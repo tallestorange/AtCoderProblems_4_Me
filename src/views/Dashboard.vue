@@ -36,7 +36,7 @@
           </v-widget>  
         </v-flex> -->
         <v-flex lg4 sm12 xs12>
-          <v-widget title="Top Location" content-bg="white">
+          <v-widget title="Unique AC" content-bg="white">
             <div slot="widget-content">
                 <e-chart 
                 :path-option="[
@@ -134,9 +134,10 @@
 
         <!-- acitivity/chat widget -->
  
-        <v-flex lg5 sm12 xs12>
+        <!-- <v-flex lg5 sm12 xs12>
           <plain-table-order></plain-table-order>
-        </v-flex>               
+        </v-flex>  -->
+
       </v-layout>
     </v-container>
   </div>

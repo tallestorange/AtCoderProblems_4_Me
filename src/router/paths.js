@@ -64,10 +64,10 @@ export default [
   {
     path: '/dashboard',
     meta: { breadcrumb: true },
-    name: 'Dashboard',
+    name: 'Test',
     component: () => import(
       /* webpackChunkName: "routes" */
-      `@/views/Dashboard.vue`
+      `@/views/Test.vue`
     )
   },
 
