@@ -80,7 +80,7 @@ export default {
     yAxis: [Object, Array],
     series: [Object, Array],
     axisPointer: Object,        
-    dataset: { type: [Object, Array], default () { return {} } }, // option.dataSet
+    dataset: Array, //{ type: [Object, Array], default () { return {} } }, // option.dataSet
     colors: Array, // echarts.option.color
     backgroundColor: [Object, String],
     toolbox: { type: [Object, Array] },
@@ -180,8 +180,11 @@ export default {
     init () {
       const { widthChangeDelay } = this;
       // set 
+
+      console.log(this.dataset);
       if (this.pathOption) {
         this.pathOption.forEach((p) => {
+          console.log(this.$data._defaultOption, p[0], p[1]);
           _object.set(this.$data._defaultOption, p[0], p[1]);
         });
       }

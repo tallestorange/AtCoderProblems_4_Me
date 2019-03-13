@@ -3,26 +3,18 @@
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
         <v-flex lg4 sm12 xs12>
-          <v-widget title="Unique AC" content-bg="white">
+
+          <v-widget v-if="!loading" title="Unique AC" content-bg="white">
             <div slot="widget-content">
                 <e-chart 
-                :path-option="[
-                  ['dataset.source', testdata],
-                  ['legend.bottom', '0'],
-                  ['color', [color.lightBlue.base, color.indigo.base, color.pink.base, color.green.base, color.cyan.base, color.teal.base]],
-                  ['xAxis.show', false],
-                  ['yAxis.show', false],
-                  ['series[0].type', 'pie'],
-                  ['series[0].avoidLabelOverlap', true],         
-                  ['series[0].radius', ['50%', '70%']],                      
-                ]"
-                :loading="loading"
+                :path-option="outd"
                 height="400px"
                 width="100%"
                 >
                 </e-chart>     
             </div>
-          </v-widget>  
+          </v-widget>
+      
         </v-flex>
       </v-layout>
     </v-container>
@@ -47,6 +39,7 @@ export default {
     info: null,
     loading: true,
     errored: false,
+    acdata: []
   }),
   computed: {
     activity () {
@@ -59,10 +52,27 @@ export default {
       return API.getMonthVisit;
     },
     locationData () {
-      console.log(API.getLocation)
       return API.getLocation;
     },
-    testdata() {
+    outd() {
+      const result = JSON.parse(JSON.stringify(this.acdata))
+      console.log(result,this.acdata)
+      return [
+        ['dataset.source', result],
+        ['legend.bottom', '0'],
+        ['xAxis.show', false],
+        ['yAxis.show', false],
+        ['series[0].type', 'pie'],
+        ['series[0].avoidLabelOverlap', true],         
+        ['series[0].radius', ['50%', '70%']],                      
+      ]
+    }
+  },
+  mounted () {
+    axios
+      .get('https://kenkoooo.com/atcoder/atcoder-api/results?user=tallestorange')
+      .then(response => {
+        this.info = response.data
 
         var result = {}
         for (var key in this.info) {
@@ -84,30 +94,23 @@ export default {
           }
         }
 
-        console.log(graph)
-
         var od = []
         for (var key in graph){
           var value = graph[key]
-          od.push({"value":value,"name":String(key)})
+          od.push({value:value,name:String(key)})
         }
 
-        this.loading = false
-        return od
-    }
-  },
-  mounted () {
-    axios
-      .get('https://kenkoooo.com/atcoder/atcoder-api/results?user=tallestorange')
-      .then(response => {
-        this.info = response.data
+        console.log(od)
+        // console.log(JSON.parse(JSON.stringify(od)))
 
+        this.acdata = JSON.parse(JSON.stringify(od))
+        this.loading = false
+        // console.log(this.acdata)
       })
       .catch(error => {
         console.log(error)
         this.errored = true
       })
-      .finally(() => this.loading = false)
     }
 };
 </script>

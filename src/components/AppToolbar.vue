@@ -17,11 +17,7 @@
         >
       </v-text-field>
       <v-spacer></v-spacer>
-      <v-toolbar-items>
-        <v-btn flat href="mailto:wangqiangshen@gmail.com">
-          Hire Me
-        </v-btn>   
-      </v-toolbar-items>
+
     
       <v-btn icon href="https://github.com/tookit/vue-material-admin">
         <v-icon class="fa-2x">fa-github</v-icon>
@@ -39,11 +35,7 @@
         <notification-list></notification-list>
       </v-menu>
       <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">
-        <v-btn icon large flat slot="activator">
-          <v-avatar size="30px">
-            <img src="/static/avatar/man_4.jpg" alt="Michael Wang"/>
-          </v-avatar>
-        </v-btn>
+
         <v-list class="pa-0">
           <v-list-tile v-for="(item,index) in items" :to="!item.href ? { name: item.name } : null" :href="item.href" @click="item.click" ripple="ripple" :disabled="item.disabled" :target="item.target" rel="noopener" :key="index">
             <v-list-tile-action v-if="item.icon">
