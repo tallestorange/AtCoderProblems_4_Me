@@ -90,9 +90,6 @@ export default {
       ]
     }
   },
-  created: function() {
-    this.$store.dispatch('getSubmissionData',{name: 'tallestorange'})
-  },
 };
 
 </script>

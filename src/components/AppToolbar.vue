@@ -9,6 +9,14 @@
     <v-toolbar-title class="ml-0 pl-3">
       精進記録
     </v-toolbar-title>
+
+    <v-spacer></v-spacer>
+
+    <v-progress-circular
+      indeterminate
+      color="primary"
+      v-if="isLoading"
+    ></v-progress-circular>
       
   </v-toolbar>
 </template>
@@ -27,6 +35,9 @@ export default {
   computed: {
     toolbarColor () {
       return this.$vuetify.options.extra.mainNav;
+    },
+    isLoading() {
+      return this.$store.getters.getLoadingState
     }
   },
   methods: {

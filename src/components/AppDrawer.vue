@@ -12,7 +12,9 @@
 
       <v-text-field
         prepend-icon="search"
-        v-on:submit.prevent="hoge"
+        v-model="username"
+        @keyup.enter="sendUserName"
+        @keypress="setCanMessageSubmit">
         >
       </v-text-field>
 
@@ -91,7 +93,9 @@ export default {
     menus: menu,
     scrollSettings: {
       maxScrollbarLength: 160
-    }    
+    },
+    username: "",
+    canMessageSubmit: false,
   }),
   computed: {
     computeGroupActive () {
@@ -103,7 +107,7 @@ export default {
 
     sideToolbarColor () {
       return this.$vuetify.options.extra.sideNav;
-    }    
+    },
   },
   created () {
     window.getApp.$on('APP_DRAWER_TOGGLED', () => {
@@ -122,8 +126,11 @@ export default {
       }
       return { name: `${item.group}/${(subItem.name)}` };
     },
-    hoge: function(e) {
-      console.log("hoge")
+    setCanMessageSubmit() {
+      this.canMessageSubmit = true
+    },
+    sendUserName() {
+      this.$store.dispatch('getSubmissionData',{name: this.username})
     }
   }
 };

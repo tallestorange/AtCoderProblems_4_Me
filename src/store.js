@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    loading: true,
+    loading: false,
     submissionData: null,
     errored: false,
     graphData: null,
@@ -48,14 +48,17 @@ export default new Vuex.Store({
 
       state.loading = false
       state.graphData = JSON.parse(JSON.stringify(od))
-      
     },
+    changeLoadingState(state, payload) {
+      state.loading = !state.loading
+    }
   },
   actions: {
     async getSubmissionData(context,{name}) {
       const payload = {
         submissionData: '',
       }
+      context.commit("changeLoadingState")
       await axios.get('https://kenkoooo.com/atcoder/atcoder-api/results?user=' + name)
       .then((res) => {
         payload.submissionData = res.data
