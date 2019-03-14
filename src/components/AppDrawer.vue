@@ -8,8 +8,14 @@
     v-model="drawer"
     width="260"
     >
-    <v-toolbar color="primary darken-1" dark>
-  
+    <v-toolbar color="indigo darken-1" dark>
+
+      <v-text-field
+        prepend-icon="search"
+        v-on:submit.prevent="hoge"
+        >
+      </v-text-field>
+
     </v-toolbar>
     <vue-perfect-scrollbar class="drawer-menu--scroll" :settings="scrollSettings">
       <v-list dense expand>
@@ -116,6 +122,9 @@ export default {
       }
       return { name: `${item.group}/${(subItem.name)}` };
     },
+    hoge: function(e) {
+      console.log("hoge")
+    }
   }
 };
 </script>
