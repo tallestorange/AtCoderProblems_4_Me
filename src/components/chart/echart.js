@@ -104,10 +104,13 @@ export default {
       },
       title: {
         show: true,
-        textStyle: {
-          color: 'rgba(0, 0, 0 , .87)',
-          fontFamily: 'sans-serif'
-        }
+        left: "center",
+        bottom: "center",
+        text: "a",
+        // textStyle: {
+        //   color: 'rgba(0, 0, 0 , .87)',
+        //   fontFamily: 'sans-serif'
+        // }
       },
       grid: {
         containLabel: true,
@@ -186,6 +189,12 @@ export default {
           _object.set(this.$data._defaultOption, p[0], p[1]);
         });
       }
+      if (this.title) {
+        this.title.forEach((p) => {
+          _object.set(this.$data._defaultOption, 'title.'+p[0], p[1]);
+        });
+      }
+
       this.chartInstance = ECharts.init(this.$refs.canvas, 'material');
       this.chartInstance.setOption(_object.merge(this.option, this.$data._defaultOption));
       window.addEventListener('optimizedResize', (e) => {

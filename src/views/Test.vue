@@ -7,9 +7,11 @@
           <v-widget v-if="!isLoading" title="Unique AC" content-bg="white">
             <div slot="widget-content">
                 <e-chart 
+                :title="getACTitle"
                 :path-option="uniqueAC"
                 height="400px"
                 width="100%"
+                
                 >
                 </e-chart>     
             </div>
@@ -22,6 +24,7 @@
           <v-widget v-if="!isLoading" title="Point Sum" content-bg="white">
             <div slot="widget-content">
                 <e-chart 
+                :title="getScoreTitle"
                 :path-option="pointSum"
                 height="400px"
                 width="100%"
@@ -50,10 +53,6 @@ export default {
   data: () => ({
     color: Material,
     selectedTab: 'tab-1',
-    info: null,
-    loading: true,
-    errored: false,
-    acdata: []
   }),
   computed: {
     isLoading() {
@@ -63,7 +62,6 @@ export default {
       const result = JSON.parse(JSON.stringify(this.$store.getters.getGraphData))
       return [
         ['dataset.source', result],
-        ['legend.bottom', '0'],
         ['xAxis.show', false],
         ['yAxis.show', false],
         ['series[0].type', 'pie'],
@@ -71,7 +69,37 @@ export default {
         ['series[0].radius', ['50%', '70%']],                      
       ]
     },
+    getACTitle() {
+      var val = 0
+      const result = JSON.parse(JSON.stringify(this.$store.getters.getGraphData))
+      for (var key in result) {
+        val += result[key].value
+      }
+
+      return [
+        ['show', true],
+        ['left', "center"],
+        ['bottom', "center"],
+        ['text', String(val)],
+      ]
+
+    },
+    getScoreTitle() {
+      var val = 0
+      const result = JSON.parse(JSON.stringify(this.$store.getters.getGraphData))
+      for (var key in result) {
+        val += Number(result[key].name) * result[key].value
+      }
+
+      return [
+        ['show', true],
+        ['left', "center"],
+        ['bottom', "center"],
+        ['text', String(val)],
+      ]
+    },
     pointSum() {
+      // use lodash
       const result = JSON.parse(JSON.stringify(this.$store.getters.getGraphData))
       var output = []
 
@@ -81,7 +109,6 @@ export default {
 
       return [
         ['dataset.source', output],
-        ['legend.bottom', '0'],
         ['xAxis.show', false],
         ['yAxis.show', false],
         ['series[0].type', 'pie'],
