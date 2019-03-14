@@ -19,19 +19,10 @@
       <v-spacer></v-spacer>
 
     
-      <v-btn icon href="https://github.com/tookit/vue-material-admin">
-        <v-icon class="fa-2x">fa-github</v-icon>
-      </v-btn>
       <v-btn icon @click="handleFullScreen()">
         <v-icon>fullscreen</v-icon>
       </v-btn>
       <v-menu offset-y origin="center center" class="elelvation-1" :nudge-bottom="14" transition="scale-transition">
-        <v-btn icon flat slot="activator">
-        <v-badge color="red" overlap>
-          <span slot="badge">3</span>
-          <v-icon medium>notifications</v-icon>
-        </v-badge>
-        </v-btn>
         <notification-list></notification-list>
       </v-menu>
       <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">

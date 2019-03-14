@@ -181,10 +181,8 @@ export default {
       const { widthChangeDelay } = this;
       // set 
 
-      console.log(this.dataset);
       if (this.pathOption) {
         this.pathOption.forEach((p) => {
-          console.log(this.$data._defaultOption, p[0], p[1]);
           _object.set(this.$data._defaultOption, p[0], p[1]);
         });
       }

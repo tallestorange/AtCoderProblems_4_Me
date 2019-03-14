@@ -2,12 +2,27 @@
   <div id="pageDashboard">
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
-        <v-flex lg4 sm12 xs12>
+        <v-flex lg4 sm6 xs12>
 
           <v-widget v-if="!loading" title="Unique AC" content-bg="white">
             <div slot="widget-content">
                 <e-chart 
-                :path-option="outd"
+                :path-option="uniqueAC"
+                height="400px"
+                width="100%"
+                >
+                </e-chart>     
+            </div>
+          </v-widget>
+      
+        </v-flex>
+
+        <v-flex lg4 sm6 xs12>
+
+          <v-widget v-if="!loading" title="Point Sum" content-bg="white">
+            <div slot="widget-content">
+                <e-chart 
+                :path-option="pointSum"
                 height="400px"
                 width="100%"
                 >
@@ -54,11 +69,30 @@ export default {
     locationData () {
       return API.getLocation;
     },
-    outd() {
+    uniqueAC() {
       const result = JSON.parse(JSON.stringify(this.acdata))
-      console.log(result,this.acdata)
       return [
         ['dataset.source', result],
+        ['legend.bottom', '0'],
+        ['xAxis.show', false],
+        ['yAxis.show', false],
+        ['series[0].type', 'pie'],
+        ['series[0].avoidLabelOverlap', true],         
+        ['series[0].radius', ['50%', '70%']],                      
+      ]
+    },
+    pointSum() {
+      const result = JSON.parse(JSON.stringify(this.acdata))
+      var output = []
+
+      for (var key in result) {
+        output.push({value:Number(result[key].name)*(result[key].value),name:result[key].name })
+      }
+
+      console.log(output)
+
+      return [
+        ['dataset.source', output],
         ['legend.bottom', '0'],
         ['xAxis.show', false],
         ['yAxis.show', false],
