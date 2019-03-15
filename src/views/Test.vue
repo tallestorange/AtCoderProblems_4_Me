@@ -56,8 +56,10 @@ export default {
       return this.$store.getters.getLoadingState
     },
     uniqueAC() {
+      this.$store.commit('setRatedSubmissionsData')
+
       const result = JSON.parse(JSON.stringify(this.$store.getters.getGraphData))
-      var val = 0
+      let val = 0
       for (var key in result) {
         val += result[key].value
       }
@@ -75,8 +77,8 @@ export default {
     pointSum() {
       // use lodash
       const result = JSON.parse(JSON.stringify(this.$store.getters.getGraphData))
-      var output = []
-      var val = 0
+      let output = []
+      let val = 0
       for (var key in result) {
         val += Number(result[key].name) * result[key].value
       }
@@ -96,9 +98,6 @@ export default {
       ]
     }
   },
-  mounted: function() {
-    this.$store.dispatch('getProblemsData')
-  }
 };
 
 </script>

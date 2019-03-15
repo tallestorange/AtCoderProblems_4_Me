@@ -130,7 +130,8 @@ export default {
       this.canMessageSubmit = true
     },
     sendUserName() {
-      this.$store.dispatch('getSubmissionData',{name: this.username})
+      this.$store.dispatch('fetchProblemsData')
+      this.$store.dispatch('fetchSubmissionsData',{name: this.username})
     }
   }
 };
