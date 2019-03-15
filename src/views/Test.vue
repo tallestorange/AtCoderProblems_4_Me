@@ -7,11 +7,9 @@
           <v-widget v-if="!isLoading" title="Unique AC" content-bg="white">
             <div slot="widget-content">
                 <e-chart 
-                :title="getACTitle"
                 :path-option="uniqueAC"
                 height="400px"
-                width="100%"
-                
+                width="95%"     
                 >
                 </e-chart>     
             </div>
@@ -24,10 +22,9 @@
           <v-widget v-if="!isLoading" title="Point Sum" content-bg="white">
             <div slot="widget-content">
                 <e-chart 
-                :title="getScoreTitle"
                 :path-option="pointSum"
                 height="400px"
-                width="100%"
+                width="95%"
                 >
                 </e-chart>     
             </div>
@@ -60,48 +57,29 @@ export default {
     },
     uniqueAC() {
       const result = JSON.parse(JSON.stringify(this.$store.getters.getGraphData))
+      var val = 0
+      for (var key in result) {
+        val += result[key].value
+      }
+
       return [
         ['dataset.source', result],
         ['xAxis.show', false],
         ['yAxis.show', false],
         ['series[0].type', 'pie'],
         ['series[0].avoidLabelOverlap', true],         
-        ['series[0].radius', ['50%', '70%']],                      
-      ]
-    },
-    getACTitle() {
-      var val = 0
-      const result = JSON.parse(JSON.stringify(this.$store.getters.getGraphData))
-      for (var key in result) {
-        val += result[key].value
-      }
-
-      return [
-        ['show', true],
-        ['left', "center"],
-        ['bottom', "center"],
-        ['text', String(val)],
-      ]
-
-    },
-    getScoreTitle() {
-      var val = 0
-      const result = JSON.parse(JSON.stringify(this.$store.getters.getGraphData))
-      for (var key in result) {
-        val += Number(result[key].name) * result[key].value
-      }
-
-      return [
-        ['show', true],
-        ['left', "center"],
-        ['bottom', "center"],
-        ['text', String(val)],
+        ['series[0].radius', ['50%', '70%']], 
+        ['title.text', String(val)]                     
       ]
     },
     pointSum() {
       // use lodash
       const result = JSON.parse(JSON.stringify(this.$store.getters.getGraphData))
       var output = []
+      var val = 0
+      for (var key in result) {
+        val += Number(result[key].name) * result[key].value
+      }
 
       for (var key in result) {
         output.push({value:Number(result[key].name)*(result[key].value),name:result[key].name })
@@ -113,7 +91,8 @@ export default {
         ['yAxis.show', false],
         ['series[0].type', 'pie'],
         ['series[0].avoidLabelOverlap', true],         
-        ['series[0].radius', ['50%', '70%']],                      
+        ['series[0].radius', ['50%', '70%']],
+        ['title.text', String(val)]                      
       ]
     }
   },

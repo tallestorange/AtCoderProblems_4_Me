@@ -22,6 +22,7 @@ export default new Vuex.Store({
   mutations: {
     setSubmissionData(state, payload) {
       state.submissionData = payload.submissionData
+
       var result = {}
       for (var key in payload.submissionData) {
         if (payload.submissionData[key].result == "AC") {
