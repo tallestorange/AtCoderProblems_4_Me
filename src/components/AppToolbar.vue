@@ -6,8 +6,8 @@
     app
   >
     <v-toolbar-side-icon @click.stop="handleDrawerToggle"></v-toolbar-side-icon>
-    <v-toolbar-title class="ml-0 pl-3">
-      精進記録
+    <v-toolbar-title class="ml-0 pl-3 font-weight-regular">
+      Competitive Programming
     </v-toolbar-title>
 
     <v-spacer></v-spacer>
