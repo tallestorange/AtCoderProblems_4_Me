@@ -11,8 +11,8 @@
     <v-toolbar color="indigo darken-1" dark>
 
       <v-text-field
-        prepend-icon="search"
         v-model="username"
+        label="UserID"
         @keyup.enter="sendUserName"
         @keypress="setCanMessageSubmit">
         >
