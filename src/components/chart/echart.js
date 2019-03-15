@@ -106,11 +106,13 @@ export default {
         show: true,
         left: "center",
         bottom: "center",
-        text: "a",
-        // textStyle: {
-        //   color: 'rgba(0, 0, 0 , .87)',
-        //   fontFamily: 'sans-serif'
-        // }
+        text: "",
+        textStyle: {
+          color: 'rgba(0, 0, 0 , .87)',
+          fontFamily: 'sans-serif',
+          fontWeight: 'bold',
+          fontSize: 32,
+        }
       },
       grid: {
         containLabel: true,
