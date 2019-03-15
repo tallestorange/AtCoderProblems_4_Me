@@ -96,6 +96,9 @@ export default {
       ]
     }
   },
+  mounted: function() {
+    this.$store.dispatch('getProblemsData')
+  }
 };
 
 </script>
