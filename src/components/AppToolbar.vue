@@ -34,7 +34,7 @@ export default {
   }),
   computed: {
     toolbarColor () {
-      return this.$vuetify.options.extra.mainNav;
+      return this.$vuetify.options.extra.mainNav
     },
     isLoading() {
       return this.$store.getters.getLoadingState
@@ -42,10 +42,10 @@ export default {
   },
   methods: {
     handleDrawerToggle () {
-      window.getApp.$emit('APP_DRAWER_TOGGLED');
+      window.getApp.$emit('APP_DRAWER_TOGGLED')
     },
     handleFullScreen () {
-      Util.toggleFullScreen();
+      Util.toggleFullScreen()
     }
   }
 };
