@@ -73,6 +73,7 @@
     </vue-perfect-scrollbar>        
   </v-navigation-drawer>
 </template>
+
 <script>
 import menu from '@/api/menu';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
@@ -101,10 +102,6 @@ export default {
     computeGroupActive () {
       return true;
     },
-    computeLogo () {
-      return '/static/m.png';
-    },
-
     sideToolbarColor () {
       return this.$vuetify.options.extra.sideNav;
     },
@@ -114,7 +111,6 @@ export default {
       this.drawer = (!this.drawer);
     });
   },
-  
 
   methods: {
     genChildTarget (item, subItem) {
@@ -136,7 +132,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="stylus">
 // @import '../../node_modules/vuetify/src/stylus/settings/_elevations.styl';
