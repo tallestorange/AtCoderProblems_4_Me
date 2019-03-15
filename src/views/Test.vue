@@ -4,7 +4,7 @@
       <v-layout row wrap>
         <v-flex lg4 sm6 xs12>
 
-          <v-widget title="Unique AC" content-bg="white">
+          <v-widget title="Unique AC(Rated)" content-bg="white">
             <div slot="widget-content">
                 <e-chart 
                 v-if="!isLoading"
@@ -53,6 +53,43 @@ export default {
     color: Material,
     selectedTab: 'tab-1',
   }),
+  methods: {
+    getColor(rate) {
+      if (rate == 100) {
+        return "#e6e6e6"
+      }
+      else if (rate == 200) {
+        return "#e3e37b"
+      }
+      else if (rate == 300) {
+        return "#84f584"
+      }
+      else if (rate == 400) {
+        return "#84dbf5"
+      }
+      else if (rate >= 500 && rate <= 600) {
+        return "#84a0f5"
+      }
+      else if (rate >= 700 && rate <= 800) {
+        return "#f1f584"
+      }
+      else if (rate >= 900 && rate <= 1100) {
+        return "#f5c084"
+      }
+      else if (rate >= 1200 && rate <= 1500) {
+        return "#f58484"
+      }
+      else if (rate >= 1600 && rate <= 1900) {
+        return "#e6e6e6"
+      }
+      else if (rate >= 2000) {
+        return "#e3e37b"
+      }
+      else {
+        return "#f66a6a"
+      }
+    },
+  },
   computed: {
     isLoading() {
       return this.$store.getters.getLoadingState
@@ -63,7 +100,9 @@ export default {
 
       const result = JSON.parse(JSON.stringify(this.$store.getters.getRatedGraphData))
       let val = 0
+      let colors = []
       for (var key in result) {
+        colors.push(this.getColor(result[key].name))
         val += result[key].value
       }
 
@@ -74,7 +113,8 @@ export default {
         ['series[0].type', 'pie'],
         ['series[0].avoidLabelOverlap', true],         
         ['series[0].radius', ['50%', '70%']], 
-        ['title.text', String(val)]                     
+        ['title.text', String(val)],
+        ['color',colors]                
       ]
     },
     pointSum() {
@@ -82,7 +122,10 @@ export default {
       const result = JSON.parse(JSON.stringify(this.$store.getters.getRatedGraphData))
       let output = []
       let val = 0
+      let colors = []
+
       for (var key in result) {
+        colors.push(this.getColor(result[key].name))
         val += Number(result[key].name) * result[key].value
       }
 
@@ -97,7 +140,8 @@ export default {
         ['series[0].type', 'pie'],
         ['series[0].avoidLabelOverlap', true],         
         ['series[0].radius', ['50%', '70%']],
-        ['title.text', String(val)]                      
+        ['title.text', String(val)],
+        ['color',colors]
       ]
     }
   },
