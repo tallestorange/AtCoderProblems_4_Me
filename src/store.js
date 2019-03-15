@@ -7,31 +7,44 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     loading: false,
-    submissionData: null,
     errored: false,
     graphData: null,
     problemsData: null,
     problemsDict: null,
     problemsIsLoading: false,
+    submissionsData: null,
+    submissionsIsLoading: false,
     submissionsDetail: null,
+    ratedSubmissionsData: null,
   },
   getters: {
     getLoadingState: (state, getters) => {
-      return state.loading
+      if (!state.submissionsIsLoading && !state.problemsIsLoading) {
+        return false
+      }
+      else {
+        return true
+      }
     },
     getGraphData: (state, getters) => {
       return state.graphData
+    },
+    getSubmissionsData: (state, getters) => {
+      return state.submissionsDetail
+    },
+    getProblemsData: (state, getters) => {
+      return state.problemsDict
     }
   },
   mutations: {
-    setSubmissionData(state, payload) {
-      state.submissionData = payload.submissionData
+    setSubmissionsData(state, payload) {
+      state.submissionsData = payload.submissionsData
     },
     setSubmissionDetail(state, payload) {
       var result = {}
-      for (var key in state.submissionData) {
-        if (state.submissionData[key].result == "AC") {
-          result[state.submissionData[key].problem_id] = state.submissionData[key].point
+      for (var key in state.submissionsData) {
+        if (state.submissionsData[key].result == "AC") {
+          result[state.submissionsData[key].problem_id] = state.submissionsData[key].point
         }
       }
 
@@ -55,8 +68,32 @@ export default new Vuex.Store({
       state.loading = false
       state.graphData = JSON.parse(JSON.stringify(od))
     },
+    setRatedSubmissionsData(state, payload) {
+      const problemsDict = JSON.parse(JSON.stringify(state.problemsDict))
+      const submissionsDetail = JSON.parse(JSON.stringify(state.submissionsDetail))
+      console.log(submissionsDetail)
+
+      let result = {}
+      for (let key in submissionsDetail) {
+        console.log(key)
+        if(problemsDict[key] && problemsDict[key].point){
+          submission = submissionsDetail[key]
+          result[key] = submission
+        }
+      }
+
+      console.log(result)
+
+
+    },
     changeLoadingState(state, payload) {
       state.loading = !state.loading
+    },
+    changeSubmissionsLoadingState(state, payload) {
+      state.submissionsIsLoading = payload
+    },
+    changeProblemsLoadingState(state, payload) {
+      state.problemsIsLoading = payload
     },
     setProblemsData(state,payload) {
       state.problemsData = payload.problemsData
@@ -73,12 +110,11 @@ export default new Vuex.Store({
           "contest_id": problem.contest_id
         }
       }
-      console.log(result)
       state.problemsDict = result
       state.problemsIsLoading = false
     },
     setSubmissionDetailPerProblem(state,payload) {
-      let submissions = state.submissionData
+      let submissions = state.submissionsData
       var result = {}
 
       for (let key in submissions) {
@@ -114,27 +150,29 @@ export default new Vuex.Store({
         }
       }
       state.submissionsDetail = result
-      console.log(result)
+      state.submissionsIsLoading = false
     }
   },
   actions: {
-    async getSubmissionData(context,{name}) {
+    async fetchSubmissionsData(context,{name}) {
       const payload = {
-        submissionData: '',
+        submissionsData: '',
       }
       context.commit("changeLoadingState")
+      context.commit("changeSubmissionsLoadingState",true)
       await axios.get('https://kenkoooo.com/atcoder/atcoder-api/results?user=' + name)
       .then((res) => {
-        payload.submissionData = res.data
+        payload.submissionsData = res.data
       })
-      context.commit("setSubmissionData", payload)
+      context.commit("setSubmissionsData", payload)
       context.commit("setSubmissionDetail", payload)
       context.commit("setSubmissionDetailPerProblem", payload)
     },
-    async getProblemsData(context) {
+    async fetchProblemsData(context) {
       const payload = {
         problemsData: '',
       }
+      context.commit("changeProblemsLoadingState",true)
       await axios.get('https://kenkoooo.com/atcoder/resources/merged-problems.json')
       .then((res) => {
         payload.problemsData = res.data
@@ -142,5 +180,5 @@ export default new Vuex.Store({
       context.commit("setProblemsData", payload)
       context.commit("setProblemsDict", payload)
     }
-  }
+  },
 });
