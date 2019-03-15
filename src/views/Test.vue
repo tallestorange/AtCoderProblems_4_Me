@@ -4,9 +4,10 @@
       <v-layout row wrap>
         <v-flex lg4 sm6 xs12>
 
-          <v-widget v-if="!isLoading" title="Unique AC" content-bg="white">
+          <v-widget title="Unique AC" content-bg="white">
             <div slot="widget-content">
                 <e-chart 
+                v-if="!isLoading"
                 :path-option="uniqueAC"
                 height="400px"
                 width="95%"     
@@ -19,9 +20,10 @@
 
         <v-flex lg4 sm6 xs12>
 
-          <v-widget v-if="!isLoading" title="Point Sum" content-bg="white">
+          <v-widget title="Rated Point Sum" content-bg="white">
             <div slot="widget-content">
                 <e-chart 
+                v-if="!isLoading"
                 :path-option="pointSum"
                 height="400px"
                 width="95%"
@@ -57,8 +59,9 @@ export default {
     },
     uniqueAC() {
       this.$store.commit('setRatedSubmissionsData')
+      this.$store.commit('setRatedGraphData')
 
-      const result = JSON.parse(JSON.stringify(this.$store.getters.getGraphData))
+      const result = JSON.parse(JSON.stringify(this.$store.getters.getRatedGraphData))
       let val = 0
       for (var key in result) {
         val += result[key].value
@@ -76,7 +79,7 @@ export default {
     },
     pointSum() {
       // use lodash
-      const result = JSON.parse(JSON.stringify(this.$store.getters.getGraphData))
+      const result = JSON.parse(JSON.stringify(this.$store.getters.getRatedGraphData))
       let output = []
       let val = 0
       for (var key in result) {

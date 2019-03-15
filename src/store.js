@@ -6,9 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    loading: false,
     errored: false,
-    graphData: null,
     problemsData: null,
     problemsDict: null,
     problemsIsLoading: false,
@@ -16,6 +14,7 @@ export default new Vuex.Store({
     submissionsIsLoading: false,
     submissionsDetail: null,
     ratedSubmissionsData: null,
+    ratedGraphData: null,
   },
   getters: {
     getLoadingState: (state, getters) => {
@@ -34,57 +33,55 @@ export default new Vuex.Store({
     },
     getProblemsData: (state, getters) => {
       return state.problemsDict
+    },
+    getRatedSubmissionsData: (state, getters) => {
+      return state.ratedSubmissionsData
+    },
+    getRatedGraphData: (state, getters) => {
+      return state.ratedGraphData
     }
   },
   mutations: {
     setSubmissionsData(state, payload) {
       state.submissionsData = payload.submissionsData
     },
-    setSubmissionDetail(state, payload) {
-      var result = {}
-      for (var key in state.submissionsData) {
-        if (state.submissionsData[key].result == "AC") {
-          result[state.submissionsData[key].problem_id] = state.submissionsData[key].point
-        }
-      }
-
-      var graph = {}
-      for (var key in result) {
-        let value = result[key]
-        if (graph[value]) {
-          graph[value] += 1
-        }
-        else {
-          graph[value] = 1
-        }
-      }
-
-      var od = []
-      for (var key in graph){
-        var value = graph[key]
-        od.push({value:value,name:String(key)})
-      }
-
-      state.loading = false
-      state.graphData = JSON.parse(JSON.stringify(od))
-    },
     setRatedSubmissionsData(state, payload) {
       const problemsDict = JSON.parse(JSON.stringify(state.problemsDict))
       const submissionsDetail = JSON.parse(JSON.stringify(state.submissionsDetail))
-      console.log(submissionsDetail)
 
       let result = {}
       for (let key in submissionsDetail) {
-        console.log(key)
         if(problemsDict[key] && problemsDict[key].point){
           let submission = submissionsDetail[key]
           result[key] = submission
+          result[key].point = problemsDict[key].point
+        }
+      }
+      state.ratedSubmissionsData = result
+    },
+    setRatedGraphData(state, payload) {
+      const ratedSubmissionsData = state.ratedSubmissionsData
+      let scoresDict = {}
+      let scoresArray = []
+
+      for (let key in ratedSubmissionsData) {
+        let submission = ratedSubmissionsData[key]
+        if (submission.your_ac_count == 0) {
+          continue
+        }
+        if (scoresDict[submission.point]){
+          scoresDict[submission.point] += 1
+        }
+        else {
+          scoresDict[submission.point] = 1
         }
       }
 
-      console.log(result)
+      for (let key in scoresDict) {
+        scoresArray.push({value:scoresDict[key],name:String(key)})
+      }
 
-
+      state.ratedGraphData = scoresArray
     },
     changeLoadingState(state, payload) {
       state.loading = !state.loading
@@ -181,4 +178,4 @@ export default new Vuex.Store({
       context.commit("setProblemsDict", payload)
     }
   },
-});
+})
