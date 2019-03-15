@@ -77,7 +77,7 @@ export default new Vuex.Store({
       for (let key in submissionsDetail) {
         console.log(key)
         if(problemsDict[key] && problemsDict[key].point){
-          submission = submissionsDetail[key]
+          let submission = submissionsDetail[key]
           result[key] = submission
         }
       }
