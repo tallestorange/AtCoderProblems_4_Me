@@ -56,6 +56,11 @@ export default new Vuex.Store({
           result[key] = submission
           result[key].point = problemsDict[key].point
         }
+        else {
+          let submission = submissionsDetail[key]
+          result[key] = submission
+          result[key].point = null
+        }
       }
       state.ratedSubmissionsData = result
     },
@@ -78,7 +83,12 @@ export default new Vuex.Store({
       }
 
       for (let key in scoresDict) {
-        scoresArray.push({value:scoresDict[key],name:key})
+        if (key == "null") {
+          scoresArray.push({value:scoresDict[key],name:"0"})
+        }
+        else {
+          scoresArray.push({value:scoresDict[key],name:String(key)})
+        }
       }
 
       state.ratedGraphData = scoresArray
