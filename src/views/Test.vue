@@ -4,7 +4,7 @@
       <v-layout row wrap>
         <v-flex lg4 sm6 xs12>
 
-          <v-widget title="Unique AC(Rated)" content-bg="white">
+          <v-widget title="Unique AC" content-bg="white">
             <div slot="widget-content">
                 <e-chart 
                 v-if="!isLoading"
@@ -86,7 +86,7 @@ export default {
         return "#e3e37b"
       }
       else {
-        return "#f66a6a"
+        return "#696969	"
       }
     },
   },
@@ -125,8 +125,13 @@ export default {
       let colors = []
 
       for (var key in result) {
+        if (result[key].name == "null"){
+          continue
+        }
+        console.log(result[key])
         colors.push(this.getColor(result[key].name))
-        val += Number(result[key].name) * result[key].value
+        
+        val += result[key].name * result[key].value
       }
 
       for (var key in result) {
