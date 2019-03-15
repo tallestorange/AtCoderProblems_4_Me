@@ -78,7 +78,7 @@ export default new Vuex.Store({
       }
 
       for (let key in scoresDict) {
-        scoresArray.push({value:scoresDict[key],name:String(key)})
+        scoresArray.push({value:scoresDict[key],name:key})
       }
 
       state.ratedGraphData = scoresArray
