@@ -110,7 +110,7 @@ export default {
         textStyle: {
           color: 'rgba(0, 0, 0 , .87)',
           fontFamily: 'sans-serif',
-          fontWeight: 'bold',
+          fontWeight: 'lighter',
           fontSize: 32,
         }
       },
@@ -191,11 +191,6 @@ export default {
           _object.set(this.$data._defaultOption, p[0], p[1]);
         });
       }
-      if (this.title) {
-        this.title.forEach((p) => {
-          _object.set(this.$data._defaultOption, 'title.'+p[0], p[1]);
-        });
-      }
 
       this.chartInstance = ECharts.init(this.$refs.canvas, 'material');
       this.chartInstance.setOption(_object.merge(this.option, this.$data._defaultOption));
@@ -205,7 +200,6 @@ export default {
         }, this.widthChangeDelay);
       });      
     },
-
 
     resize () {
       this.chartInstance.resize();
