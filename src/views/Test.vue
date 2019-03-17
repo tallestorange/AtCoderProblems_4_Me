@@ -2,52 +2,64 @@
   <div id="pageDashboard">
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
-        <v-flex lg4 sm6 xs12>
 
+        <v-flex lg4 sm6 xs12>
           <v-widget title="Unique AC" content-bg="white">
             <div slot="widget-content">
                 <e-chart 
                 v-if="!isLoading"
                 :path-option="uniqueAC"
                 height="400px"
-                width="95%"     
+                width="100%"     
                 >
                 </e-chart>     
             </div>
           </v-widget>
-      
         </v-flex>
 
         <v-flex lg4 sm6 xs12>
-
           <v-widget title="Rated Point Sum" content-bg="white">
             <div slot="widget-content">
                 <e-chart 
                 v-if="!isLoading"
                 :path-option="pointSum"
                 height="400px"
-                width="95%"
+                width="100%"
                 >
                 </e-chart>     
             </div>
           </v-widget>
-      
         </v-flex>
+
+        <v-flex lg12 sm12 xs12>
+          <v-widget title="Earned Points" content-bg="white">
+            <div slot="widget-content">
+              <heat-map
+                height="260px"
+                v-if="!isLoading"
+              >
+              </heat-map>
+            </div>
+          </v-widget>
+        </v-flex>
+
       </v-layout>
     </v-container>
   </div>
 </template>
 
 <script>
-import EChart from '@/components/chart/echart';
-import VWidget from '@/components/VWidget';
-import Material from 'vuetify/es5/util/colors';
-import axios from 'axios';
+import EChart from '@/components/chart/echart'
+import HeatMap from '@/components/chart/heatmap'
+import VWidget from '@/components/VWidget'
+import Material from 'vuetify/es5/util/colors'
+import axios from 'axios'
 
 export default {
   components: {
     VWidget,
-    EChart,  
+    EChart,
+    HeatMap
   },
   data: () => ({
     color: Material,
@@ -128,9 +140,7 @@ export default {
         if (result[key].name == "null"){
           continue
         }
-        console.log(result[key])
         colors.push(this.getColor(result[key].name))
-        
         val += result[key].name * result[key].value
       }
 
