@@ -15,9 +15,9 @@ const colorPalette = [];
 Object.entries(colors).forEach((item) => {
   if (item[1].base) {
     colorPalette.push(item[1].base);
-    
   }
 });
+
 // default 
 // const colorPalette = ['#d87c7c', '#919e8b', '#d7ab82', '#6e7074', '#61a0a8', '#efa18d', '#787464', '#cc7e63', '#724e58', '#4b565b'];
 // ECharts.registerTheme('material', {
@@ -46,12 +46,13 @@ Object.entries(colors).forEach((item) => {
   /* init - you can init any event */
   throttle('resize', 'optimizedResize');
 })();
+
 export default {
   name: 'v-echart',
 
   render (h) {
     const data = {
-      staticClass: 'v-chart',
+      staticClass: 'v-echart',
       style: this.canvasStyle,
       ref: 'canvas',
       on: this.$listeners
@@ -90,61 +91,6 @@ export default {
       default: 450
     }
   },
-  data: () => ({
-    tooltip: {
-      position: 'top',
-      formatter: function (p) {
-          var format = echarts.format.formatTime('yyyy-MM-dd', p.data[0]);
-          return format + ': ' + p.data[1];
-      }
-    },
-    visualMap: {
-        min: 0,
-        max: 1000,
-        calculable: true,
-        orient: 'vertical',
-        left: '670',
-        top: 'center'
-    },
-
-    calendar: [
-    {
-        orient: 'vertical',
-        range: '2015'
-    },
-    {
-        left: 300,
-        orient: 'vertical',
-        range: '2016'
-    },
-    {
-        left: 520,
-        cellSize: [20, 'auto'],
-        bottom: 10,
-        orient: 'vertical',
-        range: '2017',
-        dayLabel: {
-            margin: 5
-        }
-    }],
-
-    series: [{
-        type: 'heatmap',
-        coordinateSystem: 'calendar',
-        calendarIndex: 0,
-        data: getVirtulData(2015)
-    }, {
-        type: 'heatmap',
-        coordinateSystem: 'calendar',
-        calendarIndex: 1,
-        data: getVirtulData(2016)
-    }, {
-        type: 'heatmap',
-        coordinateSystem: 'calendar',
-        calendarIndex: 2,
-        data: getVirtulData(2017)
-    }]
-  }),
   computed: {
     canvasStyle () {
       return {
@@ -152,40 +98,105 @@ export default {
         height: this.height,
       };
     },
-    getVirtulData(year) {
-      year = year || '2017';
-      var date = +echarts.number.parseDate(year + '-01-01');
-      var end = +echarts.number.parseDate((+year + 1) + '-01-01');
-      var dayTime = 3600 * 24 * 1000;
-      var data = [];
-      for (var time = date; time < end; time += dayTime) {
-          data.push([
-              echarts.format.formatTime('yyyy-MM-dd', time),
-              Math.floor(Math.random() * 1000)
-          ]);
-      }
-      return data;
-    }
-
   },
+  data: () => ({
+    _defaultOption: {
+      tooltip : {},
+      visualMap: {
+        min: 0,
+        max: 5000,
+        type: 'piecewise',
+        orient: 'horizontal',
+        left: 'center',
+        top: 65,
+        textStyle: {
+          color: '#000'
+        }
+      },
+      calendar: {
+        top: 120,
+        left: 30,
+        right: 30,
+        cellSize: ['auto', 13],
+        range: ['2018-07-01', '2019-03-17'],
+        itemStyle: {
+          normal: {borderWidth: 0.5}
+        },
+        yearLabel: {show: false}
+      },
+      series: {
+        type: 'heatmap',
+        coordinateSystem: 'calendar',
+        data: []
+      }
+    }
+  }),
   methods: {
     init () {
       const { widthChangeDelay } = this;
-      // set 
 
-      if (this.pathOption) {
-        this.pathOption.forEach((p) => {
-          _object.set(this.$data._defaultOption, p[0], p[1]);
-        });
-      }
-
+      this.$data._defaultOption.series.data = this.getVirtulData(2016)          
       this.chartInstance = ECharts.init(this.$refs.canvas, 'material');
       this.chartInstance.setOption(_object.merge(this.option, this.$data._defaultOption));
+
       window.addEventListener('optimizedResize', (e) => {
         setTimeout(_ => {
           this.chartInstance.resize();
         }, this.widthChangeDelay);
-      });      
+      });
+    },
+
+    getVirtulData (year) {
+      year = year || '2017'
+      let submissionData = this.$store.getters.getSubmissionsRawData
+      let data = []
+      let submissionDict = {}
+
+      for (let key in submissionData) {
+        let submission = submissionData[key]
+        let data = []
+        if (submission.result != "AC" || submission.point <= 0) {
+          continue
+        }
+
+        let dt = new Date(0)
+        dt.setUTCSeconds(submission.epoch_second)
+        let yr = dt.getFullYear()
+        let mn = ("00" + (dt.getMonth()+1)).slice(-2)
+        let dy = ("00" + dt.getDate()).slice(-2)
+        let dateStr = yr + "-" + mn + "-" + dy
+
+        if(submissionDict[dateStr]){
+          submissionDict[dateStr] += submission.point
+        }
+        else {
+          submissionDict[dateStr] = submission.point
+        }
+      }
+
+      // console.log(submissionDict)
+      // var date = +echarts.number.parseDate(year + '-01-01')
+      // var end = +echarts.number.parseDate((+year + 1) + '-01-01')
+      
+      // var dayTime = 3600 * 24 * 1000
+      // var data = []
+
+
+      // for (var time = date; time < end; time += dayTime) {
+      //     data.push([
+      //       echarts.format.formatTime('yyyy-MM-dd', time),
+      //       Math.floor(Math.random() * 10000)
+      //     ]);
+      // }
+
+      for (let key in submissionDict) {
+        data.push([
+          key,
+          submissionDict[key]
+        ])
+      }
+
+      return data;
     },
 
     resize () {

@@ -31,6 +31,9 @@ export default new Vuex.Store({
     getSubmissionsData: (state, getters) => {
       return state.submissionsDetail
     },
+    getSubmissionsRawData: (state, getters) => {
+      return state.submissionsData
+    },
     getProblemsData: (state, getters) => {
       return state.problemsDict
     },
@@ -120,7 +123,7 @@ export default new Vuex.Store({
       state.problemsDict = result
       state.problemsIsLoading = false
     },
-    setSubmissionDetailPerProblem(state,payload) {
+    setSubmissionsDetailPerProblem(state,payload) {
       let submissions = state.submissionsData
       var result = {}
 
@@ -172,8 +175,8 @@ export default new Vuex.Store({
         payload.submissionsData = res.data
       })
       context.commit("setSubmissionsData", payload)
-      context.commit("setSubmissionDetail", payload)
-      context.commit("setSubmissionDetailPerProblem", payload)
+      // context.commit("setSubmissionDetail", payload)
+      context.commit("setSubmissionsDetailPerProblem", payload)
     },
     async fetchProblemsData(context) {
       const payload = {
