@@ -3,7 +3,7 @@
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
 
-        <v-flex lg4 sm6 xs12>
+        <v-flex lg6 sm6 xs12>
           <v-widget title="Unique AC" content-bg="white">
             <div slot="widget-content">
                 <e-chart 
@@ -17,7 +17,7 @@
           </v-widget>
         </v-flex>
 
-        <v-flex lg4 sm6 xs12>
+        <v-flex lg6 sm6 xs12>
           <v-widget title="Rated Point Sum" content-bg="white">
             <div slot="widget-content">
                 <e-chart 
@@ -59,7 +59,7 @@ export default {
   components: {
     VWidget,
     EChart,
-    HeatMap
+    HeatMap,
   },
   data: () => ({
     color: Material,

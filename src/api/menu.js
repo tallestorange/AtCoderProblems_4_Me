@@ -1,10 +1,15 @@
 const Menu =  [
-  { header: 'Apps' },
   {
     title: 'Dashboard',
     group: 'apps',
-    icon: 'dashboard',
-    name: 'Dashboard',
+    icon: '',
+    name: 'Test',
+  },
+  {
+    title: 'Problems & Submissions',
+    group: 'apps',
+    icon: '',
+    name: 'Problems',
   },
 ];
 // reorder menu

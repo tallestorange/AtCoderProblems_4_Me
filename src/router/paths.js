@@ -70,6 +70,15 @@ export default [
       `@/views/Test.vue`
     )
   },
+  {
+    path: '/problems',
+    meta: { breadcrumb: true },
+    name: 'Problems',
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      `@/views/Problems.vue`
+    )
+  },
 
   {
     path: '/media',
