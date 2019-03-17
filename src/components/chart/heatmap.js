@@ -104,7 +104,7 @@ export default {
       tooltip : {},
       visualMap: {
         min: 0,
-        max: 5000,
+        max: 10000,
         type: 'piecewise',
         orient: 'horizontal',
         left: 'center',
@@ -118,7 +118,7 @@ export default {
         left: 30,
         right: 30,
         cellSize: ['auto', 13],
-        range: ['2018-07-01', '2019-03-17'],
+        range: ['2019-01-01', '2019-03-17'],
         itemStyle: {
           normal: {borderWidth: 0.5}
         },
@@ -135,7 +135,7 @@ export default {
     init () {
       const { widthChangeDelay } = this;
 
-      this.$data._defaultOption.series.data = this.getVirtulData(2016)          
+      this.$data._defaultOption.series.data = this.getVirtulData()          
       this.chartInstance = ECharts.init(this.$refs.canvas, 'material');
       this.chartInstance.setOption(_object.merge(this.option, this.$data._defaultOption));
 
@@ -146,8 +146,7 @@ export default {
       });
     },
 
-    getVirtulData (year) {
-      year = year || '2017'
+    getVirtulData () {
       let submissionData = this.$store.getters.getSubmissionsRawData
       let data = []
       let submissionDict = {}
