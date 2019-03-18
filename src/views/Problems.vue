@@ -14,6 +14,7 @@
               color="indigo"
               full-width
               v-model="date"
+              :events="arrayEvents"
               event-color="green lighten-1"
             ></v-date-picker>
           </v-card>
@@ -51,6 +52,14 @@ export default {
   methods: {
   },
   computed: {
+    arrayEvents () {
+      let submissionsData = this.$store.getters.getHeatMapData
+      let result = []
+      for(let key in submissionsData) {
+        result.push(key)
+      }
+      return result
+    }
   },
   watch: {
     date: function() {
