@@ -14,6 +14,7 @@ export default new Vuex.Store({
     submissionsIsLoading: false,
     submissionsDetail: null,
     ratedSubmissionsData: null,
+    viewSubmissionsData: null,
     ratedGraphData: null,
     heatMapData: {},
     userName: "",
@@ -54,19 +55,25 @@ export default new Vuex.Store({
     },
     getUserName: (state, getters) => {
       return state.userName
+    },
+    getViewSubmissionsData: (state, getters) => {
+      return state.viewSubmissionsData
     }
   },
   mutations: {
     setSubmissionsData(state, payload) {
-      let result = []
       const submissions = payload.submissionsData
-
       submissions.sort(function(a,b){
         if(a.id<b.id) return 1
         if(a.id>b.id) return -1
         return 0
       })
+      state.submissionsData = submissions
+    },
+    setViewSubmissionsData(state, payload) {
+      let submissions = payload.submissionsData
 
+      let result = {}
       for(let i in submissions) {
         let submission = submissions[i]
 
@@ -77,10 +84,15 @@ export default new Vuex.Store({
         let dy = ("00" + dt.getDate()).slice(-2)
         let dateStr = yr + "-" + mn + "-" + dy
 
-        submission.date_str = dateStr
-        result.push(submission)
+        if(result[dateStr]) {
+          result[dateStr].push(submission)
+        }
+        else {
+          result[dateStr] = [submission]
+        }
       }
-      state.submissionsData = result
+      console.log(result)
+      state.viewSubmissionsData = result
     },
     setSelectedDate(state, payload) {
       state.selectedDate = payload
@@ -97,8 +109,8 @@ export default new Vuex.Store({
       state.userName = payload
     },
     setRatedSubmissionsData(state, payload) {
-      const problemsDict = JSON.parse(JSON.stringify(state.problemsDict))
-      const submissionsDetail = JSON.parse(JSON.stringify(state.submissionsDetail))
+      const problemsDict = state.problemsDict
+      const submissionsDetail = state.submissionsDetail
 
       let result = {}
       for (let key in submissionsDetail) {
@@ -196,8 +208,8 @@ export default new Vuex.Store({
         submissionsDict[dateStr].point_sum += submission.point
         submissionsDict[dateStr].accepted += 1
       }
-
       state.heatMapData = submissionsDict
+      state.submissionsIsLoading = false
     },
     setSubmissionsDetailPerProblem(state, payload) {
       let submissions = state.submissionsData
@@ -236,7 +248,6 @@ export default new Vuex.Store({
         }
       }
       state.submissionsDetail = result
-      state.submissionsIsLoading = false
     }
   },
   actions: {
@@ -254,6 +265,7 @@ export default new Vuex.Store({
       })
       context.commit("setCurrentDate", payload)
       context.commit("setSubmissionsData", payload)
+      context.commit("setViewSubmissionsData", payload)
       context.commit("setSubmissionsDetailPerProblem", payload)
       context.commit("setHeatMapData", payload)
     },

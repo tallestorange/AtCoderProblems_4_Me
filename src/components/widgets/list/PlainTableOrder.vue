@@ -8,7 +8,7 @@
       <template>
         <v-data-table
           :headers="headers"
-          :items="submissiosData"
+          :items="submissionsData"
           hide-actions
           class="elevation-0 table-striped"
         >
@@ -55,21 +55,22 @@ export default {
       let item = Math.floor(Math.random() * this.colors.length);
       return this.colors[item];
     },
-    submissiosData () {
-      let submissionsData = this.$store.getters.getSubmissionsRawData
-      let selectedDate = this.$store.getters.getSelectedDate
+    submissionsData () {
       let problemsDict = this.$store.getters.getProblemsData
+      let selectedDate = this.$store.getters.getSelectedDate
       let result = []
-      
+      if (selectedDate == "") {
+        return []
+      }
+      let allSubmissions = this.$store.getters.getViewSubmissionsData
+      let submissionsData = allSubmissions[selectedDate]
+
       for (let key in submissionsData) {
         let submission = submissionsData[key]
-        if (submission.date_str == selectedDate) {
-          let title = problemsDict[submission.problem_id].title
-          submission.title = title
-          result.push(submission)
-        }
+        let title = problemsDict[submission.problem_id].title
+        submission.title = title
+        result.push(submission)
       }
-
       return result
     }
   },
