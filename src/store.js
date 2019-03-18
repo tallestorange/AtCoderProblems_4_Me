@@ -184,30 +184,31 @@ export default new Vuex.Store({
       state.problemsIsLoading = false
     },
     setHeatMapData(state, payload) {
-      let submissionsData = state.submissionsData
+      let submissionsData = state.viewSubmissionsData
       let submissionsDict = {}
 
-      for (let key in submissionsData) {
-        let submission = submissionsData[key]
-        let dateStr = submission.date_str
-
-        if(submissionsDict[dateStr]){
-          submissionsDict[dateStr].submissions += 1
-        }
-        else {
-          submissionsDict[dateStr] = {
-            "submissions": 1,
-            "point_sum": 0,
-            "accepted": 0
+      for(let dateStr in submissionsData) {
+        let submissions = submissionsData[dateStr]
+        for(let key in submissions) {
+          let submission = submissions[key]
+          if(submissionsDict[dateStr]){
+            submissionsDict[dateStr].submissions += 1
           }
-        }
-
-        if (submission.result != "AC" || submission.point <= 0) {
-          continue
-        }
-        submissionsDict[dateStr].point_sum += submission.point
-        submissionsDict[dateStr].accepted += 1
+          else {
+            submissionsDict[dateStr] = {
+              "submissions": 1,
+              "point_sum": 0,
+              "accepted": 0
+            }
+          }
+          if (submission.result != "AC" || submission.point <= 0) {
+            continue
+          }
+          submissionsDict[dateStr].point_sum += submission.point
+          submissionsDict[dateStr].accepted += 1
+        } 
       }
+
       state.heatMapData = submissionsDict
       state.submissionsIsLoading = false
     },
