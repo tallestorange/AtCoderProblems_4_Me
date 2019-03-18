@@ -68,4 +68,22 @@ export default [
       `@/views/Submissions.vue`
     )
   },
+  {
+    path: '/problems',
+    meta: { breadcrumb: true },
+    name: 'Problems',
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      `@/views/Problems.vue`
+    )
+  },
+  {
+    path: '/rivals',
+    meta: { breadcrumb: true },
+    name: 'Rivals',
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      `@/views/Rivals.vue`
+    )
+  },
 ];
