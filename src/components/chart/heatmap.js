@@ -147,39 +147,15 @@ export default {
     },
 
     getVirtulData () {
-      let submissionData = this.$store.getters.getSubmissionsRawData
       let data = []
-      let submissionDict = {}
+      let heatMapDict = this.$store.getters.getHeatMapData
 
-      for (let key in submissionData) {
-        let submission = submissionData[key]
-        let data = []
-        if (submission.result != "AC" || submission.point <= 0) {
-          continue
-        }
-
-        let dt = new Date(0)
-        dt.setUTCSeconds(submission.epoch_second)
-        let yr = dt.getFullYear()
-        let mn = ("00" + (dt.getMonth()+1)).slice(-2)
-        let dy = ("00" + dt.getDate()).slice(-2)
-        let dateStr = yr + "-" + mn + "-" + dy
-
-        if(submissionDict[dateStr]){
-          submissionDict[dateStr] += submission.point
-        }
-        else {
-          submissionDict[dateStr] = submission.point
-        }
-      }
-
-      for (let key in submissionDict) {
+      for (let key in heatMapDict) {
         data.push([
           key,
-          submissionDict[key]
+          heatMapDict[key].point_sum
         ])
       }
-
       return data;
     },
 

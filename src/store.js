@@ -15,6 +15,7 @@ export default new Vuex.Store({
     submissionsDetail: null,
     ratedSubmissionsData: null,
     ratedGraphData: null,
+    heatMapData: {},
     userName: "",
   },
   getters: {
@@ -40,6 +41,9 @@ export default new Vuex.Store({
     },
     getRatedSubmissionsData: (state, getters) => {
       return state.ratedSubmissionsData
+    },
+    getHeatMapData: (state, getters) => {
+      return state.heatMapData
     },
     getRatedGraphData: (state, getters) => {
       return state.ratedGraphData
@@ -112,10 +116,10 @@ export default new Vuex.Store({
     changeProblemsLoadingState(state, payload) {
       state.problemsIsLoading = payload
     },
-    setProblemsData(state,payload) {
+    setProblemsData(state, payload) {
       state.problemsData = payload.problemsData
     },
-    setProblemsDict(state,payload) {
+    setProblemsDict(state, payload) {
       let problems = state.problemsData
       var result = {}
 
@@ -129,6 +133,42 @@ export default new Vuex.Store({
       }
       state.problemsDict = result
       state.problemsIsLoading = false
+    },
+    setHeatMapData(state, payload) {
+      let submissionsData = state.submissionsData
+      console.log(submissionsData)
+      let submissionsDict = {}
+
+      for (let key in submissionsData) {
+        let submission = submissionsData[key]
+        let data = []
+
+        let dt = new Date(0)
+        dt.setUTCSeconds(submission.epoch_second)
+        let yr = dt.getFullYear()
+        let mn = ("00" + (dt.getMonth()+1)).slice(-2)
+        let dy = ("00" + dt.getDate()).slice(-2)
+        let dateStr = yr + "-" + mn + "-" + dy
+
+        if(submissionsDict[dateStr]){
+          submissionsDict[dateStr].submissions += 1
+        }
+        else {
+          submissionsDict[dateStr] = {
+            "submissions": 1,
+            "point_sum": 0,
+            "accepted": 0
+          }
+        }
+
+        if (submission.result != "AC" || submission.point <= 0) {
+          continue
+        }
+        submissionsDict[dateStr].point_sum += submission.point
+        submissionsDict[dateStr].accepted += 1
+      }
+
+      state.heatMapData = submissionsDict
     },
     setSubmissionsDetailPerProblem(state, payload) {
       let submissions = state.submissionsData
@@ -177,7 +217,6 @@ export default new Vuex.Store({
       }
       
       const name = context.getters.getUserName
-      context.commit("changeLoadingState")
       context.commit("changeSubmissionsLoadingState",true)
 
       await axios.get('https://kenkoooo.com/atcoder/atcoder-api/results?user=' + name)
@@ -186,6 +225,7 @@ export default new Vuex.Store({
       })
       context.commit("setSubmissionsData", payload)
       context.commit("setSubmissionsDetailPerProblem", payload)
+      context.commit("setHeatMapData", payload)
     },
     async fetchProblemsData(context) {
       const payload = {
