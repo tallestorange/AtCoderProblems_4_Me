@@ -13,8 +13,12 @@
           class="elevation-0 table-striped"
         >
           <template v-slot:items="props">
-            <td>{{ props.item.id }}</td>
-            <td class="text-xs-left">{{ props.item.title }}</td>
+            <td>
+              <a :href="makeSubmissionURL(props.item)" target="_blank">{{ props.item.id }}</a>
+            </td>
+            <td class="text-xs-left">
+              <a :href="makeTaskURL(props.item)" target="_blank">{{ props.item.title }}</a>
+            </td>
             <td class="text-xs-left">{{ props.item.point }}</td>
             <td class="text-xs-left"><v-chip label small :color="getColorByStatus(props.item.result)" text-color="white" >{{ props.item.result }}</v-chip></td>
           </template>
@@ -83,6 +87,12 @@ export default {
       else {
         return "orange"
       }
+    },
+    makeSubmissionURL (submission) {
+      return "https://atcoder.jp/contests/" + submission.contest_id + "/submissions/" +submission.id
+    },
+    makeTaskURL (submission) {
+      return "https://atcoder.jp/contests/" + submission.contest_id + "/tasks/" +submission.problem_id
     },
   }
 };
