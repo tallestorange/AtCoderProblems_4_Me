@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import items from '@/api/order';
 export default {
   data () {
     return {
@@ -46,7 +45,6 @@ export default {
         { text: 'Result', value: 'status' },
 
       ],
-      items: items,
       colors: {
         processing: 'blue',
         sent: 'red',

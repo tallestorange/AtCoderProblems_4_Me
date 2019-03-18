@@ -91,7 +91,6 @@ export default new Vuex.Store({
           result[dateStr] = [submission]
         }
       }
-      console.log(result)
       state.viewSubmissionsData = result
     },
     setSelectedDate(state, payload) {

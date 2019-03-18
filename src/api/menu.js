@@ -3,13 +3,13 @@ const Menu =  [
     title: 'Dashboard',
     group: 'apps',
     icon: '',
-    name: 'Test',
+    name: 'Dashboard',
   },
   {
     title: 'Submissions',
     group: 'apps',
     icon: '',
-    name: 'Problems',
+    name: 'Submissions',
   },
 ];
 // reorder menu
