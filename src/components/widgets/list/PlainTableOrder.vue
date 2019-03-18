@@ -14,7 +14,7 @@
         >
           <template v-slot:items="props">
             <td>{{ props.item.id }}</td>
-            <td class="text-xs-left">{{ props.item.problem_id }}</td>
+            <td class="text-xs-left">{{ props.item.title }}</td>
             <td class="text-xs-left">{{ props.item.point }}</td>
             <td class="text-xs-left"><v-chip label small :color="getColorByStatus(props.item.result)" text-color="white" >{{ props.item.result }}</v-chip></td>
           </template>
@@ -37,9 +37,9 @@ export default {
           sortable: false,
           value: 'id'
         },
-        { text: 'problem_id', value: 'deadline' },
-        { text: 'point', value: 'progress' },
-        { text: 'result', value: 'status' },
+        { text: 'Title', value: 'deadline' },
+        { text: 'Point', value: 'progress' },
+        { text: 'Result', value: 'status' },
 
       ],
       items: items,
@@ -48,7 +48,7 @@ export default {
         sent: 'red',
         delivered: 'green'
       }
-    };ß
+    };
   },
   computed: {
     randomColor () {
@@ -58,11 +58,14 @@ export default {
     submissiosData () {
       let submissionsData = this.$store.getters.getSubmissionsRawData
       let selectedDate = this.$store.getters.getSelectedDate
+      let problemsDict = this.$store.getters.getProblemsData
       let result = []
       
       for (let key in submissionsData) {
         let submission = submissionsData[key]
         if (submission.date_str == selectedDate) {
+          let title = problemsDict[submission.problem_id].title
+          submission.title = title
           result.push(submission)
         }
       }
