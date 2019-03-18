@@ -62,6 +62,7 @@ export default {
         if(a.id>b.id) return -1
         return 0
       })
+
       return submissionData.slice(0,100)
     }
   },

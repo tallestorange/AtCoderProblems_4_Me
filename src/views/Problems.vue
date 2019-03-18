@@ -4,6 +4,25 @@
       <v-layout row wrap>
 
         <v-flex lg6 sm12 xs12>
+
+          <v-card>
+            <v-toolbar card dense color="transparent">
+              <v-toolbar-title><h4>AC Calendar</h4></v-toolbar-title>
+            </v-toolbar>
+            <v-divider></v-divider>
+            <v-date-picker
+              :events="arrayEvents"
+              color="indigo"
+              full-width
+              landscape
+              v-model="date"
+              event-color="green lighten-1"
+            ></v-date-picker>
+          </v-card>
+
+        </v-flex>
+
+        <v-flex lg6 sm12 xs12>
           <plain-table-order></plain-table-order>
         </v-flex>
 
@@ -26,6 +45,7 @@ export default {
   data: () => ({
     color: Material,
     selectedTab: 'tab-1',
+    date: new Date().toISOString().substr(0, 10),
   }),
   methods: {
   },

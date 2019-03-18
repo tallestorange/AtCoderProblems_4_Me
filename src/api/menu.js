@@ -6,7 +6,7 @@ const Menu =  [
     name: 'Test',
   },
   {
-    title: 'Problems & Submissions',
+    title: 'Submissions',
     group: 'apps',
     icon: '',
     name: 'Problems',
