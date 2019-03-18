@@ -8,7 +8,7 @@
     v-model="drawer"
     width="260"
     >
-    <v-toolbar color="indigo darken-1" dark>
+    <v-toolbar color="indigo darken-3" dark>
 
       <v-text-field
         v-model="username"

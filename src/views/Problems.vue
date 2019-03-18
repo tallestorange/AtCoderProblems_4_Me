@@ -21,7 +21,35 @@
 
         </v-flex>
 
-        <v-flex lg6 sm12 xs12>
+        <v-flex lg6 class="hidden-md-and-down">
+          <v-card>
+            <v-toolbar card dense color="transparent">
+              <v-toolbar-title><h4>Status</h4></v-toolbar-title>
+            </v-toolbar>
+            <v-divider></v-divider>
+
+            <mini-statistic
+              title="AC"
+              color="green"
+              :number="getStatus.accepted"
+            ></mini-statistic>
+
+            <mini-statistic
+              title="WA"
+              color="orange"
+              :number="getStatus.submissions-getStatus.accepted"
+            ></mini-statistic>
+
+            <mini-statistic
+              title="Point Sum"
+              color="blue"
+              :number="getStatus.point_sum"
+            ></mini-statistic>
+
+          </v-card>
+        </v-flex>
+
+        <v-flex lg12 sm12 xs12>
           <plain-table-order></plain-table-order>
         </v-flex>
 
@@ -31,7 +59,8 @@
 </template>
 
 <script>
-import PlainTableOrder from '@/components/widgets/list/PlainTableOrder';
+import PlainTableOrder from '@/components/widgets/list/PlainTableOrder'
+import MiniStatistic from '@/components/widgets/statistic/MiniStatistic'
 import VWidget from '@/components/VWidget'
 import Material from 'vuetify/es5/util/colors'
 import axios from 'axios'
@@ -40,6 +69,7 @@ export default {
   components: {
     VWidget,
     PlainTableOrder,
+    MiniStatistic
   },
   data: () => ({
     color: Material,
@@ -59,6 +89,16 @@ export default {
         result.push(key)
       }
       return result
+    },
+    getStatus () {
+      let submissionsData = this.$store.getters.getHeatMapData
+      let selectedDate = this.$store.getters.getSelectedDate
+      if (submissionsData[selectedDate]) {
+        return submissionsData[selectedDate]
+      }
+      else {
+        return { "submissions": 0, "point_sum": 0, "accepted": 0 }
+      }
     }
   },
   watch: {
@@ -67,7 +107,7 @@ export default {
       this.$store.commit('setSelectedDate', this.date)
     }
   }
-
+// { "submissions": 2, "point_sum": 400, "accepted": 2 }
 };
 
 </script>
