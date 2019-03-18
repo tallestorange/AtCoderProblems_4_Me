@@ -61,7 +61,7 @@ export default {
       let problemsDict = this.$store.getters.getProblemsData
       let selectedDate = this.$store.getters.getSelectedDate
       let result = []
-      if (selectedDate == "") {
+      if (selectedDate == "" || this.$store.getters.getSubmissionsRawData.length == 0) {
         return []
       }
       let allSubmissions = this.$store.getters.getViewSubmissionsData

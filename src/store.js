@@ -265,9 +265,11 @@ export default new Vuex.Store({
       })
 
       let nowDate = context.getters.getSelectedDate
-      console.log(nowDate)
       if (nowDate == "") {
         context.commit("setCurrentDate", payload)
+      }
+      else {
+        console.log(context.getters.getSelectedDate)
       }
       
       context.commit("setSubmissionsData", payload)

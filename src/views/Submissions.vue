@@ -103,6 +103,7 @@ export default {
   },
   watch: {
     date: function() {
+      console.log(this.date)
       this.$store.commit('setSelectedDate', this.date)
     }
   }
