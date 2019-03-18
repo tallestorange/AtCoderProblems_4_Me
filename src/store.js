@@ -10,11 +10,12 @@ export default new Vuex.Store({
     problemsData: null,
     problemsDict: null,
     problemsIsLoading: false,
-    submissionsData: null,
+    submissionsData: [],
     submissionsIsLoading: false,
     submissionsDetail: null,
     ratedSubmissionsData: null,
     ratedGraphData: null,
+    userName: "",
   },
   getters: {
     getLoadingState: (state, getters) => {
@@ -42,11 +43,17 @@ export default new Vuex.Store({
     },
     getRatedGraphData: (state, getters) => {
       return state.ratedGraphData
+    },
+    getUserName: (state, getters) => {
+      return state.userName
     }
   },
   mutations: {
     setSubmissionsData(state, payload) {
       state.submissionsData = payload.submissionsData
+    },
+    setUserName(state, payload) {
+      state.userName = payload
     },
     setRatedSubmissionsData(state, payload) {
       const problemsDict = JSON.parse(JSON.stringify(state.problemsDict))
@@ -123,7 +130,7 @@ export default new Vuex.Store({
       state.problemsDict = result
       state.problemsIsLoading = false
     },
-    setSubmissionsDetailPerProblem(state,payload) {
+    setSubmissionsDetailPerProblem(state, payload) {
       let submissions = state.submissionsData
       var result = {}
 
@@ -164,18 +171,20 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async fetchSubmissionsData(context,{name}) {
+    async fetchSubmissionsData(context) {
       const payload = {
         submissionsData: '',
       }
+      
+      const name = context.getters.getUserName
       context.commit("changeLoadingState")
       context.commit("changeSubmissionsLoadingState",true)
+
       await axios.get('https://kenkoooo.com/atcoder/atcoder-api/results?user=' + name)
       .then((res) => {
         payload.submissionsData = res.data
       })
       context.commit("setSubmissionsData", payload)
-      // context.commit("setSubmissionDetail", payload)
       context.commit("setSubmissionsDetailPerProblem", payload)
     },
     async fetchProblemsData(context) {
