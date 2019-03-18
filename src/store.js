@@ -17,7 +17,7 @@ export default new Vuex.Store({
     ratedGraphData: null,
     heatMapData: {},
     userName: "",
-    selectedDate: "2019-03-18",
+    selectedDate: "",
   },
   getters: {
     getLoadingState: (state, getters) => {
@@ -61,6 +61,12 @@ export default new Vuex.Store({
       let result = []
       const submissions = payload.submissionsData
 
+      submissions.sort(function(a,b){
+        if(a.id<b.id) return 1
+        if(a.id>b.id) return -1
+        return 0
+      })
+
       for(let i in submissions) {
         let submission = submissions[i]
 
@@ -78,6 +84,14 @@ export default new Vuex.Store({
     },
     setSelectedDate(state, payload) {
       state.selectedDate = payload
+    },
+    setCurrentDate(state, payload) {
+      let dt = new Date()
+      let yr = dt.getFullYear()
+      let mn = ("00" + (dt.getMonth()+1)).slice(-2)
+      let dy = ("00" + dt.getDate()).slice(-2)
+      let dateStr = yr + "-" + mn + "-" + dy
+      state.selectedDate = dateStr
     },
     setUserName(state, payload) {
       state.userName = payload
@@ -238,6 +252,7 @@ export default new Vuex.Store({
       .then((res) => {
         payload.submissionsData = res.data
       })
+      context.commit("setCurrentDate", payload)
       context.commit("setSubmissionsData", payload)
       context.commit("setSubmissionsDetailPerProblem", payload)
       context.commit("setHeatMapData", payload)
