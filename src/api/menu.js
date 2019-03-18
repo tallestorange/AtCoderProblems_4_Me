@@ -11,6 +11,18 @@ const Menu =  [
     icon: '',
     name: 'Submissions',
   },
+  {
+    title: 'Problems',
+    group: 'apps',
+    icon: '',
+    name: 'Problems',
+  },
+  {
+    title: 'Rivals',
+    group: 'apps',
+    icon: '',
+    name: 'Rivals',
+  },
 ];
 // reorder menu
 Menu.forEach((item) => {
