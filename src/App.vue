@@ -4,20 +4,22 @@
       <v-app id="inspire" class="app">
         <app-drawer class="app--drawer"></app-drawer>
         <app-toolbar class="app--toolbar"></app-toolbar>
+
         <v-content>
           <div class="page-wrapper">
             <router-view></router-view>
-          </div>   
+          </div>
         </v-content>
+
       </v-app>
     </template>
   </div>
 </template>
 
 <script>
-import AppDrawer from '@/components/AppDrawer';
-import AppToolbar from '@/components/AppToolbar';
-import AppEvents from  './event';
+import AppDrawer from '@/components/AppDrawer'
+import AppToolbar from '@/components/AppToolbar'
+import AppEvents from  './event'
 
 export default {
   components: {
@@ -28,17 +30,24 @@ export default {
     AppEvents.forEach(item => {
       this.$on(item.name, item.callback);
     });
-    window.getApp = this;
+    window.getApp = this
   },
 };
 </script>
 
-<style lang="stylus" scoped>
-  .setting-fab 
-    top:50%!important; 
+<style>
+  .setting-fab {
+    top:50%!important;
     right:0;
-    border-radius:0  
-  .page-wrapper
-    min-height:calc(100vh - 64px - 50px - 81px );  
-
+    border-radius:0;
+  }  
+  .page-wrapper {
+    min-height:calc(100vh - 64px - 50px - 81px );
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .1s;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
 </style>
