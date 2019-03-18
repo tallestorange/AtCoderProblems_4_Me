@@ -17,6 +17,14 @@
       color="primary"
       v-if="isLoading"
     ></v-progress-circular>
+    <v-btn
+      flat
+      icon
+      v-else
+      @click="pushedRefreshButton"
+    >
+      <v-icon>autorenew</v-icon>
+    </v-btn>
       
   </v-toolbar>
 </template>
@@ -46,6 +54,10 @@ export default {
     },
     handleFullScreen () {
       Util.toggleFullScreen()
+    },
+    pushedRefreshButton() {
+      this.$store.dispatch('fetchProblemsData')
+      this.$store.dispatch('fetchSubmissionsData')
     }
   }
 };
