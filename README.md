@@ -3,7 +3,7 @@
 
 ## Preview
 
-~~Not yet!~~
+[Sample Page](https://tallestorange.github.io/AtCoderProblems_4_Me/#/dashboard)
 
 ## Project setup
 ```
