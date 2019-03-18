@@ -17,6 +17,7 @@ export default new Vuex.Store({
     ratedGraphData: null,
     heatMapData: {},
     userName: "",
+    selectedDate: "2019-03-18",
   },
   getters: {
     getLoadingState: (state, getters) => {
@@ -26,6 +27,9 @@ export default new Vuex.Store({
       else {
         return true
       }
+    },
+    getSelectedDate: (state, getters) => {
+      return state.selectedDate
     },
     getGraphData: (state, getters) => {
       return state.graphData
@@ -54,7 +58,26 @@ export default new Vuex.Store({
   },
   mutations: {
     setSubmissionsData(state, payload) {
-      state.submissionsData = payload.submissionsData
+      let result = []
+      const submissions = payload.submissionsData
+
+      for(let i in submissions) {
+        let submission = submissions[i]
+
+        let dt = new Date(0)
+        dt.setUTCSeconds(submission.epoch_second)
+        let yr = dt.getFullYear()
+        let mn = ("00" + (dt.getMonth()+1)).slice(-2)
+        let dy = ("00" + dt.getDate()).slice(-2)
+        let dateStr = yr + "-" + mn + "-" + dy
+
+        submission.date_str = dateStr
+        result.push(submission)
+      }
+      state.submissionsData = result
+    },
+    setSelectedDate(state, payload) {
+      state.selectedDate = payload
     },
     setUserName(state, payload) {
       state.userName = payload
@@ -136,19 +159,11 @@ export default new Vuex.Store({
     },
     setHeatMapData(state, payload) {
       let submissionsData = state.submissionsData
-      console.log(submissionsData)
       let submissionsDict = {}
 
       for (let key in submissionsData) {
         let submission = submissionsData[key]
-        let data = []
-
-        let dt = new Date(0)
-        dt.setUTCSeconds(submission.epoch_second)
-        let yr = dt.getFullYear()
-        let mn = ("00" + (dt.getMonth()+1)).slice(-2)
-        let dy = ("00" + dt.getDate()).slice(-2)
-        let dateStr = yr + "-" + mn + "-" + dy
+        let dateStr = submission.date_str
 
         if(submissionsDict[dateStr]){
           submissionsDict[dateStr].submissions += 1
