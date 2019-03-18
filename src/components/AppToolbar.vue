@@ -7,7 +7,7 @@
   >
     <v-toolbar-side-icon @click.stop="handleDrawerToggle"></v-toolbar-side-icon>
     <v-toolbar-title class="ml-0 pl-3 font-weight-regular">
-      Competitive Programming
+      AtCoder Problems 4 Me
     </v-toolbar-title>
 
     <v-spacer></v-spacer>
@@ -29,12 +29,10 @@
   </v-toolbar>
 </template>
 <script>
-import NotificationList from '@/components/widgets/list/NotificationList';
-import Util from '@/util';
+
 export default {
   name: 'app-toolbar',
   components: {
-    NotificationList
   },
   data: () => ({
     date: new Date().toISOString().substr(0, 10)
@@ -50,9 +48,6 @@ export default {
   methods: {
     handleDrawerToggle () {
       window.getApp.$emit('APP_DRAWER_TOGGLED')
-    },
-    handleFullScreen () {
-      Util.toggleFullScreen()
     },
     pushedRefreshButton() {
       this.$store.dispatch('fetchProblemsData')
