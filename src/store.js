@@ -264,7 +264,13 @@ export default new Vuex.Store({
       .then((res) => {
         payload.submissionsData = res.data
       })
-      context.commit("setCurrentDate", payload)
+
+      let nowDate = context.getters.getSelectedDate
+      console.log(nowDate)
+      if (nowDate == "") {
+        context.commit("setCurrentDate", payload)
+      }
+      
       context.commit("setSubmissionsData", payload)
       context.commit("setViewSubmissionsData", payload)
       context.commit("setSubmissionsDetailPerProblem", payload)

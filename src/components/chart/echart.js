@@ -102,6 +102,7 @@ export default {
       tooltip: {
         show: true,
       },
+      animation: false,
       title: {
         show: true,
         left: "center",
