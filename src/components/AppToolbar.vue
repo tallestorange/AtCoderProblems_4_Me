@@ -37,8 +37,7 @@ export default {
     NotificationList
   },
   data: () => ({
-    items: [
-    ],
+    date: new Date().toISOString().substr(0, 10)
   }),
   computed: {
     toolbarColor () {
