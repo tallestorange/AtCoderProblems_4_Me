@@ -11,10 +11,8 @@
             </v-toolbar>
             <v-divider></v-divider>
             <v-date-picker
-              :events="arrayEvents"
               color="indigo"
               full-width
-              landscape
               v-model="date"
               event-color="green lighten-1"
             ></v-date-picker>
@@ -45,12 +43,22 @@ export default {
   data: () => ({
     color: Material,
     selectedTab: 'tab-1',
+    rawDate: "null",
+    dates: [],
+    pickerDate: null,
     date: new Date().toISOString().substr(0, 10),
   }),
   methods: {
   },
   computed: {
   },
+  watch: {
+    date: function() {
+      console.log(this.date)
+      this.$store.commit('setSelectedDate', this.date)
+    }
+  }
+
 };
 
 </script>
