@@ -48,7 +48,7 @@ export default {
         sent: 'red',
         delivered: 'green'
       }
-    };
+    };ß
   },
   computed: {
     randomColor () {
@@ -56,14 +56,18 @@ export default {
       return this.colors[item];
     },
     submissiosData () {
-      let submissionData = this.$store.getters.getSubmissionsRawData
-      submissionData.sort(function(a,b){
-        if(a.id<b.id) return 1
-        if(a.id>b.id) return -1
-        return 0
-      })
+      let submissionsData = this.$store.getters.getSubmissionsRawData
+      let selectedDate = this.$store.getters.getSelectedDate
+      let result = []
+      
+      for (let key in submissionsData) {
+        let submission = submissionsData[key]
+        if (submission.date_str == selectedDate) {
+          result.push(submission)
+        }
+      }
 
-      return submissionData.slice(0,100)
+      return result
     }
   },
   methods: {
