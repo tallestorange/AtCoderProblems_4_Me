@@ -103,11 +103,9 @@ export default {
   },
   watch: {
     date: function() {
-      console.log(this.date)
       this.$store.commit('setSelectedDate', this.date)
     }
   }
-// { "submissions": 2, "point_sum": 400, "accepted": 2 }
 };
 
 </script>
