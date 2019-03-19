@@ -63,10 +63,10 @@ export default {
           problem.your_wa_count = 0
         }
         if (problem.your_ac_count > 0){
-          problem.cls = "text-xs-left green"
+          problem.cls = "text-xs-left green lighten-3"
         }
         else if (problem.your_wa_count > 0){
-          problem.cls = "text-xs-left orange"
+          problem.cls = "text-xs-left orange lighten-3"
         }
         else {
           problem.cls = "text-xs-left"
@@ -84,14 +84,6 @@ export default {
     },
   },
   methods: {
-    getColorByStatus(status) {
-      // return this.colors[status];
-      if (status == "AC") {
-        return "green";
-      } else {
-        return "orange";
-      }
-    },
     makeTaskURL(submission) {
       return (
         "https://atcoder.jp/contests/" +
