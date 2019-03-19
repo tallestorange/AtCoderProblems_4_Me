@@ -43,11 +43,9 @@
 </template>
 
 <script>
-import EChart from "@/components/parts/DonutGraph";
-import HeatMap from "@/components/parts/HeatMap";
+import EChart from "@/components/DonutGraph";
+import HeatMap from "@/components/HeatMap";
 import VWidget from "@/components/VWidget";
-import Material from "vuetify/es5/util/colors";
-import axios from "axios";
 
 export default {
   components: {
@@ -56,8 +54,6 @@ export default {
     HeatMap
   },
   data: () => ({
-    color: Material,
-    selectedTab: "tab-1"
   }),
   methods: {
     getColor(rate) {

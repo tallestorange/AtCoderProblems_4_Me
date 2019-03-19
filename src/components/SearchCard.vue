@@ -29,7 +29,7 @@
           </template>
         </v-combobox>
       </v-flex>
-    </v-layout>  
+    </v-layout>
   </v-card>
 </template>
 
@@ -42,29 +42,28 @@ export default {
   },
   methods: {
     remove: function(item) {
-      const index = this.scores.indexOf(item)
-      if (index >= 0) this.scores.splice(index, 1)
+      const index = this.scores.indexOf(item);
+      if (index >= 0) this.scores.splice(index, 1);
     }
   },
   computed: {
     getScoresList() {
-      const problemsDict = this.$store.getters.getProblemsData
-      let resultDict = {}
-      let result = []
+      const problemsDict = this.$store.getters.getProblemsData;
+      let resultDict = {};
+      let result = [];
 
-      for(let key in problemsDict) {
-        let problem = problemsDict[key]
+      for (let key in problemsDict) {
+        let problem = problemsDict[key];
         if (resultDict[problem.point]) {
-          resultDict[problem.point] += 1
-        }
-        else {
-          resultDict[problem.point] = 1
+          resultDict[problem.point] += 1;
+        } else {
+          resultDict[problem.point] = 1;
         }
       }
-      for(let key in resultDict){
-        result.push(key)
+      for (let key in resultDict) {
+        result.push(key);
       }
-      return result
+      return result;
     }
   },
   watch: {

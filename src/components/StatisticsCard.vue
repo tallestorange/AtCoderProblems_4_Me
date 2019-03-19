@@ -23,15 +23,14 @@
 </template>
 
 <script>
-import MiniStatistic from "@/components/parts/StatusItem";
+import MiniStatistic from "@/components/StatusItem";
 
 export default {
   components: {
-    MiniStatistic,
+    MiniStatistic
   },
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     getStatus() {
@@ -43,6 +42,6 @@ export default {
         return { submissions: 0, point_sum: 0, accepted: 0 };
       }
     }
-  },
+  }
 };
 </script>

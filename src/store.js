@@ -30,7 +30,7 @@ export default new Vuex.Store({
       }
     },
     getSearchTags: (state, getters) => {
-      return state.searchTags
+      return state.searchTags;
     },
     getSelectedDate: (state, getters) => {
       return state.selectedDate;
@@ -74,7 +74,7 @@ export default new Vuex.Store({
       state.submissionsData = submissions;
     },
     setSearchTags(state, payload) {
-      state.searchTags = payload
+      state.searchTags = payload;
     },
     setViewSubmissionsData(state, payload) {
       let submissions = payload.submissionsData;

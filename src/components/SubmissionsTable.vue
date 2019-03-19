@@ -57,9 +57,9 @@ export default {
         { text: "Result", value: "result" }
       ],
       pagination: {
-        sortBy: 'id',
+        sortBy: "id",
         descending: true,
-        rowsPerPage: 10,
+        rowsPerPage: 10
       }
     };
   },
