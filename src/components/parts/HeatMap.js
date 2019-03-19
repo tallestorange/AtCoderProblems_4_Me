@@ -1,42 +1,32 @@
-
 /**
  * ECharts Vue Wrapper
  * Michael Wang
  */
-import colors from 'vuetify/es5/util/colors';
-import _object from 'lodash/object';
+import colors from "vuetify/es5/util/colors";
+import _object from "lodash/object";
 
 const ECharts = window.echarts || undefined;
 if (ECharts === undefined) {
-  console.error('ECharts is not defined');
+  console.error("ECharts is not defined");
 }
 // set color palette
 const colorPalette = [];
-Object.entries(colors).forEach((item) => {
+Object.entries(colors).forEach(item => {
   if (item[1].base) {
     colorPalette.push(item[1].base);
   }
 });
 
-// default 
-// const colorPalette = ['#d87c7c', '#919e8b', '#d7ab82', '#6e7074', '#61a0a8', '#efa18d', '#787464', '#cc7e63', '#724e58', '#4b565b'];
-// ECharts.registerTheme('material', {
-//   color: colorPalette,
-//   graph: {
-//     color: colorPalette
-//   }
-//   textStyle: {
-
-//   }
-// });
-(function () {
-  const throttle = function (type, name, obj) {
+(function() {
+  const throttle = function(type, name, obj) {
     obj = obj || window;
     let running = false;
-    let func = function () {
-      if (running) { return }
+    let func = function() {
+      if (running) {
+        return;
+      }
       running = true;
-      requestAnimationFrame(function () {
+      requestAnimationFrame(function() {
         obj.dispatchEvent(new CustomEvent(name));
         running = false;
       });
@@ -44,33 +34,33 @@ Object.entries(colors).forEach((item) => {
     obj.addEventListener(type, func);
   };
   /* init - you can init any event */
-  throttle('resize', 'optimizedResize');
+  throttle("resize", "optimizedResize");
 })();
 
 export default {
-  name: 'v-echart',
+  name: "v-echart",
 
-  render (h) {
+  render(h) {
     const data = {
-      staticClass: 'v-echart',
+      staticClass: "v-echart",
       style: this.canvasStyle,
-      ref: 'canvas',
+      ref: "canvas",
       on: this.$listeners
     };
-    return h('div', data);
+    return h("div", data);
   },
 
   props: {
     // args of  ECharts.init(dom, theme, opts)
-    width: { type: String, default: 'auto' },
-    height: { type: String, default: '400px' },
+    width: { type: String, default: "auto" },
+    height: { type: String, default: "400px" },
     merged: {
       type: Boolean,
-      default: true,
+      default: true
     },
-    // instace.setOption 
+    // instace.setOption
     pathOption: [Object, Array],
-    option: Object, 
+    option: Object,
     // general config
     textStyle: Object,
     title: Object,
@@ -80,7 +70,7 @@ export default {
     xAxis: [Object, Array],
     yAxis: [Object, Array],
     series: [Object, Array],
-    axisPointer: Object,        
+    axisPointer: Object,
     dataset: Array, //{ type: [Object, Array], default () { return {} } }, // option.dataSet
     colors: Array, // echarts.option.color
     backgroundColor: [Object, String],
@@ -92,86 +82,85 @@ export default {
     }
   },
   computed: {
-    canvasStyle () {
+    canvasStyle() {
       return {
         width: this.width,
-        height: this.height,
+        height: this.height
       };
-    },
+    }
   },
   data: () => ({
     _defaultOption: {
-      tooltip : {},
+      tooltip: {},
       visualMap: {
         min: 0,
         max: 10000,
-        type: 'piecewise',
-        orient: 'horizontal',
-        left: 'center',
+        type: "piecewise",
+        orient: "horizontal",
+        left: "center",
         top: 65,
         textStyle: {
-          color: '#000'
+          color: "#000"
         }
       },
       calendar: {
         top: 120,
         left: 30,
         right: 30,
-        cellSize: ['auto', 13],
-        range: ['2019-01-01', '2019-03-17'],
+        cellSize: ["auto", 13],
+        range: ["2019-01-01", "2019-03-17"],
         itemStyle: {
-          normal: {borderWidth: 0.5}
+          normal: { borderWidth: 0.5 }
         },
-        yearLabel: {show: false}
+        yearLabel: { show: false }
       },
       series: {
-        type: 'heatmap',
-        coordinateSystem: 'calendar',
+        type: "heatmap",
+        coordinateSystem: "calendar",
         data: []
       }
     }
   }),
   methods: {
-    init () {
+    init() {
       const { widthChangeDelay } = this;
 
-      this.$data._defaultOption.series.data = this.getVirtulData()          
-      this.chartInstance = ECharts.init(this.$refs.canvas, 'material');
-      this.chartInstance.setOption(_object.merge(this.option, this.$data._defaultOption));
+      this.$data._defaultOption.series.data = this.getVirtulData();
+      this.chartInstance = ECharts.init(this.$refs.canvas, "material");
+      this.chartInstance.setOption(
+        _object.merge(this.option, this.$data._defaultOption)
+      );
 
-      window.addEventListener('optimizedResize', (e) => {
+      window.addEventListener("optimizedResize", e => {
         setTimeout(_ => {
           this.chartInstance.resize();
         }, this.widthChangeDelay);
       });
     },
 
-    getVirtulData () {
-      let data = []
-      let heatMapDict = this.$store.getters.getHeatMapData
+    getVirtulData() {
+      let data = [];
+      let heatMapDict = this.$store.getters.getHeatMapData;
 
       for (let key in heatMapDict) {
-        data.push([
-          key,
-          heatMapDict[key].point_sum
-        ])
+        data.push([key, heatMapDict[key].point_sum]);
       }
       return data;
     },
 
-    resize () {
+    resize() {
       this.chartInstance.resize();
     },
-    clean () {
-      window.removeEventListener('resize', this.chartInstance.resize);
+    clean() {
+      window.removeEventListener("resize", this.chartInstance.resize);
       this.chartInstance.clear();
-    },
+    }
   },
-  mounted () {
+  mounted() {
     this.init();
   },
 
-  beforeDestroy () {
+  beforeDestroy() {
     this.clean();
   }
 };
