@@ -8,35 +8,31 @@
               <v-toolbar-title><h4>Search</h4></v-toolbar-title>
             </v-toolbar>
             <v-divider></v-divider>
-
             <v-layout justify-center>
-            <v-flex lg4 sm10 xs10>
-
-            <v-combobox
-              label="Scores"
-              :items="getScoresList"
-              v-model="scores"
-              multiple
-              clearable
-              chips
-              type="button"
-            >
-              <template v-slot:selection="data">
-                <v-chip
-                  :selected="data.selected"
-                  close
-                  color="primary"
-                  text-color="white"
-                  @input="remove(data.item)"
+              <v-flex lg4 sm10 xs10>
+                <v-combobox
+                  label="Scores"
+                  :items="getScoresList"
+                  v-model="scores"
+                  multiple
+                  clearable
+                  chips
+                  type="button"
                 >
-                  {{ data.item }}
-                </v-chip>
-              </template>
-            </v-combobox>
-
-            </v-flex>
+                  <template v-slot:selection="data">
+                    <v-chip
+                      :selected="data.selected"
+                      close
+                      color="primary"
+                      text-color="white"
+                      @input="remove(data.item)"
+                    >
+                      {{ data.item }}
+                    </v-chip>
+                  </template>
+                </v-combobox>
+              </v-flex>
             </v-layout>
-
           </v-card>
         </v-flex>
 
@@ -93,6 +89,11 @@ export default {
     let problems = this.$store.getters.getProblemsData;
     if (problems === null) {
       this.$store.dispatch("fetchProblemsData");
+    }
+  },
+  watch: {
+    scores: function() {
+      this.$store.commit("setSearchTags", this.scores);
     }
   }
 };
