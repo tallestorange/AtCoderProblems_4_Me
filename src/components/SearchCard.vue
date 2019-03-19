@@ -1,5 +1,5 @@
 <template>
-  <v-card height="280px">
+  <v-card>
     <v-toolbar card dense color="transparent">
       <v-toolbar-title><h4>Search</h4></v-toolbar-title>
     </v-toolbar>
