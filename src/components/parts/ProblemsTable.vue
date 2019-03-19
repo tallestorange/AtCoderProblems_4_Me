@@ -14,7 +14,7 @@
         >
           <template v-slot:items="props">
 
-            <td class="text-xs-left">
+            <td :class="props.item.cls">
               <a :href="makeTaskURL(props.item)" target="_blank">{{
                 props.item.title
               }}</a>
@@ -25,6 +25,7 @@
             <td class="text-xs-left">
               {{ props.item.solver_count }}
             </td>
+
           </template>
         </v-data-table>
       </template>
@@ -38,9 +39,9 @@ export default {
   data() {
     return {
       headers: [
-        { text: "Title", value: "deadline" },
-        { text: "Point", value: "progress" },
-        { text: "Solvers", value: "status" }
+        { text: "Title", value: "title", sortable: false },
+        { text: "Point", value: "point" },
+        { text: "Solvers", value: "solver_count" }
       ]
     };
   },
@@ -60,6 +61,15 @@ export default {
         else {
           problem.your_ac_count = 0
           problem.your_wa_count = 0
+        }
+        if (problem.your_ac_count > 0){
+          problem.cls = "text-xs-left green"
+        }
+        else if (problem.your_wa_count > 0){
+          problem.cls = "text-xs-left orange"
+        }
+        else {
+          problem.cls = "text-xs-left"
         }
         result.push(problem)
       }
