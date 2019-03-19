@@ -97,6 +97,12 @@ export default {
     date: function() {
       this.$store.commit("setSelectedDate", this.date);
     }
+  },
+  created: function() {
+    let problems = this.$store.getters.getProblemsData;
+    if (problems === null) {
+      this.$store.dispatch("fetchProblemsData");
+    }
   }
 };
 </script>

@@ -49,12 +49,11 @@ export default {
         {
           text: "#",
           align: "left",
-          sortable: false,
           value: "id"
         },
-        { text: "Title", value: "deadline" },
-        { text: "Point", value: "progress" },
-        { text: "Result", value: "status" }
+        { text: "Title", value: "title" },
+        { text: "Point", value: "point" },
+        { text: "Result", value: "result" }
       ]
     };
   },
