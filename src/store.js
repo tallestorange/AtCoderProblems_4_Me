@@ -20,7 +20,8 @@ export default new Vuex.Store({
     userName: "",
     selectedDate: "",
     searchTags: "",
-    statusGraphData: null
+    statusGraphData: null,
+    isDarkMode: false
   },
   getters: {
     getLoadingState: (state, getters) => {
@@ -29,6 +30,9 @@ export default new Vuex.Store({
       } else {
         return true;
       }
+    },
+    getIsDarkMode: (state, getters) => {
+      return state.isDarkMode;
     },
     getStatusGraphData: (state, getters) => {
       return state.statusGraphData;
@@ -77,8 +81,11 @@ export default new Vuex.Store({
       });
       state.submissionsData = submissions;
     },
+    setIsDarkMode(state, payload) {
+      state.isDarkMode = payload;
+    },
     setStatusGraphData(state, payload) {
-      state.statusGraphData = payload
+      state.statusGraphData = payload;
     },
     setSearchTags(state, payload) {
       state.searchTags = payload;

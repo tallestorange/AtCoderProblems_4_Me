@@ -5,7 +5,6 @@
     </v-toolbar>
     <v-divider></v-divider>
     <v-date-picker
-      color="indigo"
       full-width
       v-model="date"
       :events="arrayEvents"

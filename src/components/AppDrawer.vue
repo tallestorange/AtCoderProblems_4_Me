@@ -111,6 +111,19 @@
             </v-list-tile-action>
           </v-list-tile>
         </template>
+
+        <v-divider></v-divider>
+
+        <v-list-tile>
+          <v-list-tile-content>
+            <v-list-tile-title>NightMode</v-list-tile-title>
+          </v-list-tile-content>
+          <v-list-tile-action>
+            <v-switch v-model="nightMode">
+            </v-switch>
+          </v-list-tile-action>
+        </v-list-tile>
+
       </v-list>
     </vue-perfect-scrollbar>
   </v-navigation-drawer>
@@ -133,6 +146,7 @@ export default {
   data: () => ({
     mini: false,
     drawer: true,
+    nightMode: false,
     menus: menu,
     scrollSettings: {
       maxScrollbarLength: 160
@@ -152,6 +166,11 @@ export default {
     window.getApp.$on("APP_DRAWER_TOGGLED", () => {
       this.drawer = !this.drawer;
     });
+  },
+  watch: {
+    nightMode: function() {
+      this.$store.commit("setIsDarkMode", this.nightMode);
+    }
   },
 
   methods: {

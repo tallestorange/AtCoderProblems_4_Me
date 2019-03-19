@@ -1,7 +1,7 @@
 <template>
   <div id="appRoot">
     <template v-if="!$route.meta.public">
-      <v-app id="inspire" class="app">
+      <v-app :dark="darkMode" id="inspire" class="app">
         <app-drawer class="app--drawer"></app-drawer>
         <app-toolbar class="app--toolbar"></app-toolbar>
 
@@ -30,6 +30,11 @@ export default {
       this.$on(item.name, item.callback);
     });
     window.getApp = this;
+  },
+  computed: {
+    darkMode() {
+      return this.$store.getters.getIsDarkMode
+    }
   }
 };
 </script>
