@@ -9,7 +9,6 @@
         <v-data-table
           :headers="headers"
           :items="getProblemsList"
-          hide-actions
           class="elevation-0 table-striped"
         >
           <template v-slot:items="props">
