@@ -115,7 +115,9 @@ export default {
       return false;
     },
     customFilter(items, search, filter) {
-      return items.filter(item => filter(item.point, search));
+      let result = items.filter(item => filter(item.point, search));
+      this.$store.commit("setStatusGraphData", result);
+      return result
     }
   }
 };

@@ -1,11 +1,11 @@
 <template>
-  <v-card>
+  <v-card height="240px">
     <v-toolbar card dense color="transparent">
       <v-toolbar-title><h4>Search</h4></v-toolbar-title>
     </v-toolbar>
     <v-divider></v-divider>
     <v-layout justify-center>
-      <v-flex lg10 sm10 xs10>
+      <v-flex lg11 sm10 xs10>
         <v-combobox
           label="Scores"
           :items="getScoresList"
