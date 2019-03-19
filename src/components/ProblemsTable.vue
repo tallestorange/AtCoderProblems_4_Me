@@ -108,7 +108,7 @@ export default {
         if (val === undefined && tag == "undefined") {
           return true;
         }
-        else if (tag === val) {
+        else if (tag == val) {
           return true;
         }
       }

@@ -1,9 +1,9 @@
 const Menu = [
   {
-    title: "Dashboard",
+    title: "Problems",
     group: "apps",
     icon: "",
-    name: "Dashboard"
+    name: "Problems"
   },
   {
     title: "Submissions",
@@ -12,10 +12,10 @@ const Menu = [
     name: "Submissions"
   },
   {
-    title: "Problems",
+    title: "UserInfo",
     group: "apps",
     icon: "",
-    name: "Problems"
+    name: "Dashboard"
   },
   {
     title: "Rivals",
