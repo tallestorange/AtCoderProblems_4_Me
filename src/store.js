@@ -1,8 +1,8 @@
-import Vue from "vue"
-import Vuex from "vuex"
-import axios from 'axios'
+import Vue from "vue";
+import Vuex from "vuex";
+import axios from "axios";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
@@ -18,276 +18,268 @@ export default new Vuex.Store({
     ratedGraphData: null,
     heatMapData: {},
     userName: "",
-    selectedDate: "",
+    selectedDate: ""
   },
   getters: {
     getLoadingState: (state, getters) => {
       if (!state.submissionsIsLoading && !state.problemsIsLoading) {
-        return false
-      }
-      else {
-        return true
+        return false;
+      } else {
+        return true;
       }
     },
     getSelectedDate: (state, getters) => {
-      return state.selectedDate
+      return state.selectedDate;
     },
     getGraphData: (state, getters) => {
-      return state.graphData
+      return state.graphData;
     },
     getSubmissionsData: (state, getters) => {
-      return state.submissionsDetail
+      return state.submissionsDetail;
     },
     getSubmissionsRawData: (state, getters) => {
-      return state.submissionsData
+      return state.submissionsData;
     },
     getProblemsData: (state, getters) => {
-      return state.problemsDict
+      return state.problemsDict;
     },
     getRatedSubmissionsData: (state, getters) => {
-      return state.ratedSubmissionsData
+      return state.ratedSubmissionsData;
     },
     getHeatMapData: (state, getters) => {
-      return state.heatMapData
+      return state.heatMapData;
     },
     getRatedGraphData: (state, getters) => {
-      return state.ratedGraphData
+      return state.ratedGraphData;
     },
     getUserName: (state, getters) => {
-      return state.userName
+      return state.userName;
     },
     getViewSubmissionsData: (state, getters) => {
-      return state.viewSubmissionsData
+      return state.viewSubmissionsData;
     }
   },
   mutations: {
     setSubmissionsData(state, payload) {
-      const submissions = payload.submissionsData
-      submissions.sort(function(a,b){
-        if(a.id<b.id) return 1
-        if(a.id>b.id) return -1
-        return 0
-      })
-      state.submissionsData = submissions
+      const submissions = payload.submissionsData;
+      submissions.sort(function(a, b) {
+        if (a.id < b.id) return 1;
+        if (a.id > b.id) return -1;
+        return 0;
+      });
+      state.submissionsData = submissions;
     },
     setViewSubmissionsData(state, payload) {
-      let submissions = payload.submissionsData
+      let submissions = payload.submissionsData;
 
-      let result = {}
-      for(let i in submissions) {
-        let submission = submissions[i]
+      let result = {};
+      for (let i in submissions) {
+        let submission = submissions[i];
 
-        let dt = new Date(0)
-        dt.setUTCSeconds(submission.epoch_second)
-        let yr = dt.getFullYear()
-        let mn = ("00" + (dt.getMonth()+1)).slice(-2)
-        let dy = ("00" + dt.getDate()).slice(-2)
-        let dateStr = yr + "-" + mn + "-" + dy
+        let dt = new Date(0);
+        dt.setUTCSeconds(submission.epoch_second);
+        let yr = dt.getFullYear();
+        let mn = ("00" + (dt.getMonth() + 1)).slice(-2);
+        let dy = ("00" + dt.getDate()).slice(-2);
+        let dateStr = yr + "-" + mn + "-" + dy;
 
-        if(result[dateStr]) {
-          result[dateStr].push(submission)
-        }
-        else {
-          result[dateStr] = [submission]
+        if (result[dateStr]) {
+          result[dateStr].push(submission);
+        } else {
+          result[dateStr] = [submission];
         }
       }
-      state.viewSubmissionsData = result
+      state.viewSubmissionsData = result;
     },
     setSelectedDate(state, payload) {
-      state.selectedDate = payload
+      state.selectedDate = payload;
     },
     setCurrentDate(state, payload) {
-      let dt = new Date()
-      let yr = dt.getFullYear()
-      let mn = ("00" + (dt.getMonth()+1)).slice(-2)
-      let dy = ("00" + dt.getDate()).slice(-2)
-      let dateStr = yr + "-" + mn + "-" + dy
-      state.selectedDate = dateStr
+      let dt = new Date();
+      let yr = dt.getFullYear();
+      let mn = ("00" + (dt.getMonth() + 1)).slice(-2);
+      let dy = ("00" + dt.getDate()).slice(-2);
+      let dateStr = yr + "-" + mn + "-" + dy;
+      state.selectedDate = dateStr;
     },
     setUserName(state, payload) {
-      state.userName = payload
+      state.userName = payload;
     },
     setRatedSubmissionsData(state, payload) {
-      const problemsDict = state.problemsDict
-      const submissionsDetail = state.submissionsDetail
+      const problemsDict = state.problemsDict;
+      const submissionsDetail = state.submissionsDetail;
 
-      let result = {}
+      let result = {};
       for (let key in submissionsDetail) {
-        if(problemsDict[key] && problemsDict[key].point){
-          let submission = submissionsDetail[key]
-          result[key] = submission
-          result[key].point = problemsDict[key].point
-        }
-        else {
-          let submission = submissionsDetail[key]
-          result[key] = submission
-          result[key].point = null
+        if (problemsDict[key] && problemsDict[key].point) {
+          let submission = submissionsDetail[key];
+          result[key] = submission;
+          result[key].point = problemsDict[key].point;
+        } else {
+          let submission = submissionsDetail[key];
+          result[key] = submission;
+          result[key].point = null;
         }
       }
-      state.ratedSubmissionsData = result
+      state.ratedSubmissionsData = result;
     },
     setRatedGraphData(state, payload) {
-      const ratedSubmissionsData = state.ratedSubmissionsData
-      let scoresDict = {}
-      let scoresArray = []
+      const ratedSubmissionsData = state.ratedSubmissionsData;
+      let scoresDict = {};
+      let scoresArray = [];
 
       for (let key in ratedSubmissionsData) {
-        let submission = ratedSubmissionsData[key]
+        let submission = ratedSubmissionsData[key];
         if (submission.your_ac_count == 0) {
-          continue
+          continue;
         }
-        if (scoresDict[submission.point]){
-          scoresDict[submission.point] += 1
-        }
-        else {
-          scoresDict[submission.point] = 1
+        if (scoresDict[submission.point]) {
+          scoresDict[submission.point] += 1;
+        } else {
+          scoresDict[submission.point] = 1;
         }
       }
 
       for (let key in scoresDict) {
         if (key == "null") {
-          scoresArray.push({value:scoresDict[key],name:"0"})
-        }
-        else {
-          scoresArray.push({value:scoresDict[key],name:String(key)})
+          scoresArray.push({ value: scoresDict[key], name: "0" });
+        } else {
+          scoresArray.push({ value: scoresDict[key], name: String(key) });
         }
       }
 
-      state.ratedGraphData = scoresArray
+      state.ratedGraphData = scoresArray;
     },
     changeLoadingState(state, payload) {
-      state.loading = !state.loading
+      state.loading = !state.loading;
     },
     changeSubmissionsLoadingState(state, payload) {
-      state.submissionsIsLoading = payload
+      state.submissionsIsLoading = payload;
     },
     changeProblemsLoadingState(state, payload) {
-      state.problemsIsLoading = payload
+      state.problemsIsLoading = payload;
     },
     setProblemsData(state, payload) {
-      state.problemsData = payload.problemsData
+      state.problemsData = payload.problemsData;
     },
     setProblemsDict(state, payload) {
-      let problems = state.problemsData
-      var result = {}
+      let problems = state.problemsData;
+      var result = {};
 
       for (let key in problems) {
-        let problem = problems[key]
+        let problem = problems[key];
         result[problem.id] = {
-          "title": problem.title,
-          "point": problem.point,
-          "contest_id": problem.contest_id
-        }
+          title: problem.title,
+          point: problem.point,
+          contest_id: problem.contest_id
+        };
       }
-      state.problemsDict = result
-      state.problemsIsLoading = false
+      state.problemsDict = result;
+      state.problemsIsLoading = false;
     },
     setHeatMapData(state, payload) {
-      let submissionsData = state.viewSubmissionsData
-      let submissionsDict = {}
+      let submissionsData = state.viewSubmissionsData;
+      let submissionsDict = {};
 
-      for(let dateStr in submissionsData) {
-        let submissions = submissionsData[dateStr]
-        for(let key in submissions) {
-          let submission = submissions[key]
-          if(submissionsDict[dateStr]){
-            submissionsDict[dateStr].submissions += 1
-          }
-          else {
+      for (let dateStr in submissionsData) {
+        let submissions = submissionsData[dateStr];
+        for (let key in submissions) {
+          let submission = submissions[key];
+          if (submissionsDict[dateStr]) {
+            submissionsDict[dateStr].submissions += 1;
+          } else {
             submissionsDict[dateStr] = {
-              "submissions": 1,
-              "point_sum": 0,
-              "accepted": 0
-            }
+              submissions: 1,
+              point_sum: 0,
+              accepted: 0
+            };
           }
           if (submission.result != "AC" || submission.point <= 0) {
-            continue
+            continue;
           }
-          submissionsDict[dateStr].point_sum += submission.point
-          submissionsDict[dateStr].accepted += 1
-        } 
+          submissionsDict[dateStr].point_sum += submission.point;
+          submissionsDict[dateStr].accepted += 1;
+        }
       }
 
-      state.heatMapData = submissionsDict
-      state.submissionsIsLoading = false
+      state.heatMapData = submissionsDict;
+      state.submissionsIsLoading = false;
     },
     setSubmissionsDetailPerProblem(state, payload) {
-      let submissions = state.submissionsData
-      var result = {}
+      let submissions = state.submissionsData;
+      var result = {};
 
       for (let key in submissions) {
-        let submission = submissions[key]
+        let submission = submissions[key];
 
         if (result[submission.problem_id]) {
           if (submission.result == "AC") {
-            result[submission.problem_id].your_ac_count +=1
-            result[submission.problem_id].ac_submissions.push(submission.id)
+            result[submission.problem_id].your_ac_count += 1;
+            result[submission.problem_id].ac_submissions.push(submission.id);
+          } else {
+            result[submission.problem_id].your_wa_count += 1;
+            result[submission.problem_id].wa_submissions.push(submission.id);
           }
-          else {
-            result[submission.problem_id].your_wa_count +=1
-            result[submission.problem_id].wa_submissions.push(submission.id)
-          }
-        }
-        else {
-          result[submission.problem_id] = {}
-          result[submission.problem_id].contest_id = submission.contest_id
+        } else {
+          result[submission.problem_id] = {};
+          result[submission.problem_id].contest_id = submission.contest_id;
 
           if (submission.result == "AC") {
-            result[submission.problem_id].your_ac_count = 1
-            result[submission.problem_id].your_wa_count = 0
-            result[submission.problem_id].ac_submissions = [submission.id]
-            result[submission.problem_id].wa_submissions = []
-            result[submission.problem_id].point = submission.point
-          }
-          else {
-            result[submission.problem_id].your_ac_count = 0
-            result[submission.problem_id].your_wa_count = 1
-            result[submission.problem_id].ac_submissions = []
-            result[submission.problem_id].wa_submissions = [submission.id]
+            result[submission.problem_id].your_ac_count = 1;
+            result[submission.problem_id].your_wa_count = 0;
+            result[submission.problem_id].ac_submissions = [submission.id];
+            result[submission.problem_id].wa_submissions = [];
+            result[submission.problem_id].point = submission.point;
+          } else {
+            result[submission.problem_id].your_ac_count = 0;
+            result[submission.problem_id].your_wa_count = 1;
+            result[submission.problem_id].ac_submissions = [];
+            result[submission.problem_id].wa_submissions = [submission.id];
           }
         }
       }
-      state.submissionsDetail = result
+      state.submissionsDetail = result;
     }
   },
   actions: {
     async fetchSubmissionsData(context) {
       const payload = {
-        submissionsData: '',
-      }
-      
-      const name = context.getters.getUserName
-      context.commit("changeSubmissionsLoadingState",true)
+        submissionsData: ""
+      };
 
-      await axios.get('https://kenkoooo.com/atcoder/atcoder-api/results?user=' + name)
-      .then((res) => {
-        payload.submissionsData = res.data
-      })
+      const name = context.getters.getUserName;
+      context.commit("changeSubmissionsLoadingState", true);
 
-      let nowDate = context.getters.getSelectedDate
+      await axios
+        .get("https://kenkoooo.com/atcoder/atcoder-api/results?user=" + name)
+        .then(res => {
+          payload.submissionsData = res.data;
+        });
+
+      let nowDate = context.getters.getSelectedDate;
       if (nowDate == "") {
-        context.commit("setCurrentDate", payload)
+        context.commit("setCurrentDate", payload);
+      } else {
+        console.log(context.getters.getSelectedDate);
       }
-      else {
-        console.log(context.getters.getSelectedDate)
-      }
-      
-      context.commit("setSubmissionsData", payload)
-      context.commit("setViewSubmissionsData", payload)
-      context.commit("setSubmissionsDetailPerProblem", payload)
-      context.commit("setHeatMapData", payload)
+
+      context.commit("setSubmissionsData", payload);
+      context.commit("setViewSubmissionsData", payload);
+      context.commit("setSubmissionsDetailPerProblem", payload);
+      context.commit("setHeatMapData", payload);
     },
     async fetchProblemsData(context) {
       const payload = {
-        problemsData: '',
-      }
-      context.commit("changeProblemsLoadingState",true)
-      await axios.get('https://kenkoooo.com/atcoder/resources/merged-problems.json')
-      .then((res) => {
-        payload.problemsData = res.data
-      })
-      context.commit("setProblemsData", payload)
-      context.commit("setProblemsDict", payload)
+        problemsData: ""
+      };
+      context.commit("changeProblemsLoadingState", true);
+      await axios
+        .get("https://kenkoooo.com/atcoder/resources/merged-problems.json")
+        .then(res => {
+          payload.problemsData = res.data;
+        });
+      context.commit("setProblemsData", payload);
+      context.commit("setProblemsDict", payload);
     }
-  },
-})
+  }
+});
