@@ -152,6 +152,12 @@ export default {
         ["color", colors]
       ];
     }
+  },
+  created: function() {
+    let problems = this.$store.getters.getProblemsData;
+    if (problems === null) {
+      this.$store.dispatch("fetchProblemsData");
+    }
   }
 };
 </script>

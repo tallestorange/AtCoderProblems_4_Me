@@ -46,7 +46,7 @@
         </v-flex>
 
         <v-flex lg12 sm12 xs12>
-          <plain-table-order></plain-table-order>
+          <submissions-table></submissions-table>
         </v-flex>
       </v-layout>
     </v-container>
@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import PlainTableOrder from "@/components/parts/DataTable";
+import SubmissionsTable from "@/components/parts/SubmissionsTable";
 import MiniStatistic from "@/components/parts/StatusItem";
 import VWidget from "@/components/VWidget";
 import Material from "vuetify/es5/util/colors";
@@ -62,7 +62,7 @@ import Material from "vuetify/es5/util/colors";
 export default {
   components: {
     VWidget,
-    PlainTableOrder,
+    SubmissionsTable,
     MiniStatistic
   },
   data: () => ({
@@ -95,7 +95,6 @@ export default {
   },
   watch: {
     date: function() {
-      console.log(this.date);
       this.$store.commit("setSelectedDate", this.date);
     }
   }

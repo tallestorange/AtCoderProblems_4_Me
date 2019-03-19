@@ -12,7 +12,7 @@ export default new Vuex.Store({
     problemsIsLoading: false,
     submissionsData: [],
     submissionsIsLoading: false,
-    submissionsDetail: null,
+    submissionsDetail: {},
     ratedSubmissionsData: null,
     viewSubmissionsData: null,
     ratedGraphData: null,
@@ -171,7 +171,9 @@ export default new Vuex.Store({
         result[problem.id] = {
           title: problem.title,
           point: problem.point,
-          contest_id: problem.contest_id
+          contest_id: problem.contest_id,
+          solver_count: problem.solver_count,
+          first_submission_id: problem.first_submission_id
         };
       }
       state.problemsDict = result;
