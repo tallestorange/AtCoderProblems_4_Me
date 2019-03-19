@@ -43,12 +43,4 @@ export default {
 .page-wrapper {
   min-height: calc(100vh - 64px - 50px - 81px);
 }
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.1s;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
 </style>

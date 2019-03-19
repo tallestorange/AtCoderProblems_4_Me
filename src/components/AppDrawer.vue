@@ -3,12 +3,11 @@
     id="appDrawer"
     :mini-variant.sync="mini"
     fixed
-    :dark="$vuetify.dark"
     app
     v-model="drawer"
     width="260"
   >
-    <v-toolbar color="indigo darken-3" dark>
+    <v-toolbar>
       <v-text-field
         v-model="username"
         label="UserID"

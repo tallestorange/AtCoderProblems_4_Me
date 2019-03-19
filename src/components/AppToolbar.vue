@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar color="indigo" fixed dark app>
+  <v-toolbar fixed app>
     <v-toolbar-side-icon @click.stop="handleDrawerToggle"></v-toolbar-side-icon>
     <v-toolbar-title class="ml-0 pl-3 font-weight-regular">
       AtCoder Problems 4 Me
