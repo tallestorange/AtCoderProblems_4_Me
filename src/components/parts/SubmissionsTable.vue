@@ -9,6 +9,7 @@
         <v-data-table
           :headers="headers"
           :items="submissionsData"
+          :pagination.sync="pagination"
           hide-actions
           class="elevation-0 table-striped"
         >
@@ -47,14 +48,19 @@ export default {
     return {
       headers: [
         {
-          text: "#",
+          text: "id",
           align: "left",
           value: "id"
         },
         { text: "Title", value: "title" },
         { text: "Point", value: "point" },
         { text: "Result", value: "result" }
-      ]
+      ],
+      pagination: {
+        sortBy: 'id',
+        descending: true,
+        rowsPerPage: 10,
+      }
     };
   },
   computed: {
@@ -82,7 +88,6 @@ export default {
   },
   methods: {
     getColorByStatus(status) {
-      // return this.colors[status];
       if (status == "AC") {
         return "green";
       } else {
