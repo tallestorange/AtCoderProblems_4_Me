@@ -5,6 +5,9 @@
         <v-flex lg6 sm12 xs12>
           <search-card></search-card>
         </v-flex>
+        <v-flex lg6 class="hidden-md-and-down">
+          <status-card></status-card>
+        </v-flex>
         <v-flex lg12 sm12 xs12>
           <problems-table></problems-table>
         </v-flex>
@@ -16,14 +19,17 @@
 <script>
 import ProblemsTable from "@/components/ProblemsTable";
 import SearchCard from "@/components/SearchCard";
+import StatusCard from "@/components/StatusCard";
 
 export default {
   components: {
     ProblemsTable,
-    SearchCard
+    SearchCard,
+    StatusCard
   },
   data() {
-    return {};
+    return {
+    };
   },
   created: function() {
     let problems = this.$store.getters.getProblemsData;

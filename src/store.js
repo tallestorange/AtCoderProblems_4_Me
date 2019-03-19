@@ -19,7 +19,8 @@ export default new Vuex.Store({
     heatMapData: {},
     userName: "",
     selectedDate: "",
-    searchTags: ""
+    searchTags: "",
+    statusGraphData: null
   },
   getters: {
     getLoadingState: (state, getters) => {
@@ -28,6 +29,9 @@ export default new Vuex.Store({
       } else {
         return true;
       }
+    },
+    getStatusGraphData: (state, getters) => {
+      return state.statusGraphData;
     },
     getSearchTags: (state, getters) => {
       return state.searchTags;
@@ -72,6 +76,9 @@ export default new Vuex.Store({
         return 0;
       });
       state.submissionsData = submissions;
+    },
+    setStatusGraphData(state, payload) {
+      state.statusGraphData = payload
     },
     setSearchTags(state, payload) {
       state.searchTags = payload;
