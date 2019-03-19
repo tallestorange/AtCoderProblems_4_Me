@@ -32,7 +32,6 @@ export default {
       default: "white"
     }
   },
-
   data() {
     return {};
   },
