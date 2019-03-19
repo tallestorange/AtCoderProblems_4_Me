@@ -3,12 +3,7 @@
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
         <v-flex lg6 sm12 xs12>
-          <v-card>
-            <v-toolbar card dense color="transparent">
-              <v-toolbar-title><h4>Coming soon...</h4></v-toolbar-title>
-            </v-toolbar>
-            <v-divider></v-divider>
-          </v-card>
+          <problems-table></problems-table>
         </v-flex>
       </v-layout>
     </v-container>
@@ -17,9 +12,12 @@
 
 <script>
 import Material from "vuetify/es5/util/colors";
+import ProblemsTable from "@/components/parts/ProblemsTable";
 
 export default {
-  components: {},
+  components: {
+    ProblemsTable
+  },
   data: () => ({
     color: Material,
     rawDate: "null",
@@ -29,23 +27,7 @@ export default {
   }),
   methods: {},
   computed: {
-    arrayEvents() {
-      let submissionsData = this.$store.getters.getHeatMapData;
-      let result = [];
-      for (let key in submissionsData) {
-        result.push(key);
-      }
-      return result;
-    },
-    getStatus() {
-      let submissionsData = this.$store.getters.getHeatMapData;
-      let selectedDate = this.$store.getters.getSelectedDate;
-      if (submissionsData[selectedDate]) {
-        return submissionsData[selectedDate];
-      } else {
-        return { submissions: 0, point_sum: 0, accepted: 0 };
-      }
-    }
+    
   },
   watch: {
     date: function() {
