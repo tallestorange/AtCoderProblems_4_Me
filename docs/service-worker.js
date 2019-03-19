@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/AtCoderProblems_4_Me/precache-manifest.9c1f40a78568ef60e1aa86f2720fb24f.js"
+  "/AtCoderProblems_4_Me/precache-manifest.5f07c429f087b2119b77171866e51dea.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "vma"});

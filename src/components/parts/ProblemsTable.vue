@@ -10,6 +10,9 @@
           :headers="headers"
           :items="getProblemsList"
           :pagination.sync="pagination"
+          :filter="filter"
+          :customFilter="customFilter"
+          :search="searchTags"
           class="elevation-0 table-striped"
         >
           <template v-slot:items="props">
@@ -51,6 +54,9 @@ export default {
     };
   },
   computed: {
+    searchTags() {
+      return this.$store.getters.getSearchTags
+    },
     getProblemsList() {
       const problemsDict = this.$store.getters.getProblemsData
       const submissionsDict = this.$store.getters.getSubmissionsData
@@ -96,6 +102,18 @@ export default {
         "/tasks/" +
         submission.problem_id
       );
+    },
+    filter(val, search) {
+      for(let key in search){
+        let tag = this.$store.getters.getSearchTags[key]
+        if(tag == val){
+          return true
+        }
+      }
+      return false
+    },
+    customFilter(items, search, filter){
+      return items.filter(item => filter(item.point, search))
     }
   }
 };
