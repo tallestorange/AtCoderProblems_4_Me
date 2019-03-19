@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import ProblemsTable from "@/components/parts/ProblemsTable";
+import ProblemsTable from "@/components/ProblemsTable";
 import SearchCard from "@/components/SearchCard";
 
 export default {

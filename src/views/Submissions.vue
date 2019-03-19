@@ -17,14 +17,12 @@
 </template>
 
 <script>
-import SubmissionsTable from "@/components/parts/SubmissionsTable";
+import SubmissionsTable from "@/components/SubmissionsTable";
 import StatisticsCard from "@/components/StatisticsCard";
-import VWidget from "@/components/VWidget";
 import DatePickerCard from "@/components/DatePickerCard";
 
 export default {
   components: {
-    VWidget,
     SubmissionsTable,
     StatisticsCard,
     DatePickerCard
