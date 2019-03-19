@@ -9,6 +9,7 @@
         <v-data-table
           :headers="headers"
           :items="getProblemsList"
+          :pagination.sync="pagination"
           class="elevation-0 table-striped"
         >
           <template v-slot:items="props">
@@ -41,7 +42,12 @@ export default {
         { text: "Title", value: "title", sortable: false },
         { text: "Point", value: "point" },
         { text: "Solvers", value: "solver_count" }
-      ]
+      ],
+      pagination: {
+        sortBy: 'point',
+        descending: true,
+        rowsPerPage: 10,
+      }
     };
   },
   computed: {
