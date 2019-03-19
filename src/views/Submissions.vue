@@ -48,6 +48,7 @@
         <v-flex lg12 sm12 xs12>
           <submissions-table></submissions-table>
         </v-flex>
+        
       </v-layout>
     </v-container>
   </div>
