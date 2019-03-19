@@ -53,7 +53,7 @@ export default {
           value: "id"
         },
         { text: "Title", value: "title" },
-        { text: "Point", value: "point" },
+        { text: "Score", value: "point" },
         { text: "Result", value: "result" }
       ],
       pagination: {

@@ -43,7 +43,7 @@ export default {
     return {
       headers: [
         { text: "Title", value: "title", sortable: false },
-        { text: "Point", value: "point" },
+        { text: "Score", value: "point" },
         { text: "Solvers", value: "solver_count" }
       ],
       pagination: {
@@ -104,8 +104,13 @@ export default {
       );
     },
     filter(val, search) {
+      const searchTags = this.$store.getters.getSearchTags
+      if (searchTags.length == 0) {
+        return true
+      }
+      
       for(let key in search){
-        let tag = this.$store.getters.getSearchTags[key]
+        let tag = searchTags[key]
         if(tag == val){
           return true
         }

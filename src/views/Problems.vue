@@ -2,20 +2,24 @@
   <div id="pageDashboard">
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
+
         <v-flex lg6 sm12 xs12>
+          
           <v-card>
             <v-toolbar card dense color="transparent">
               <v-toolbar-title><h4>Search</h4></v-toolbar-title>
             </v-toolbar>
             <v-divider></v-divider>
+
             <v-layout justify-center>
-              <v-flex lg4 sm10 xs10>
+              <v-flex lg10 sm10 xs10>
                 <v-combobox
                   label="Scores"
                   :items="getScoresList"
                   v-model="scores"
                   multiple
                   clearable
+                  full-width
                   chips
                   type="button"
                 >
@@ -32,8 +36,9 @@
                   </template>
                 </v-combobox>
               </v-flex>
-            </v-layout>
+            </v-layout>  
           </v-card>
+
         </v-flex>
 
         <v-flex lg12 sm12 xs12>
