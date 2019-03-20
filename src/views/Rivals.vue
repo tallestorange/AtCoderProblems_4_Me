@@ -1,31 +1,26 @@
 <template>
-    <v-container grid-list-xl fluid>
-      <v-layout row wrap>
-        <v-flex lg6 sm12 xs12>
-          <v-card>
-            <v-toolbar card dense color="transparent">
-              <v-toolbar-title><h4>Coming soon...</h4></v-toolbar-title>
-            </v-toolbar>
-            <v-divider></v-divider>
-          </v-card>
-        </v-flex>
-      </v-layout>
-    
-
-    <div style="right: 5vw; bottom: 4vh; z-index: 999; position: fixed;">
-      <v-btn fab color="primary">
-        <v-icon>add</v-icon>
-      </v-btn>
-    </div>
-
-    </v-container>
-
+  <v-container grid-list-xl fluid>
+    <v-layout row wrap>
+      <v-flex lg6 sm12 xs12>
+        <v-card>
+          <v-toolbar card dense color="transparent">
+            <v-toolbar-title><h4>Coming soon...</h4></v-toolbar-title>
+          </v-toolbar>
+          <v-divider></v-divider>
+        </v-card>
+      </v-flex>
+    </v-layout>
+    <rivals-input-dialog></rivals-input-dialog>
+  </v-container>
 </template>
 
 <script>
+import RivalsInputDialog from "@/components/RivalsInputDialog";
 
 export default {
-  components: {},
+  components: {
+    RivalsInputDialog
+  },
   data: () => ({
     rawDate: "null",
     dates: [],
