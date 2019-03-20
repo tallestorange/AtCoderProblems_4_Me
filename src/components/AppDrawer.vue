@@ -11,6 +11,7 @@
       <v-text-field
         v-model="username"
         label="UserID"
+        clearable
         @keyup.enter="sendUserName"
         @keypress="setCanMessageSubmit"
         class="mt-3"
