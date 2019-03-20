@@ -1,5 +1,4 @@
 <template>
-  <div id="pageDashboard">
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
         <v-flex lg6 sm12 xs12>
@@ -11,17 +10,23 @@
           </v-card>
         </v-flex>
       </v-layout>
+    
+
+    <div style="right: 5vw; bottom: 4vh; z-index: 999; position: fixed;">
+      <v-btn fab color="primary">
+        <v-icon>add</v-icon>
+      </v-btn>
+    </div>
+
     </v-container>
-  </div>
+
 </template>
 
 <script>
-import Material from "vuetify/es5/util/colors";
 
 export default {
   components: {},
   data: () => ({
-    color: Material,
     rawDate: "null",
     dates: [],
     pickerDate: null,
