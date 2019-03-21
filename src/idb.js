@@ -1,19 +1,16 @@
-import Vue from 'vue'
-import VueIdb from 'vue-idb'
+import Dexie from 'dexie';
 
-Vue.use(VueIdb)
+const db = new Dexie('MyDatabase');
+// Declare tables, IDs and indexes
+db.version(1).stores({
+  notes: "++id, title, body, *tags, updated_at"
+});
 
-export default new VueIdb({
-  database: 'test',
-  schemas: [
-    { tests: 'id, label, created_at, updated_at' }
-  ],
-  options: {
-    tests: { type: 'list', primary: 'id', label: 'title', updated_at: 'updated_at' }
-  },
-  apis: {
-    bigs: {
-      all: () => axios.get('/dev/data/data.json')
-    }
-  }
-})
+db.notes.add({
+  title: "タイトル",
+  body: '本文',
+  tags: ["IndexedDB", "Dexie.js"],
+  updated_at: new Date()
+});
+
+export default db;
