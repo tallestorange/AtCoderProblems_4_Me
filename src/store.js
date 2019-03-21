@@ -293,16 +293,36 @@ export default new Vuex.Store({
     },
     async fetchProblemsData(context) {
       const payload = {
-        problemsData: ""
+        problemsData: null
       };
       context.commit("changeProblemsLoadingState", true);
+
+      const db = Vue.prototype.$db
+
+      await db.problems
+        .toArray()
+        .then(function (notes) {
+          payload.problemsData = notes
+          context.commit("setProblemsData", payload);
+          context.commit("setProblemsDict", payload);
+        });
+
+      if (payload.problemsData.length > 0) {
+        console.log("loading from IndexedDB")
+        return
+      }
+
+      console.log("loading from API")
       await axios
         .get("https://kenkoooo.com/atcoder/resources/merged-problems.json")
         .then(res => {
           payload.problemsData = res.data;
-        });
-      context.commit("setProblemsData", payload);
-      context.commit("setProblemsDict", payload);
+          for(let key in res.data) {
+            db.problems.put(res.data[key])
+          }
+          context.commit("setProblemsData", payload);
+          context.commit("setProblemsDict", payload);
+      })
     }
   }
 });

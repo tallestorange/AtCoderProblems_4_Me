@@ -32,8 +32,7 @@ export default {
     };
   },
   created: function() {
-    let problems = this.$store.getters.getProblemsData;
-    console.log(this.$db)
+    let problems = this.$store.getters.getProblemsData;    
     if (problems === null) {
       this.$store.dispatch("fetchProblemsData");
     }
