@@ -33,6 +33,7 @@ export default {
   },
   created: function() {
     let problems = this.$store.getters.getProblemsData;
+    console.log(this.$db)
     if (problems === null) {
       this.$store.dispatch("fetchProblemsData");
     }

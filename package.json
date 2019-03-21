@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "dexie": "^2.0.4",
     "font-awesome": "^4.7.0",
     "lodash.truncate": "^4.4.2",
     "nprogress": "^0.2.0",
