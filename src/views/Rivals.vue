@@ -19,13 +19,14 @@
                         <v-divider vertical></v-divider>
                         <div class="headline ml-2">tourist</div>
                         <v-spacer></v-spacer>
-                        <v-divider vertical></v-divider>
+                        <v-layout column wrap align-end>
                         <v-btn outline icon>
                           <v-icon>delete</v-icon>
                         </v-btn>
                         <v-btn outline icon>
                           <v-icon>notifications</v-icon>
                         </v-btn>
+                        </v-layout>
                       </v-card-title> 
                       <v-divider></v-divider>
                       <v-card-actions>
@@ -48,13 +49,14 @@
                         <v-divider vertical></v-divider>
                         <div class="headline ml-2">tallestorange</div>
                         <v-spacer></v-spacer>
-                        <v-divider vertical></v-divider>
+                        <v-layout column wrap align-end>
                         <v-btn outline icon>
                           <v-icon>delete</v-icon>
                         </v-btn>
                         <v-btn outline icon>
                           <v-icon>notifications</v-icon>
                         </v-btn>
+                        </v-layout>
                       </v-card-title> 
                       <v-divider></v-divider>
                       <v-card-actions>
