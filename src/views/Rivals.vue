@@ -4,9 +4,40 @@
       <v-flex lg6 sm12 xs12>
         <v-card>
           <v-toolbar card dense color="transparent">
-            <v-toolbar-title><h4>Coming soon...</h4></v-toolbar-title>
+            <v-toolbar-title><h4>Rivals</h4></v-toolbar-title>
           </v-toolbar>
           <v-divider></v-divider>
+
+            <v-flex lg11 sm11 xs11>
+              <v-layout row wrap>
+              
+                
+                <v-flex lg2 sm2 xs2>
+                  <v-card height="114px" color="red lighten-1" class="white--text ma-0">
+                    <v-card-title primary-title>
+                      <div>
+                        <div class="display-3 font-weight-light">1</div>
+                        <span></span>
+                      </div>
+                    </v-card-title>
+                  </v-card>
+                </v-flex>
+
+                <v-flex lg10 sm10 xs10>
+                  <v-card height="114px" class="ma-0">
+                    <v-card-title primary-title>
+                      <div>
+                        <div class="headline">tallestorange</div>
+                        <span>Zako Programmer</span>
+                      </div>
+                    </v-card-title>
+                  </v-card>
+                </v-flex>
+
+
+              </v-layout>
+            </v-flex>
+
         </v-card>
       </v-flex>
     </v-layout>
