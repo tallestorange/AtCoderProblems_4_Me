@@ -27,6 +27,8 @@ yarn run build
 * [ECharts](http://echarts.baidu.com/option.html)
 * [Stylus](http://stylus-lang.com/)
 * [vue-material-admin](https://github.com/tookit/vue-material-admin)
+* [Dexie.js](https://github.com/dfahlander/Dexie.js)
+* [AtCoderProblems](https://github.com/kenkoooo/AtCoderProblems)
 
 ## License
 
