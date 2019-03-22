@@ -21,7 +21,8 @@ export default new Vuex.Store({
     selectedDate: "",
     searchTags: [],
     statusGraphData: null,
-    isDarkMode: false
+    isDarkMode: false,
+    isLoaded: false,
   },
   getters: {
     getLoadingState: (state, getters) => {
@@ -30,6 +31,9 @@ export default new Vuex.Store({
       } else {
         return true;
       }
+    },
+    getIsLoaded: (state, getters) => {
+      return state.isLoaded
     },
     getIsDarkMode: (state, getters) => {
       return state.isDarkMode;
@@ -72,6 +76,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    setIsLoaded(state, payload) {
+      state.isLoaded = payload
+    },
     setSubmissionsData(state, payload) {
       const submissions = payload.submissionsData;
       submissions.sort(function(a, b) {

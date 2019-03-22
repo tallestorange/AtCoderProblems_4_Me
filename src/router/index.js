@@ -14,14 +14,20 @@ const router = new Router({
 });
 // router gards
 router.beforeEach((to, from, next) => {
-  const problems = store.getters.getProblemsData;
-  const submissions = store.getters.getSubmissionsRawData;
-  if (problems === null) {
-    store.dispatch("loadProblemsData");
+  const result = store.getters.getIsLoaded;
+
+  if (!result) {
+    const problems = store.getters.getProblemsData;
+    const submissions = store.getters.getSubmissionsRawData;
+    if (problems === null) {
+      store.dispatch("loadProblemsData");
+    }
+    if (submissions.length == 0) {
+      store.dispatch("loadSubmissionsData");
+    }
+    store.commit("setIsLoaded", true)
   }
-  if (submissions.length == 0) {
-    store.dispatch("loadSubmissionsData");
-  }
+  
   next();
 });
 
