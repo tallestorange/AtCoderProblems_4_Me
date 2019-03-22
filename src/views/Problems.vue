@@ -32,10 +32,11 @@ export default {
     };
   },
   created: function() {
-    let problems = this.$store.getters.getProblemsData;    
+    const problems = this.$store.getters.getProblemsData;
     if (problems === null) {
-      this.$store.dispatch("fetchProblemsData");
+      this.$store.dispatch("loadProblemsData");
     }
+    this.$store.dispatch("loadSubmissionsData");
   }
 };
 </script>

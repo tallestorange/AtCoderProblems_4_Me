@@ -270,24 +270,52 @@ export default new Vuex.Store({
   actions: {
     async fetchSubmissionsData(context) {
       const payload = {
-        submissionsData: ""
+        submissionsData: []
       };
 
       const name = context.getters.getUserName;
       context.commit("changeSubmissionsLoadingState", true);
 
+      const db = Vue.prototype.$db
       await axios
         .get("https://kenkoooo.com/atcoder/atcoder-api/results?user=" + name)
         .then(res => {
           payload.submissionsData = res.data;
+          db.submissions.put({id:name,contents:res.data});
         });
 
-      let nowDate = context.getters.getSelectedDate;
-      if (nowDate == "") {
-        context.commit("setCurrentDate", payload);
-      } else {
-        console.log(context.getters.getSelectedDate);
+      await db.submissions.get(name).then( (data) => {
+        console.log(data)
+      }).catch( error => {
+      });
+
+      context.commit("setSubmissionsData", payload);
+      context.commit("setViewSubmissionsData", payload);
+      context.commit("setSubmissionsDetailPerProblem", payload);
+      context.commit("setHeatMapData", payload);
+    },
+    async loadSubmissionsData(context) {
+      const payload = {
+        submissionsData: []
+      };
+
+      let name = ""
+      const db = Vue.prototype.$db
+      await db.inputs.get("userName").then( (data) => {
+        name = data.value
+      }).catch( error => {
+      });
+
+      if (name == ""){
+        console.log("UserID is empty")
+        return
       }
+
+      context.commit("changeSubmissionsLoadingState", true);
+      await db.submissions.get(name).then( (data) => {
+        payload.submissionsData = data.contents
+      }).catch( error => {
+      });
 
       context.commit("setSubmissionsData", payload);
       context.commit("setViewSubmissionsData", payload);
@@ -299,32 +327,40 @@ export default new Vuex.Store({
         problemsData: null
       };
       context.commit("changeProblemsLoadingState", true);
+      console.log("loading from API")
 
       const db = Vue.prototype.$db
-
-      await db.problems
-        .toArray()
-        .then(function (data) {
-          payload.problemsData = data
-          context.commit("setProblemsData", payload);
-          context.commit("setProblemsDict", payload);
-        });
-
-      if (payload.problemsData.length > 0) {
-        console.log("loading from IndexedDB")
-        return
-      }
-
-      console.log("loading from API")
       await axios
         .get("https://kenkoooo.com/atcoder/resources/merged-problems.json")
         .then(res => {
           payload.problemsData = res.data;
           db.problems.bulkPut(res.data);
-          
-          context.commit("setProblemsData", payload);
-          context.commit("setProblemsDict", payload);
       })
+      context.commit("setProblemsData", payload);
+      context.commit("setProblemsDict", payload);
+    },
+    async loadProblemsData(context) {
+      const payload = {
+        problemsData: null
+      };
+      context.commit("changeProblemsLoadingState", true);
+
+      const db = Vue.prototype.$db
+      console.log("loading from IndexedDB")
+      await db.problems
+        .toArray()
+        .then(function (data) {
+          payload.problemsData = data
+        });
+
+      if (payload.problemsData.length > 0) {
+        context.commit("setProblemsData", payload);
+        context.commit("setProblemsDict", payload);
+        return
+      }
+      else {
+        context.dispatch("fetchProblemsData")
+      }
     }
   }
 });

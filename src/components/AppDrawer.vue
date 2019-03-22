@@ -173,6 +173,8 @@ export default {
       result = data.value
     }).catch( error => {
     });
+  
+    this.$store.commit("setUserName", result)
     this.username = result
   },
   watch: {
