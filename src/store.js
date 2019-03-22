@@ -23,6 +23,7 @@ export default new Vuex.Store({
     statusGraphData: null,
     isDarkMode: false,
     isLoaded: false,
+    rivalsList: []
   },
   getters: {
     getLoadingState: (state, getters) => {
@@ -73,6 +74,9 @@ export default new Vuex.Store({
     },
     getViewSubmissionsData: (state, getters) => {
       return state.viewSubmissionsData;
+    },
+    getRivalsList: (state, getters) => {
+      return state.rivalsList;
     }
   },
   mutations: {
@@ -123,6 +127,20 @@ export default new Vuex.Store({
     setSelectedDate(state, payload) {
       Vue.prototype.$db.inputs.put({id: "selectedDate", value: payload});
       state.selectedDate = payload;
+    },
+    setRivalsList(state, payload) {
+      Vue.prototype.$db.rivals.add({
+        userid: payload,
+        accepted_count: 0,
+        rated_point_sum: 0
+      }).then(() => {
+        state.rivalsList.push({
+          userid: payload,
+          accepted_count: 0,
+          rated_point_sum: 0
+        })
+      }).catch((err) => {
+      })
     },
     setCurrentDate(state, payload) {
       let dt = new Date();

@@ -15,7 +15,7 @@
         <v-container grid-list-md>
           <v-layout wrap>
             <v-flex xs12 sm6 md6>
-              <v-text-field label="userID*" required></v-text-field>
+              <v-text-field v-model="userID" label="userID*" required></v-text-field>
             </v-flex>
           </v-layout>
         </v-container>
@@ -24,7 +24,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" flat @click="dialog = false">Cancel</v-btn>
-        <v-btn color="blue darken-1" flat @click="dialog = false">Add</v-btn>
+        <v-btn color="blue darken-1" flat @click="submit()">Add</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -35,9 +35,18 @@ export default {
   data() {
     return {
       dialog: false,
+      userID: ""
     };
   },
-  computed: {
+  methods: {
+    submit() {
+      if (this.userID == "") {
+        return
+      }
+      console.log(this.userID)
+      this.$store.commit("setRivalsList",this.userID)
+      this.dialog = false
+    }
   }
 };
 </script>

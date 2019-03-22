@@ -9,15 +9,17 @@
           <v-divider></v-divider>
 
             <v-layout justify-center>
+            
+            
             <v-flex lg11 sm11 xs11>
+              <div v-for="rival in rivalsList">
               <v-layout row wrap>
-
                   <v-flex lg12 sm12 xs12>
                     <v-card>
                       <v-card-title primary-title>
                         <div class="display-3 mr-2">1</div>
                         <v-divider vertical></v-divider>
-                        <div class="headline ml-2">tourist</div>
+                        <div class="headline ml-2">{{rival.userid}}</div>
                         <v-spacer></v-spacer>
                         <v-layout column wrap align-end>
                         <v-btn outline icon>
@@ -32,48 +34,22 @@
                       <v-card-actions>
                         <div class="subheading">Solved</div>
                         <v-spacer></v-spacer>
-                        <div class="headline">10000</div>
+                        <div class="headline">{{rival.accepted_count}}</div>
                       </v-card-actions>
                       <v-card-actions>
                         <div class="subheading">RatedPointSum</div>
                         <v-spacer></v-spacer>
-                        <div class="headline">1000000000</div>
+                        <div class="headline">{{rival.rated_point_sum}}</div>
                       </v-card-actions> 
                     </v-card>
                   </v-flex>
+                  
 
-                  <v-flex lg12 sm12 xs12>
-                    <v-card>
-                      <v-card-title primary-title>
-                        <div class="display-3 mr-2">2</div>
-                        <v-divider vertical></v-divider>
-                        <div class="headline ml-2">tallestorange</div>
-                        <v-spacer></v-spacer>
-                        <v-layout column wrap align-end>
-                        <v-btn outline icon>
-                          <v-icon>delete</v-icon>
-                        </v-btn>
-                        <v-btn outline icon>
-                          <v-icon>notifications</v-icon>
-                        </v-btn>
-                        </v-layout>
-                      </v-card-title> 
-                      <v-divider></v-divider>
-                      <v-card-actions>
-                        <div class="subheading">Solved</div>
-                        <v-spacer></v-spacer>
-                        <div class="headline">1</div>
-                      </v-card-actions>
-                      <v-card-actions>
-                        <div class="subheading">RatedPointSum</div>
-                        <v-spacer></v-spacer>
-                        <div class="headline">100</div>
-                      </v-card-actions> 
-                    </v-card>
-                  </v-flex>
 
               </v-layout>
+              </div>
             </v-flex>
+            
             </v-layout>
 
         </v-card>
@@ -105,6 +81,9 @@ export default {
         result.push(key);
       }
       return result;
+    },
+    rivalsList() {
+      return this.$store.getters.getRivalsList
     },
     getStatus() {
       let submissionsData = this.$store.getters.getHeatMapData;
