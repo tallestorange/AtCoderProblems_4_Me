@@ -44,7 +44,7 @@ export default {
     remove: function(item) {
       const index = this.scores.indexOf(item);
       if (index >= 0) this.scores.splice(index, 1);
-    }
+    },
   },
   computed: {
     getScoresList() {
@@ -70,6 +70,14 @@ export default {
     scores: function() {
       this.$store.commit("setSearchTags", this.scores);
     }
+  },
+  created: async function() {
+    let result = []
+    await this.$db.inputs.get("searchTags").then( (data) => {
+      result = data.value
+    }).catch( error => {
+    });
+    this.scores = result
   }
 };
 </script>

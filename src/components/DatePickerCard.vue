@@ -34,6 +34,16 @@ export default {
     date: function() {
       this.$store.commit("setSelectedDate", this.date);
     }
+  },
+  created: async function() {
+    let result = ""
+    await this.$db.inputs.get("selectedDate").then( (data) => {
+      result = data.value
+    }).catch( error => {
+    });
+    if (result != "") {
+      this.date = result
+    }
   }
 };
 </script>

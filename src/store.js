@@ -19,7 +19,7 @@ export default new Vuex.Store({
     heatMapData: {},
     userName: "",
     selectedDate: "",
-    searchTags: "",
+    searchTags: [],
     statusGraphData: null,
     isDarkMode: false
   },
@@ -88,6 +88,7 @@ export default new Vuex.Store({
       state.statusGraphData = payload;
     },
     setSearchTags(state, payload) {
+      Vue.prototype.$db.inputs.put({id: "searchTags", value: payload});
       state.searchTags = payload;
     },
     setViewSubmissionsData(state, payload) {
@@ -113,6 +114,7 @@ export default new Vuex.Store({
       state.viewSubmissionsData = result;
     },
     setSelectedDate(state, payload) {
+      Vue.prototype.$db.inputs.put({id: "selectedDate", value: payload});
       state.selectedDate = payload;
     },
     setCurrentDate(state, payload) {
@@ -124,6 +126,7 @@ export default new Vuex.Store({
       state.selectedDate = dateStr;
     },
     setUserName(state, payload) {
+      Vue.prototype.$db.inputs.put({id: "userName", value: payload});
       state.userName = payload;
     },
     setRatedSubmissionsData(state, payload) {

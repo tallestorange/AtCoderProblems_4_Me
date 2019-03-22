@@ -163,17 +163,23 @@ export default {
       return this.$vuetify.options.extra.sideNav;
     }
   },
-  created() {
+  created: async function() {
     window.getApp.$on("APP_DRAWER_TOGGLED", () => {
       this.drawer = !this.drawer;
     });
+
+    let result = ""
+    await this.$db.inputs.get("userName").then( (data) => {
+      result = data.value
+    }).catch( error => {
+    });
+    this.username = result
   },
   watch: {
     nightMode: function() {
       this.$store.commit("setIsDarkMode", this.nightMode);
     }
   },
-
   methods: {
     genChildTarget(item, subItem) {
       if (subItem.href) return;
