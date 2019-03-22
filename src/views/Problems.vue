@@ -30,13 +30,6 @@ export default {
   data() {
     return {
     };
-  },
-  created: function() {
-    const problems = this.$store.getters.getProblemsData;
-    if (problems === null) {
-      this.$store.dispatch("loadProblemsData");
-    }
-    this.$store.dispatch("loadSubmissionsData");
   }
 };
 </script>
