@@ -120,7 +120,7 @@
             <v-list-tile-title>NightMode</v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-action>
-            <v-switch v-model="nightMode">
+            <v-switch v-model="darkMode">
             </v-switch>
           </v-list-tile-action>
         </v-list-tile>
@@ -147,7 +147,7 @@ export default {
   data: () => ({
     mini: false,
     drawer: true,
-    nightMode: false,
+    darkMode: false,
     menus: menu,
     scrollSettings: {
       maxScrollbarLength: 160
@@ -168,6 +168,13 @@ export default {
       this.drawer = !this.drawer;
     });
 
+    let isDarkMode = false;
+    await this.$db.inputs.get("isDarkMode").then( (data) => {
+      isDarkMode = data.value
+    }).catch( error => {
+    });
+    this.darkMode = isDarkMode
+
     let result = ""
     await this.$db.inputs.get("userName").then( (data) => {
       result = data.value
@@ -178,8 +185,9 @@ export default {
     this.username = result
   },
   watch: {
-    nightMode: function() {
-      this.$store.commit("setIsDarkMode", this.nightMode);
+    darkMode: function() {
+      this.$db.inputs.put({id: "isDarkMode", value: this.darkMode});
+      this.$store.commit("setIsDarkMode", this.darkMode);
     }
   },
   methods: {
