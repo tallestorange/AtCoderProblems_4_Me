@@ -301,8 +301,8 @@ export default new Vuex.Store({
 
       await db.problems
         .toArray()
-        .then(function (notes) {
-          payload.problemsData = notes
+        .then(function (data) {
+          payload.problemsData = data
           context.commit("setProblemsData", payload);
           context.commit("setProblemsDict", payload);
         });
@@ -317,9 +317,8 @@ export default new Vuex.Store({
         .get("https://kenkoooo.com/atcoder/resources/merged-problems.json")
         .then(res => {
           payload.problemsData = res.data;
-          for(let key in res.data) {
-            db.problems.put(res.data[key])
-          }
+          db.problems.bulkPut(res.data);
+          
           context.commit("setProblemsData", payload);
           context.commit("setProblemsDict", payload);
       })
