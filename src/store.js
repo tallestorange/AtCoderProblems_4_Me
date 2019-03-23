@@ -119,6 +119,7 @@ export default new Vuex.Store({
     setSubmissionDataFromAPI(state, payload) {
       const submissionsData = payload
       const db = Vue.prototype.$db
+      const userName = state.userName
       let submissionsDict = {}
 
       for (let key in submissionsData) {
@@ -144,13 +145,14 @@ export default new Vuex.Store({
         }
       }
 
-      db.submissions.put({id: "submissionsDictionary", value: submissionsDict});
+      db.submissions.put({id: userName, value: submissionsDict});
       state.submissionsDictionary = submissionsDict
     },
     updateSubmissionsData(state, payload) {
       let submissions = JSON.parse(JSON.stringify(state.submissionsDictionary));
       const problems = state.problemsDictionary;
       const db = Vue.prototype.$db
+      const userName = state.userName
 
       for (let dateStr in submissions) {
         let data = submissions[dateStr].submissions        
@@ -165,7 +167,7 @@ export default new Vuex.Store({
         }
       }
 
-      db.submissions.put({id: "submissionsDictionary", value: submissions});
+      db.submissions.put({id: userName, value: submissions});
       state.submissionsDictionary = submissions
     },
     updateProblemsData(state, payload) {
@@ -214,10 +216,10 @@ export default new Vuex.Store({
       })
       context.commit("setProblemsDataFromAPI", result)
     },
-    async fetchSubmissionsData(context) {
+    async fetchSubmissionsData(context, payload) {
       console.log("Fetching from Atcoder Problems API(Submissions Data)");
       let result = [];
-      const userName = context.getters.getUserName
+      const userName = payload
 
       await axios
         .get("https://kenkoooo.com/atcoder/atcoder-api/results?user=" + userName)
@@ -229,8 +231,9 @@ export default new Vuex.Store({
     },
     async fetchAll(context) {
       context.commit("setIsNowLoading", true)
+      const userName = context.getters.getUserName
       await context.dispatch("fetchProblemsData").then(() => {})
-      await context.dispatch("fetchSubmissionsData").then(() => {})
+      await context.dispatch("fetchSubmissionsData", userName).then(() => {})
 
       context.commit("updateSubmissionsData")
       context.commit("updateProblemsData")
@@ -254,7 +257,12 @@ export default new Vuex.Store({
         context.commit("setProblemsDictionary", data.value)
       }).catch( error => {
       });
-      await db.submissions.get("submissionsDictionary").then( (data) => {
+      await db.inputs.get("userName").then( (data) => {
+        context.commit("setUserName", data.value)
+      }).catch( error => {
+      });
+      const userName = context.getters.getUserName
+      await db.submissions.get(userName).then( (data) => {
         context.commit("setSubmissionsDictionary", data.value)
       }).catch( error => {
       });
