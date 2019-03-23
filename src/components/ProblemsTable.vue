@@ -16,11 +16,23 @@
           class="elevation-0 table-striped"
         >
           <template v-slot:items="props">
-            <td :class="props.item.class">
+            
+            <td class="text-xs-left green lighten-3" v-if="props.item.your_ac_count > 0">
               <a :href="props.item.url" target="_blank">{{
                 props.item.title
               }}</a>
             </td>
+            <td class="text-xs-left orange lighten-3" v-else-if="props.item.your_wa_count > 0">
+              <a :href="props.item.url" target="_blank">{{
+                props.item.title
+              }}</a>
+            </td>
+            <td v-else>
+              <a :href="props.item.url" target="_blank">{{
+                props.item.title
+              }}</a>
+            </td>
+
             <td class="text-xs-left">{{ props.item.point }}</td>
             <td class="text-xs-left">{{ props.item.solver_count }}</td>
             <td class="text-xs-left hidden-md-and-down">{{ props.item.your_ac_count }}</td>
@@ -57,12 +69,6 @@ export default {
     },
     getProblemsList() {
       const problems = this.$store.getters.getProblemsDictionary
-
-      //   if (problem.your_ac_count > 0) {
-      //     problem.cls = "text-xs-left green lighten-3";
-      //   } else if (problem.your_wa_count > 0) {
-      //     problem.cls = "text-xs-left orange lighten-3";
-
       return Object.values(problems);
     }
   },

@@ -3,10 +3,9 @@
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
         <v-flex lg6 sm6 xs12>
-          <v-widget title="Unique AC" content-bg="white">
+          <v-widget title="Unique AC" content-bg="white" v-if="!isScoresLoading">
             <div slot="widget-content">
               <e-chart
-                v-if="!isLoading"
                 :path-option="uniqueAC"
                 height="400px"
                 width="100%"
@@ -16,11 +15,10 @@
           </v-widget>
         </v-flex>
 
-        <!-- <v-flex lg6 sm6 xs12>
-          <v-widget title="Rated Point Sum" content-bg="white">
+        <v-flex lg6 sm6 xs12>
+          <v-widget title="Rated Point Sum" content-bg="white" v-if="!isScoresLoading">
             <div slot="widget-content">
               <e-chart
-                v-if="!isLoading"
                 :path-option="pointSum"
                 height="400px"
                 width="100%"
@@ -30,13 +28,13 @@
           </v-widget>
         </v-flex>
 
-        <v-flex lg12 sm12 xs12>
-          <v-widget title="Earned Points" content-bg="white">
+        <v-flex lg12 sm12 xs12 class="hidden-md-and-down">
+          <v-widget title="Earned Points" content-bg="white" v-if="!isSubmissionsLoading">
             <div slot="widget-content">
-              <heat-map height="260px" v-if="!isLoading"> </heat-map>
+              <heat-map height="260px"> </heat-map>
             </div>
           </v-widget>
-        </v-flex> -->
+        </v-flex>
 
       </v-layout>
     </v-container>
@@ -84,30 +82,32 @@ export default {
     }
   },
   computed: {
-    isLoading() {
-      // if (this.$store.getters.getSubmissionsRawData.length == 0) {
-      //   return true;
-      // }
-      // return this.$store.getters.getLoadingState;
+    isScoresLoading() {
+      if (Object.keys(this.$store.getters.getScoresDictionary).length == 0) {
+        return true;
+      }
+      return false
+    },
+    isSubmissionsLoading() {
+      if (Object.keys(this.$store.getters.getSubmissionsDictionary).length == 0) {
+        return true;
+      }
       return false
     },
     uniqueAC() {
-      // this.$store.commit("setRatedSubmissionsData");
-      // this.$store.commit("setRatedGraphData");
-
       const scoresDict = this.$store.getters.getScoresDictionary;
-      let result = {}
-      // console.log(result)
+      let result = []
 
       let val = 0;
       let colors = [];
       for (var key in scoresDict) {
-        // colors.push(this.getColor(result[key].name));
-        result[key] = scoresDict[key].accepted_count
-        // val += result[key].value;
+        let ac = scoresDict[key].accepted_count
+        if(ac>0){
+          result.push({value:ac,name:key})
+          colors.push(this.getColor(Number(key)))
+        }
+        val += ac
       }
-
-      console.log(result)
 
       return [
         ["dataset.source", result],
@@ -116,34 +116,29 @@ export default {
         ["series[0].type", "pie"],
         ["series[0].avoidLabelOverlap", true],
         ["series[0].radius", ["50%", "70%"]],
+        ["title.text", String(val)],
+        ["color", colors]
       ];
     },
     pointSum() {
-      // use lodash
-      const result = JSON.parse(
-        JSON.stringify(this.$store.getters.getRatedGraphData)
-      );
-      let output = [];
+      const scoresDict = this.$store.getters.getScoresDictionary;
+      let result = []
+
       let val = 0;
       let colors = [];
-
-      for (var key in result) {
-        if (result[key].name == "null") {
-          continue;
+      for (var key in scoresDict) {
+        let ac = scoresDict[key].accepted_count
+        let score = (key != "undefined")? Number(key):0
+        
+        if(ac>0 && score != 0){
+          result.push({value:ac,name:key})
+          colors.push(this.getColor(score))
         }
-        colors.push(this.getColor(result[key].name));
-        val += result[key].name * result[key].value;
-      }
-
-      for (var key in result) {
-        output.push({
-          value: Number(result[key].name) * result[key].value,
-          name: result[key].name
-        });
+        val += ac * score
       }
 
       return [
-        ["dataset.source", output],
+        ["dataset.source", result],
         ["xAxis.show", false],
         ["yAxis.show", false],
         ["series[0].type", "pie"],

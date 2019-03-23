@@ -37,8 +37,7 @@ export default {
       window.getApp.$emit("APP_DRAWER_TOGGLED");
     },
     pushedRefreshButton() {
-      this.$store.dispatch("fetchProblemsData");
-      this.$store.dispatch("fetchSubmissionsData");
+      this.$store.dispatch("fetchAll");
     }
   }
 };

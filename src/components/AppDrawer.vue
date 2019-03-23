@@ -161,6 +161,9 @@ export default {
     },
     sideToolbarColor() {
       return this.$vuetify.options.extra.sideNav;
+    },
+    userName() {
+      return this.$store.getters.getUserName
     }
   },
   created: async function() {
@@ -168,21 +171,20 @@ export default {
       this.drawer = !this.drawer;
     });
 
-    // let isDarkMode = false;
-    // await this.$db.inputs.get("isDarkMode").then( (data) => {
-    //   isDarkMode = data.value
-    // }).catch( error => {
-    // });
-    // this.darkMode = isDarkMode
+    let isDarkMode = false;
+    await this.$db.inputs.get("isDarkMode").then( (data) => {
+      isDarkMode = data.value
+    }).catch( error => {
+    });
+    this.darkMode = isDarkMode
 
-    // let result = ""
-    // await this.$db.inputs.get("userName").then( (data) => {
-    //   result = data.value
-    // }).catch( error => {
-    // });
-  
-    // this.$store.commit("setUserName", result)
-    // this.username = result
+    let result = ""
+    await this.$db.inputs.get("userName").then( (data) => {
+      result = data.value
+    }).catch( error => {
+    });  
+    this.$store.commit("setUserName", result)
+    this.username = result
   },
   watch: {
     darkMode: function() {
@@ -204,9 +206,9 @@ export default {
       this.canMessageSubmit = true;
     },
     sendUserName() {
+      this.$db.inputs.put({id: "userName", value: this.username});
       this.$store.commit("setUserName", this.username);
-      this.$store.dispatch("fetchProblemsData");
-      this.$store.dispatch("fetchSubmissionsData");
+      this.$store.dispatch("fetchAll");
     }
   }
 };

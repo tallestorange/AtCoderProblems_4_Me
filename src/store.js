@@ -17,11 +17,13 @@ function convertToDateString(epoch_second) {
 export default new Vuex.Store({
   state: {
     isInitialLoad: true,
+    isDarkMode: false,
     problemsDictionary: {},
     scoresDictionary: {},
     submissionsDictionary: {},
     selectedSearchTags: [],
-    selectedDate: ""
+    selectedDate: "",
+    userName: ""
   },
   getters: {
     getIsInitialLoad: (state, getters) => {
@@ -29,6 +31,9 @@ export default new Vuex.Store({
     },
     getSelectedDate: (state, getters) => {
       return state.selectedDate
+    },
+    getIsDarkMode: (state, getters) => {
+      return state.isDarkMode
     },
     getScoresDictionary: (state, getters) => {
       return state.scoresDictionary;
@@ -45,8 +50,17 @@ export default new Vuex.Store({
     getSelectedDate: (state, getters) => {
       return state.selectedDate
     },
+    getUserName: (state, getters) => {
+      return state.userName
+    }
   },
   mutations: {
+    setUserName(state, payload) {
+      state.userName = payload
+    },
+    setIsDarkMode(state, payload) {
+      state.isDarkMode = payload
+    },
     setIsInitialLoad(state, payload) {
       state.isInitialLoad = payload
     },
@@ -76,7 +90,6 @@ export default new Vuex.Store({
         problemsDict[problem.id] = problem
         problemsDict[problem.id].your_ac_count = 0
         problemsDict[problem.id].your_wa_count = 0
-        problemsDict[problem.id].class = ""
         problemsDict[problem.id].url = "https://atcoder.jp/contests/" + problem.contest_id + "/tasks/" + problem.id
 
         if (scoresDict[problem.point]){
@@ -197,9 +210,10 @@ export default new Vuex.Store({
     async fetchSubmissionsData(context) {
       console.log("Fetching from Atcoder Problems API(Submissions Data)");
       let result = [];
+      const userName = context.getters.getUserName
 
       await axios
-        .get("https://kenkoooo.com/atcoder/atcoder-api/results?user=tallestorange")
+        .get("https://kenkoooo.com/atcoder/atcoder-api/results?user=" + userName)
         .then(res => {
           console.log("Successful to fetch Submissions Data")
           result = res.data

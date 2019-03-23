@@ -108,7 +108,7 @@ export default {
         left: 30,
         right: 30,
         cellSize: ["auto", 13],
-        range: ["2019-01-01", "2019-03-17"],
+        range: "2019",
         itemStyle: {
           normal: { borderWidth: 0.5 }
         },
@@ -139,8 +139,8 @@ export default {
     },
 
     getVirtulData() {
-      let data = [];
-      let heatMapDict = this.$store.getters.getHeatMapData;
+      let data = [];      
+      let heatMapDict = this.$store.getters.getSubmissionsDictionary;
 
       for (let key in heatMapDict) {
         data.push([key, heatMapDict[key].point_sum]);
