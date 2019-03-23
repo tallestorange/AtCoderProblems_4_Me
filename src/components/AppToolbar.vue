@@ -29,7 +29,7 @@ export default {
       return this.$vuetify.options.extra.mainNav;
     },
     isLoading() {
-      return this.$store.getters.getLoadingState;
+      return this.$store.getters.getIsNowLoading;
     }
   },
   methods: {

@@ -17,6 +17,7 @@ function convertToDateString(epoch_second) {
 export default new Vuex.Store({
   state: {
     isInitialLoad: true,
+    isNowLoading: false,
     isDarkMode: false,
     problemsDictionary: {},
     scoresDictionary: {},
@@ -28,6 +29,9 @@ export default new Vuex.Store({
   getters: {
     getIsInitialLoad: (state, getters) => {
       return state.isInitialLoad;
+    },
+    getIsNowLoading: (state, getters) => {
+      return state.isNowLoading;
     },
     getSelectedDate: (state, getters) => {
       return state.selectedDate
@@ -57,6 +61,9 @@ export default new Vuex.Store({
   mutations: {
     setUserName(state, payload) {
       state.userName = payload
+    },
+    setIsNowLoading(state, payload) {
+      state.isNowLoading = payload
     },
     setIsDarkMode(state, payload) {
       state.isDarkMode = payload
@@ -221,14 +228,17 @@ export default new Vuex.Store({
       context.commit("setSubmissionDataFromAPI", result)
     },
     async fetchAll(context) {
+      context.commit("setIsNowLoading", true)
       await context.dispatch("fetchProblemsData").then(() => {})
       await context.dispatch("fetchSubmissionsData").then(() => {})
 
       context.commit("updateSubmissionsData")
       context.commit("updateProblemsData")
+      context.commit("setIsNowLoading", false)
     },
     async loadDataFromIDB(context) {
       console.log("Loading Data From IndexedDB")
+      context.commit("setIsNowLoading", true)
       const db = Vue.prototype.$db
 
       await db.inputs.get("selectedSearchTags").then( (data) => {
@@ -250,6 +260,7 @@ export default new Vuex.Store({
       });
 
       context.commit("setIsInitialLoad", false)
+      context.commit("setIsNowLoading", false)
     }
   }
 });
