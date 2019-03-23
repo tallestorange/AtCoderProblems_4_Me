@@ -37,7 +37,7 @@
 export default {
   data() {
     return {
-      scores: this.$store.getters.getSelectedSearchTags
+      scores: []
     };
   },
   methods: {
@@ -57,6 +57,14 @@ export default {
       this.$db.inputs.put({id: "selectedSearchTags", value: this.scores});
       this.$store.commit("setSelectedSearchTags", this.scores);
     }
+  },
+  created: async function() {
+    let searchTags = [];
+    await this.$db.inputs.get("selectedSearchTags").then( (data) => {
+      searchTags = data.value
+    }).catch( error => {
+    });
+    this.scores = searchTags
   },
 };
 </script>
