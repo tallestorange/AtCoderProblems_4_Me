@@ -22,16 +22,13 @@ export default {
   },
   computed: {
     arrayEvents() {
-      let submissionsData = this.$store.getters.getHeatMapData;
-      let result = [];
-      for (let key in submissionsData) {
-        result.push(key);
-      }
-      return result;
+      let submissionsData = this.$store.getters.getSubmissionsDictionary;
+      return Object.keys(submissionsData);
     }
   },
   watch: {
     date: function() {
+      this.$db.inputs.put({id: "selectedDate", value: this.date});
       this.$store.commit("setSelectedDate", this.date);
     }
   },

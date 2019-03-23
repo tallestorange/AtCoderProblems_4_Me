@@ -168,21 +168,21 @@ export default {
       this.drawer = !this.drawer;
     });
 
-    let isDarkMode = false;
-    await this.$db.inputs.get("isDarkMode").then( (data) => {
-      isDarkMode = data.value
-    }).catch( error => {
-    });
-    this.darkMode = isDarkMode
+    // let isDarkMode = false;
+    // await this.$db.inputs.get("isDarkMode").then( (data) => {
+    //   isDarkMode = data.value
+    // }).catch( error => {
+    // });
+    // this.darkMode = isDarkMode
 
-    let result = ""
-    await this.$db.inputs.get("userName").then( (data) => {
-      result = data.value
-    }).catch( error => {
-    });
+    // let result = ""
+    // await this.$db.inputs.get("userName").then( (data) => {
+    //   result = data.value
+    // }).catch( error => {
+    // });
   
-    this.$store.commit("setUserName", result)
-    this.username = result
+    // this.$store.commit("setUserName", result)
+    // this.username = result
   },
   watch: {
     darkMode: function() {

@@ -15,14 +15,14 @@ const Menu = [
     title: "UserInfo",
     group: "apps",
     icon: "",
-    name: "Dashboard"
+    name: "UserInfo"
   },
-  {
-    title: "Rivals",
-    group: "apps",
-    icon: "",
-    name: "Rivals"
-  }
+  // {
+  //   title: "Rivals",
+  //   group: "apps",
+  //   icon: "",
+  //   name: "Rivals"
+  // }
 ];
 // reorder menu
 Menu.forEach(item => {

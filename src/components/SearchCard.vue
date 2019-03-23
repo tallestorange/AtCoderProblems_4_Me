@@ -37,7 +37,7 @@
 export default {
   data() {
     return {
-      scores: []
+      scores: this.$store.getters.getSelectedSearchTags
     };
   },
   methods: {
@@ -48,36 +48,15 @@ export default {
   },
   computed: {
     getScoresList() {
-      const problemsDict = this.$store.getters.getProblemsData;
-      let resultDict = {};
-      let result = [];
-
-      for (let key in problemsDict) {
-        let problem = problemsDict[key];
-        if (resultDict[problem.point]) {
-          resultDict[problem.point] += 1;
-        } else {
-          resultDict[problem.point] = 1;
-        }
-      }
-      for (let key in resultDict) {
-        result.push(key);
-      }
-      return result;
+      const scoresDict = this.$store.getters.getScoresDictionary;
+      return Object.keys(scoresDict);
     }
   },
   watch: {
     scores: function() {
-      this.$store.commit("setSearchTags", this.scores);
+      this.$db.inputs.put({id: "selectedSearchTags", value: this.scores});
+      this.$store.commit("setSelectedSearchTags", this.scores);
     }
   },
-  created: async function() {
-    let result = []
-    await this.$db.inputs.get("searchTags").then( (data) => {
-      result = data.value
-    }).catch( error => {
-    });
-    this.scores = result
-  }
 };
 </script>

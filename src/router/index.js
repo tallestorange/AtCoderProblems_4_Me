@@ -14,20 +14,10 @@ const router = new Router({
 });
 // router gards
 router.beforeEach((to, from, next) => {
-  const result = store.getters.getIsLoaded;
-
-  if (!result) {
-    const problems = store.getters.getProblemsData;
-    const submissions = store.getters.getSubmissionsRawData;
-    if (problems === null) {
-      store.dispatch("loadProblemsData");
-    }
-    if (submissions.length == 0) {
-      store.dispatch("loadSubmissionsData");
-    }
-    store.commit("setIsLoaded", true)
-  }
-  
+  const result = store.getters.getIsInitialLoad;
+  if (result) {
+    store.dispatch("loadDataFromIDB")
+  }  
   next();
 });
 

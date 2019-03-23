@@ -15,12 +15,12 @@
         >
           <template v-slot:items="props">
             <td>
-              <a :href="makeSubmissionURL(props.item)" target="_blank">{{
+              <a :href="props.item.submission_url" target="_blank">{{
                 props.item.id
               }}</a>
             </td>
             <td class="text-xs-left">
-              <a :href="makeTaskURL(props.item)" target="_blank">{{
+              <a :href="props.item.problem_url" target="_blank">{{
                 props.item.title
               }}</a>
             </td>
@@ -65,25 +65,15 @@ export default {
   },
   computed: {
     submissionsData() {
-      let problemsDict = this.$store.getters.getProblemsData;
+      let problemsDict = this.$store.getters.getSubmissionsDictionary;
       let selectedDate = this.$store.getters.getSelectedDate;
-      let result = [];
-      if (
-        selectedDate == "" ||
-        this.$store.getters.getSubmissionsRawData.length == 0
-      ) {
-        return [];
-      }
-      let allSubmissions = this.$store.getters.getViewSubmissionsData;
-      let submissionsData = allSubmissions[selectedDate];
 
-      for (let key in submissionsData) {
-        let submission = submissionsData[key];
-        let title = problemsDict[submission.problem_id].title;
-        submission.title = title;
-        result.push(submission);
+      if (problemsDict[selectedDate]) {
+        return problemsDict[selectedDate].submissions
       }
-      return result;
+      else {
+        return []
+      }
     }
   },
   methods: {
@@ -93,22 +83,6 @@ export default {
       } else {
         return "orange";
       }
-    },
-    makeSubmissionURL(submission) {
-      return (
-        "https://atcoder.jp/contests/" +
-        submission.contest_id +
-        "/submissions/" +
-        submission.id
-      );
-    },
-    makeTaskURL(submission) {
-      return (
-        "https://atcoder.jp/contests/" +
-        submission.contest_id +
-        "/tasks/" +
-        submission.problem_id
-      );
     }
   }
 };

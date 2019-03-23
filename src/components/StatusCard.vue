@@ -65,33 +65,41 @@ export default {
   },
   computed: {
     statusGraphData() {
+      const searchTags = this.$store.getters.getSelectedSearchTags;
+      const scoresDict = this.$store.getters.getScoresDictionary;
       let result = {}
-      const status = this.$store.getters.getStatusGraphData;
-      if (status === null) {
-        return null
-      }
-      if (status.length == 0) {
-        return null
-      }
-      
-      result["total"] = status.length
+
+      result["total"] = 0
       result["point_sum"] = 0
       result["ac_point_sum"] = 0
       result["ac"] = 0
 
-      for (let key in status) {
-        if (status[key].point) {
-          result.point_sum += status[key].point
+      if (searchTags.length == 0) {
+        for (let key in scoresDict) {
+          let score = key
+          let data = scoresDict[key]
+          if (score == "undefined") {
+            score = 0
+          }
+          result["point_sum"] += data.problems_count * Number(score)
+          result["total"] += data.problems_count
+          result["ac"] += data.accepted_count
+          result["ac_point_sum"] += data.accepted_count * Number(score)
         }
-        if (status[key].your_ac_count > 0) {
-          result.ac += 1
-          if (status[key].point) {
-            result.ac_point_sum += status[key].point
+      }
+      else {
+        for (let key in searchTags) {
+          let score = searchTags[key]
+          let data = scoresDict[score]
+          if (data) {
+            result["point_sum"] += data.problems_count * Number(score)
+            result["total"] += data.problems_count
+            result["ac"] += data.accepted_count
+            result["ac_point_sum"] += data.accepted_count * Number(score)
           }
         }
       }
-
-
+      
       return result
     }
   }

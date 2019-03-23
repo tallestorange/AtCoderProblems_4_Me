@@ -7,12 +7,12 @@
     <mini-statistic
       title="AC"
       color="green"
-      :number="getStatus.accepted"
+      :number="getStatus.accepted_count"
     ></mini-statistic>
     <mini-statistic
       title="WA"
       color="orange"
-      :number="getStatus.submissions - getStatus.accepted"
+      :number="getStatus.submissions_count - getStatus.accepted_count"
     ></mini-statistic>
     <mini-statistic
       title="Point Sum"
@@ -34,12 +34,13 @@ export default {
   },
   computed: {
     getStatus() {
-      let submissionsData = this.$store.getters.getHeatMapData;
+      let submissionsData = this.$store.getters.getSubmissionsDictionary;
       let selectedDate = this.$store.getters.getSelectedDate;
+
       if (submissionsData[selectedDate]) {
         return submissionsData[selectedDate];
       } else {
-        return { submissions: 0, point_sum: 0, accepted: 0 };
+        return { submissions_count: 0, point_sum: 0, accepted_count: 0 };
       }
     }
   }

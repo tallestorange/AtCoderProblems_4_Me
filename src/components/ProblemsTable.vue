@@ -16,8 +16,8 @@
           class="elevation-0 table-striped"
         >
           <template v-slot:items="props">
-            <td :class="props.item.cls">
-              <a :href="makeTaskURL(props.item)" target="_blank">{{
+            <td :class="props.item.class">
+              <a :href="props.item.url" target="_blank">{{
                 props.item.title
               }}</a>
             </td>
@@ -53,53 +53,22 @@ export default {
   },
   computed: {
     searchTags() {
-      return this.$store.getters.getSearchTags;
+      return this.$store.getters.getSelectedSearchTags;
     },
     getProblemsList() {
-      const problemsDict = this.$store.getters.getProblemsData;
-      const submissionsDict = this.$store.getters.getSubmissionsData;
-      let result = [];
+      const problems = this.$store.getters.getProblemsDictionary
 
-      for (let key in problemsDict) {
-        let problem = problemsDict[key];
-        problem.problem_id = key;
-        if (submissionsDict[key]) {
-          problem.your_ac_count = submissionsDict[key].your_ac_count;
-          problem.your_wa_count = submissionsDict[key].your_wa_count;
-        } else {
-          problem.your_ac_count = 0;
-          problem.your_wa_count = 0;
-        }
-        if (problem.your_ac_count > 0) {
-          problem.cls = "text-xs-left green lighten-3";
-        } else if (problem.your_wa_count > 0) {
-          problem.cls = "text-xs-left orange lighten-3";
-        } else {
-          problem.cls = "text-xs-left";
-        }
-        result.push(problem);
-      }
+      //   if (problem.your_ac_count > 0) {
+      //     problem.cls = "text-xs-left green lighten-3";
+      //   } else if (problem.your_wa_count > 0) {
+      //     problem.cls = "text-xs-left orange lighten-3";
 
-      result.sort(function(a, b) {
-        if (a.first_submission_id < b.first_submission_id) return 1;
-        if (a.first_submission_id > b.first_submission_id) return -1;
-        return 0;
-      });
-
-      return result;
+      return Object.values(problems);
     }
   },
   methods: {
-    makeTaskURL(submission) {
-      return (
-        "https://atcoder.jp/contests/" +
-        submission.contest_id +
-        "/tasks/" +
-        submission.problem_id
-      );
-    },
     filter(val, search) {
-      const searchTags = this.$store.getters.getSearchTags;
+      const searchTags = this.$store.getters.getSelectedSearchTags;
       if (searchTags.length == 0) {
         return true;
       }
@@ -116,7 +85,7 @@ export default {
     },
     customFilter(items, search, filter) {
       let result = items.filter(item => filter(item.point, search));
-      this.$store.commit("setStatusGraphData", result);
+      // this.$store.commit("setStatusGraphData", result);
       return result
     }
   }

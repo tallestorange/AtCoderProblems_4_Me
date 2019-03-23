@@ -4,388 +4,238 @@ import axios from "axios";
 
 Vue.use(Vuex);
 
+function convertToDateString(epoch_second) {
+  let dt = new Date(0);
+  dt.setUTCSeconds(epoch_second);
+  let yr = dt.getFullYear();
+  let mn = ("00" + (dt.getMonth() + 1)).slice(-2);
+  let dy = ("00" + dt.getDate()).slice(-2);
+  let dateStr = yr + "-" + mn + "-" + dy;
+  return dateStr
+}
+
 export default new Vuex.Store({
   state: {
-    errored: false,
-    problemsData: null,
-    problemsDict: null,
-    problemsIsLoading: false,
-    submissionsData: [],
-    submissionsIsLoading: false,
-    submissionsDetail: {},
-    ratedSubmissionsData: null,
-    viewSubmissionsData: null,
-    ratedGraphData: null,
-    heatMapData: {},
-    userName: "",
-    selectedDate: "",
-    searchTags: [],
-    statusGraphData: null,
-    isDarkMode: false,
-    isLoaded: false,
-    rivalsList: []
+    isInitialLoad: true,
+    problemsDictionary: {},
+    scoresDictionary: {},
+    submissionsDictionary: {},
+    selectedSearchTags: [],
+    selectedDate: ""
   },
   getters: {
-    getLoadingState: (state, getters) => {
-      if (!state.submissionsIsLoading && !state.problemsIsLoading) {
-        return false;
-      } else {
-        return true;
-      }
-    },
-    getIsLoaded: (state, getters) => {
-      return state.isLoaded
-    },
-    getIsDarkMode: (state, getters) => {
-      return state.isDarkMode;
-    },
-    getStatusGraphData: (state, getters) => {
-      return state.statusGraphData;
-    },
-    getSearchTags: (state, getters) => {
-      return state.searchTags;
+    getIsInitialLoad: (state, getters) => {
+      return state.isInitialLoad;
     },
     getSelectedDate: (state, getters) => {
-      return state.selectedDate;
+      return state.selectedDate
     },
-    getGraphData: (state, getters) => {
-      return state.graphData;
+    getScoresDictionary: (state, getters) => {
+      return state.scoresDictionary;
     },
-    getSubmissionsData: (state, getters) => {
-      return state.submissionsDetail;
+    getSelectedSearchTags: (state, getters) => {
+      return state.selectedSearchTags;
     },
-    getSubmissionsRawData: (state, getters) => {
-      return state.submissionsData;
+    getProblemsDictionary: (state, getters) => {
+      return state.problemsDictionary;
     },
-    getProblemsData: (state, getters) => {
-      return state.problemsDict;
+    getSubmissionsDictionary: (state, getters) => {
+      return state.submissionsDictionary;
     },
-    getRatedSubmissionsData: (state, getters) => {
-      return state.ratedSubmissionsData;
+    getSelectedDate: (state, getters) => {
+      return state.selectedDate
     },
-    getHeatMapData: (state, getters) => {
-      return state.heatMapData;
-    },
-    getRatedGraphData: (state, getters) => {
-      return state.ratedGraphData;
-    },
-    getUserName: (state, getters) => {
-      return state.userName;
-    },
-    getViewSubmissionsData: (state, getters) => {
-      return state.viewSubmissionsData;
-    },
-    getRivalsList: (state, getters) => {
-      return state.rivalsList;
-    }
   },
   mutations: {
-    setIsLoaded(state, payload) {
-      state.isLoaded = payload
-    },
-    setSubmissionsData(state, payload) {
-      const submissions = payload.submissionsData;
-      submissions.sort(function(a, b) {
-        if (a.id < b.id) return 1;
-        if (a.id > b.id) return -1;
-        return 0;
-      });
-      state.submissionsData = submissions;
-    },
-    setIsDarkMode(state, payload) {
-      state.isDarkMode = payload;
-    },
-    setStatusGraphData(state, payload) {
-      state.statusGraphData = payload;
-    },
-    setSearchTags(state, payload) {
-      Vue.prototype.$db.inputs.put({id: "searchTags", value: payload});
-      state.searchTags = payload;
-    },
-    setViewSubmissionsData(state, payload) {
-      let submissions = payload.submissionsData;
-
-      let result = {};
-      for (let i in submissions) {
-        let submission = submissions[i];
-
-        let dt = new Date(0);
-        dt.setUTCSeconds(submission.epoch_second);
-        let yr = dt.getFullYear();
-        let mn = ("00" + (dt.getMonth() + 1)).slice(-2);
-        let dy = ("00" + dt.getDate()).slice(-2);
-        let dateStr = yr + "-" + mn + "-" + dy;
-
-        if (result[dateStr]) {
-          result[dateStr].push(submission);
-        } else {
-          result[dateStr] = [submission];
-        }
-      }
-      state.viewSubmissionsData = result;
+    setIsInitialLoad(state, payload) {
+      state.isInitialLoad = payload
     },
     setSelectedDate(state, payload) {
-      Vue.prototype.$db.inputs.put({id: "selectedDate", value: payload});
-      state.selectedDate = payload;
+      state.selectedDate = payload
     },
-    setRivalsList(state, payload) {
-      Vue.prototype.$db.rivals.add({
-        userid: payload,
-        accepted_count: 0,
-        rated_point_sum: 0
-      }).then(() => {
-        state.rivalsList.push({
-          userid: payload,
-          accepted_count: 0,
-          rated_point_sum: 0
-        })
-      }).catch((err) => {
-      })
+    setSelectedSearchTags(state, payload) {
+      state.selectedSearchTags = payload
     },
-    setCurrentDate(state, payload) {
-      let dt = new Date();
-      let yr = dt.getFullYear();
-      let mn = ("00" + (dt.getMonth() + 1)).slice(-2);
-      let dy = ("00" + dt.getDate()).slice(-2);
-      let dateStr = yr + "-" + mn + "-" + dy;
-      state.selectedDate = dateStr;
+    setProblemsDictionary(state, payload) {
+      state.problemsDictionary = payload;
     },
-    setUserName(state, payload) {
-      Vue.prototype.$db.inputs.put({id: "userName", value: payload});
-      state.userName = payload;
+    setScoresDictionary(state, payload) {
+      state.scoresDictionary = payload;
     },
-    setRatedSubmissionsData(state, payload) {
-      const problemsDict = state.problemsDict;
-      const submissionsDetail = state.submissionsDetail;
+    setSubmissionsDictionary(state, payload) {
+      state.submissionsDictionary = payload;
+    },
+    setProblemsDataFromAPI(state, payload) {
+      const problemsData = payload
+      const db = Vue.prototype.$db
+      let scoresDict = {}
+      let problemsDict = {}
 
-      let result = {};
-      for (let key in submissionsDetail) {
-        if (problemsDict[key] && problemsDict[key].point) {
-          let submission = submissionsDetail[key];
-          result[key] = submission;
-          result[key].point = problemsDict[key].point;
-        } else {
-          let submission = submissionsDetail[key];
-          result[key] = submission;
-          result[key].point = null;
-        }
-      }
-      state.ratedSubmissionsData = result;
-    },
-    setRatedGraphData(state, payload) {
-      const ratedSubmissionsData = state.ratedSubmissionsData;
-      let scoresDict = {};
-      let scoresArray = [];
+      for (let key in problemsData) {
+        let problem = problemsData[key]
+        problemsDict[problem.id] = problem
+        problemsDict[problem.id].your_ac_count = 0
+        problemsDict[problem.id].your_wa_count = 0
+        problemsDict[problem.id].class = ""
+        problemsDict[problem.id].url = "https://atcoder.jp/contests/" + problem.contest_id + "/tasks/" + problem.id
 
-      for (let key in ratedSubmissionsData) {
-        let submission = ratedSubmissionsData[key];
-        if (submission.your_ac_count == 0) {
-          continue;
+        if (scoresDict[problem.point]){
+          scoresDict[problem.point].problems_count += 1
         }
-        if (scoresDict[submission.point]) {
-          scoresDict[submission.point] += 1;
-        } else {
-          scoresDict[submission.point] = 1;
+        else {
+          scoresDict[problem.point] = {
+            problems_count: 1,
+            accepted_count: 0
+          }
         }
       }
 
-      for (let key in scoresDict) {
-        if (key == "null") {
-          scoresArray.push({ value: scoresDict[key], name: "0" });
-        } else {
-          scoresArray.push({ value: scoresDict[key], name: String(key) });
+      db.problems.put({id: "scoresDictionary", value: scoresDict});
+      db.problems.put({id: "problemsDictionary", value: problemsDict});
+
+      state.problemsDictionary = problemsDict
+      state.scoresDictionary = scoresDict
+    },
+    setSubmissionDataFromAPI(state, payload) {
+      const submissionsData = payload
+      const db = Vue.prototype.$db
+      let submissionsDict = {}
+
+      for (let key in submissionsData) {
+        let submission = submissionsData[key]
+        let dateStr = convertToDateString(submission.epoch_second)
+        let isAccepted = (submission.result == "AC") ? true:false
+        
+        if (submissionsDict[dateStr]) {
+          submissionsDict[dateStr].submissions.push(submission)
+        }
+        else {
+          submissionsDict[dateStr] = {
+            submissions: [submission],
+            accepted_count: 0,
+            submissions_count: 0,
+            point_sum: 0,
+          }
+        }
+        submissionsDict[dateStr].submissions_count += 1
+        if (isAccepted){
+          submissionsDict[dateStr].accepted_count += 1
+          submissionsDict[dateStr].point_sum += submission.point
         }
       }
 
-      state.ratedGraphData = scoresArray;
+      db.submissions.put({id: "submissionsDictionary", value: submissionsDict});
+      state.submissionsDictionary = submissionsDict
     },
-    changeLoadingState(state, payload) {
-      state.loading = !state.loading;
+    updateSubmissionsData(state, payload) {
+      let submissions = JSON.parse(JSON.stringify(state.submissionsDictionary));
+      const problems = state.problemsDictionary;
+      const db = Vue.prototype.$db
+
+      for (let dateStr in submissions) {
+        let data = submissions[dateStr].submissions        
+        for (let key in data) {
+          let submission = data[key]
+          let problem_info = problems[submission.problem_id]
+
+          submission.score = problem_info.point
+          submission.title = problem_info.title
+          submission.problem_url = problem_info.url
+          submission.submission_url = "https://atcoder.jp/contests/" + submission.contest_id + "/submissions/" + submission.id
+        }
+      }
+
+      db.submissions.put({id: "submissionsDictionary", value: submissions});
+      state.submissionsDictionary = submissions
     },
-    changeSubmissionsLoadingState(state, payload) {
-      state.submissionsIsLoading = payload;
-    },
-    changeProblemsLoadingState(state, payload) {
-      state.problemsIsLoading = payload;
-    },
-    setProblemsData(state, payload) {
-      state.problemsData = payload.problemsData;
-    },
-    setProblemsDict(state, payload) {
-      let problems = state.problemsData;
-      var result = {};
+    updateProblemsData(state, payload) {
+      const submissions = state.submissionsDictionary;
+      const db = Vue.prototype.$db
+      let problems = JSON.parse(JSON.stringify(state.problemsDictionary));
+      let scores = JSON.parse(JSON.stringify(state.scoresDictionary));
+
+      for (let dateStr in submissions) {
+        let data = submissions[dateStr].submissions
+        for (let key in data) {
+          let submission = data[key]
+          if (submission.result == "AC") {
+            problems[submission.problem_id].your_ac_count += 1
+          }
+          else {
+            problems[submission.problem_id].your_wa_count += 1
+          }
+        }
+      }
 
       for (let key in problems) {
-        let problem = problems[key];
-        result[problem.id] = {
-          title: problem.title,
-          point: problem.point,
-          contest_id: problem.contest_id,
-          solver_count: problem.solver_count,
-          first_submission_id: problem.first_submission_id
-        };
-      }
-      state.problemsDict = result;
-      state.problemsIsLoading = false;
-    },
-    setHeatMapData(state, payload) {
-      let submissionsData = state.viewSubmissionsData;
-      let submissionsDict = {};
-
-      for (let dateStr in submissionsData) {
-        let submissions = submissionsData[dateStr];
-        for (let key in submissions) {
-          let submission = submissions[key];
-          if (submissionsDict[dateStr]) {
-            submissionsDict[dateStr].submissions += 1;
-          } else {
-            submissionsDict[dateStr] = {
-              submissions: 1,
-              point_sum: 0,
-              accepted: 0
-            };
-          }
-          if (submission.result != "AC" || submission.point <= 0) {
-            continue;
-          }
-          submissionsDict[dateStr].point_sum += submission.point;
-          submissionsDict[dateStr].accepted += 1;
+        let data = problems[key]
+        if (data.your_ac_count > 0) {
+          scores[data.point].accepted_count += 1
         }
       }
 
-      state.heatMapData = submissionsDict;
-      state.submissionsIsLoading = false;
-    },
-    setSubmissionsDetailPerProblem(state, payload) {
-      let submissions = state.submissionsData;
-      var result = {};
+      db.problems.put({id: "problemsDictionary", value: problems});
+      state.problemsDictionary = problems
 
-      for (let key in submissions) {
-        let submission = submissions[key];
-
-        if (result[submission.problem_id]) {
-          if (submission.result == "AC") {
-            result[submission.problem_id].your_ac_count += 1;
-            result[submission.problem_id].ac_submissions.push(submission.id);
-          } else {
-            result[submission.problem_id].your_wa_count += 1;
-            result[submission.problem_id].wa_submissions.push(submission.id);
-          }
-        } else {
-          result[submission.problem_id] = {};
-          result[submission.problem_id].contest_id = submission.contest_id;
-
-          if (submission.result == "AC") {
-            result[submission.problem_id].your_ac_count = 1;
-            result[submission.problem_id].your_wa_count = 0;
-            result[submission.problem_id].ac_submissions = [submission.id];
-            result[submission.problem_id].wa_submissions = [];
-            result[submission.problem_id].point = submission.point;
-          } else {
-            result[submission.problem_id].your_ac_count = 0;
-            result[submission.problem_id].your_wa_count = 1;
-            result[submission.problem_id].ac_submissions = [];
-            result[submission.problem_id].wa_submissions = [submission.id];
-          }
-        }
-      }
-      state.submissionsDetail = result;
+      db.problems.put({id: "scoresDictionary", value: scores});
+      state.scoresDictionary = scores
     }
   },
   actions: {
-    async fetchSubmissionsData(context) {
-      const payload = {
-        submissionsData: []
-      };
-
-      const name = context.getters.getUserName;
-      context.commit("changeSubmissionsLoadingState", true);
-
-      const db = Vue.prototype.$db
-      await axios
-        .get("https://kenkoooo.com/atcoder/atcoder-api/results?user=" + name)
-        .then(res => {
-          payload.submissionsData = res.data;
-          db.submissions.put({id:name,contents:res.data});
-        });
-
-      await db.submissions.get(name).then( (data) => {
-        console.log(data)
-      }).catch( error => {
-      });
-
-      context.commit("setSubmissionsData", payload);
-      context.commit("setViewSubmissionsData", payload);
-      context.commit("setSubmissionsDetailPerProblem", payload);
-      context.commit("setHeatMapData", payload);
-    },
-    async loadSubmissionsData(context) {
-      const payload = {
-        submissionsData: []
-      };
-
-      let name = ""
-      const db = Vue.prototype.$db
-      await db.inputs.get("userName").then( (data) => {
-        name = data.value
-      }).catch( error => {
-      });
-
-      if (name == ""){
-        console.log("UserID is empty")
-        return
-      }
-
-      context.commit("changeSubmissionsLoadingState", true);
-      await db.submissions.get(name).then( (data) => {
-        payload.submissionsData = data.contents
-      }).catch( error => {
-      });
-
-      context.commit("setSubmissionsData", payload);
-      context.commit("setViewSubmissionsData", payload);
-      context.commit("setSubmissionsDetailPerProblem", payload);
-      context.commit("setHeatMapData", payload);
-    },
     async fetchProblemsData(context) {
-      const payload = {
-        problemsData: null
-      };
-      context.commit("changeProblemsLoadingState", true);
-      console.log("loading from API")
+      console.log("Fetching from Atcoder Problems API(Problems Data)");
+      let result = [];
 
-      const db = Vue.prototype.$db
       await axios
         .get("https://kenkoooo.com/atcoder/resources/merged-problems.json")
         .then(res => {
-          payload.problemsData = res.data;
-          db.problems.bulkPut(res.data);
+          console.log("Successful to fetch Problems Data")
+          result = res.data
       })
-      context.commit("setProblemsData", payload);
-      context.commit("setProblemsDict", payload);
+      context.commit("setProblemsDataFromAPI", result)
     },
-    async loadProblemsData(context) {
-      const payload = {
-        problemsData: null
-      };
-      context.commit("changeProblemsLoadingState", true);
+    async fetchSubmissionsData(context) {
+      console.log("Fetching from Atcoder Problems API(Submissions Data)");
+      let result = [];
 
+      await axios
+        .get("https://kenkoooo.com/atcoder/atcoder-api/results?user=tallestorange")
+        .then(res => {
+          console.log("Successful to fetch Submissions Data")
+          result = res.data
+      })
+      context.commit("setSubmissionDataFromAPI", result)
+    },
+    async fetchAll(context) {
+      await context.dispatch("fetchProblemsData").then(() => {})
+      await context.dispatch("fetchSubmissionsData").then(() => {})
+
+      context.commit("updateSubmissionsData")
+      context.commit("updateProblemsData")
+    },
+    async loadDataFromIDB(context) {
+      console.log("Loading Data From IndexedDB")
       const db = Vue.prototype.$db
-      console.log("loading from IndexedDB")
-      await db.problems
-        .toArray()
-        .then(function (data) {
-          payload.problemsData = data
-        });
 
-      if (payload.problemsData.length > 0) {
-        context.commit("setProblemsData", payload);
-        context.commit("setProblemsDict", payload);
-        return
-      }
-      else {
+      await db.inputs.get("selectedSearchTags").then( (data) => {
+        context.commit("setSelectedSearchTags", data.value)
+      }).catch( error => {
+      });
+      await db.problems.get("scoresDictionary").then( (data) => {
+        context.commit("setScoresDictionary", data.value)
+      }).catch( error => {
         context.dispatch("fetchProblemsData")
-      }
+      });
+      await db.problems.get("problemsDictionary").then( (data) => {
+        context.commit("setProblemsDictionary", data.value)
+      }).catch( error => {
+      });
+      await db.submissions.get("submissionsDictionary").then( (data) => {
+        context.commit("setSubmissionsDictionary", data.value)
+      }).catch( error => {
+      });
+
+      context.commit("setIsInitialLoad", false)
     }
   }
 });

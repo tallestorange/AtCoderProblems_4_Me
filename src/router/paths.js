@@ -47,12 +47,12 @@ export default [
     }
   },
   {
-    path: "/dashboard",
+    path: "/userinfo",
     meta: { breadcrumb: true },
-    name: "Dashboard",
+    name: "UserInfo",
     component: () =>
       import(/* webpackChunkName: "routes" */
-      `@/views/Dashboard.vue`)
+      `@/views/UserInfo.vue`)
   },
   {
     path: "/submissions",

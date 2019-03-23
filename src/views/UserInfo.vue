@@ -16,7 +16,7 @@
           </v-widget>
         </v-flex>
 
-        <v-flex lg6 sm6 xs12>
+        <!-- <v-flex lg6 sm6 xs12>
           <v-widget title="Rated Point Sum" content-bg="white">
             <div slot="widget-content">
               <e-chart
@@ -36,7 +36,8 @@
               <heat-map height="260px" v-if="!isLoading"> </heat-map>
             </div>
           </v-widget>
-        </v-flex>
+        </v-flex> -->
+
       </v-layout>
     </v-container>
   </div>
@@ -84,23 +85,29 @@ export default {
   },
   computed: {
     isLoading() {
-      if (this.$store.getters.getSubmissionsRawData.length == 0) {
-        return true;
-      }
-      return this.$store.getters.getLoadingState;
+      // if (this.$store.getters.getSubmissionsRawData.length == 0) {
+      //   return true;
+      // }
+      // return this.$store.getters.getLoadingState;
+      return false
     },
     uniqueAC() {
-      this.$store.commit("setRatedSubmissionsData");
-      this.$store.commit("setRatedGraphData");
+      // this.$store.commit("setRatedSubmissionsData");
+      // this.$store.commit("setRatedGraphData");
 
-      const result = this.$store.getters.getRatedGraphData;
+      const scoresDict = this.$store.getters.getScoresDictionary;
+      let result = {}
+      // console.log(result)
 
       let val = 0;
       let colors = [];
-      for (var key in result) {
-        colors.push(this.getColor(result[key].name));
-        val += result[key].value;
+      for (var key in scoresDict) {
+        // colors.push(this.getColor(result[key].name));
+        result[key] = scoresDict[key].accepted_count
+        // val += result[key].value;
       }
+
+      console.log(result)
 
       return [
         ["dataset.source", result],
@@ -109,8 +116,6 @@ export default {
         ["series[0].type", "pie"],
         ["series[0].avoidLabelOverlap", true],
         ["series[0].radius", ["50%", "70%"]],
-        ["title.text", String(val)],
-        ["color", colors]
       ];
     },
     pointSum() {
