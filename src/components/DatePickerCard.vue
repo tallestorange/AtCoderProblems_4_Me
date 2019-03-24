@@ -24,9 +24,8 @@ export default {
   computed: {
     arrayEvents() {
       const userName = this.$store.getters.getUserName;
-      const submissionsData = this.$store.getters.getSubmissionsDictionary;
-      console.log(submissionsData[userName])
-      return Object.keys(submissionsData[userName]); 
+      const submissionsData = this.$store.getters.getSubmissions(userName)
+      return Object.keys(submissionsData); 
     },
     isLoading() {
       return this.$store.getters.getIsNowLoading
