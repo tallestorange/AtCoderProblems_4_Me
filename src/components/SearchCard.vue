@@ -8,6 +8,7 @@
       <v-flex lg11 sm10 xs10>
         <v-combobox
           label="Scores"
+          v-if="!isLoading"
           :items="getScoresList"
           v-model="scores"
           multiple
@@ -47,6 +48,9 @@ export default {
     },
   },
   computed: {
+    isLoading() {
+      return this.$store.getters.getIsNowLoading
+    },
     getScoresList() {
       const userName = this.$store.getters.getUserName;
       const scoresDict = this.$store.getters.getScoresDictionary[userName];
