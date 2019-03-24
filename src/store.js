@@ -252,10 +252,8 @@ export default new Vuex.Store({
       const userName = context.getters.getUserName
       await context.dispatch("fetchProblemsData").then(() => {})
       
-      if(userName != "") {
-        await context.dispatch("fetchSubmissionsData", userName).then(() => {})
-        context.commit("updateSubmissionsData",userName)
-      }
+      await context.dispatch("fetchSubmissionsData", userName).then(() => {})
+      context.commit("updateSubmissionsData",userName)
       
       context.commit("updateProblemsData",userName)
       context.commit("setIsNowLoading", false)
