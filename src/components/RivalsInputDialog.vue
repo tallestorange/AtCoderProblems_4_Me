@@ -39,21 +39,29 @@ export default {
     };
   },
   methods: {
-    submit() {
+    submit: async function() {
       if (this.userID == "") {
         return
       }
-      const result = {
+      let result = {
         userid: this.userID,
         accepted_count: 0,
         rated_point_sum: 0
       }
-      const payload = {
-        name: this.userID,
-        data: result
+      await this.$store.dispatch("fetchAll", this.userID).then(() => {})
+      const scoresDict = this.$store.getters.getScores(this.userID)
+
+      for(let key in scoresDict) {
+        let data = scoresDict[key]
+        result.accepted_count += data.accepted_count
+        if (key != "undefined") {
+          result.rated_point_sum += data.accepted_count * Number(key)
+        }
       }
-      this.$store.commit("addRivalsList", payload)
-      console.log(this.$store.getters.getRivalsList)
+
+      this.$store.commit("addRivalsList", result) 
+      this.$db.rivals.add(result)
+      
       this.dialog = false
     }
   },

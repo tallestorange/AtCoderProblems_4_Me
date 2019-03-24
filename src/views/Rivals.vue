@@ -10,12 +10,12 @@
 
           <v-layout justify-center>
             <v-flex lg11 sm11 xs11>
-              <div v-for="rival in rivalsList">
+              <div v-for="(rival, rank)  in rivalsList">
                 <v-layout row wrap>
                   <v-flex lg12 sm12 xs12>
                     <v-card>
                       <v-card-title primary-title>
-                        <div class="display-3 mr-2">1</div>
+                        <div class="display-3 mr-2">{{rank+1}}</div>
                         <v-divider vertical></v-divider>
                         <div class="headline ml-2">{{rival.userid}}</div>
                         <v-spacer></v-spacer>
@@ -61,31 +61,19 @@ export default {
     RivalsInputDialog
   },
   data: () => ({
-    rawDate: "null",
-    dates: [],
-    pickerDate: null,
-    date: new Date().toISOString().substr(0, 10)
   }),
-  methods: {},
+  methods: {
+  },
   computed: {
     rivalsList() {
-      console.log(this.$store.getters.getRivalsList)
-      return this.$store.getters.getRivalsList
-    },
-    getStatus() {
-      let submissionsData = this.$store.getters.getHeatMapData;
-      let selectedDate = this.$store.getters.getSelectedDate;
-      if (submissionsData[selectedDate]) {
-        return submissionsData[selectedDate];
-      } else {
-        return { submissions: 0, point_sum: 0, accepted: 0 };
-      }
+      let result = this.$store.getters.getRivalsList
+      result.sort(function(a,b){
+        if(a.rated_point_sum > b.rated_point_sum) return -1;
+        if(a.rated_point_sum < b.rated_point_sum) return 1;
+        return 0;
+      });
+      return result
     }
   },
-  watch: {
-    date: function() {
-      this.$store.commit("setSelectedDate", this.date);
-    }
-  }
 };
 </script>

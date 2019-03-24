@@ -25,7 +25,7 @@ export default new Vuex.Store({
     selectedSearchTags: [],
     selectedDate: "",
     userName: "",
-    rivalsList: {}
+    rivalsList: []
   },
   getters: {
     getIsInitialLoad: (state, getters) => {
@@ -55,6 +55,9 @@ export default new Vuex.Store({
     getProblemsDictionary: (state, getters) => {
       return state.problemsDictionary;
     },
+    getProblems: state => userName => {
+      return state.problemsDictionary[userName];
+    },
     getSubmissionsDictionary: (state, getters) => {
       return state.submissionsDictionary;
     },
@@ -73,7 +76,10 @@ export default new Vuex.Store({
       state.userName = payload
     },
     addRivalsList(state, payload) {
-      state.rivalsList[payload.name] = payload.data
+      state.rivalsList.push(payload)
+    },
+    setRivalsList(state, payload) {
+      state.rivalsList = payload
     },
     setIsNowLoading(state, payload) {
       state.isNowLoading = payload
@@ -100,11 +106,11 @@ export default new Vuex.Store({
       state.submissionsDictionary[payload.userName] = payload.data;
     },
     setProblemsDataFromAPI(state, payload) {
-      const problemsData = payload
+      const problemsData = payload.data
       const db = Vue.prototype.$db
-      const userName = state.userName
+      const userName = payload.userName
+
       let scoresDict = {}
-      scoresDict[userName] = {}
       let problemsDict = {}
 
       for (let key in problemsData) {
@@ -114,22 +120,22 @@ export default new Vuex.Store({
         problemsDict[problem.id].your_wa_count = 0
         problemsDict[problem.id].url = "https://atcoder.jp/contests/" + problem.contest_id + "/tasks/" + problem.id
 
-        if (scoresDict[userName][problem.point]){
-          scoresDict[userName][problem.point].problems_count += 1
+        if (scoresDict[problem.point]){
+          scoresDict[problem.point].problems_count += 1
         }
         else {
-          scoresDict[userName][problem.point] = {
+          scoresDict[problem.point] = {
             problems_count: 1,
             accepted_count: 0
           }
         }
       }
 
-      db.scores.put({id: userName, value: scoresDict[userName]});
-      db.problems.put({id: "problemsDictionary", value: problemsDict});
+      db.scores.put({id: userName, value: scoresDict});
+      db.problems.put({id: userName, value: problemsDict});
 
-      state.problemsDictionary = problemsDict
-      state.scoresDictionary = scoresDict
+      state.problemsDictionary[userName] = problemsDict
+      state.scoresDictionary[userName] = scoresDict
     },
     setSubmissionDataFromAPI(state, payload) {
       const submissionsData = payload.data
@@ -164,9 +170,10 @@ export default new Vuex.Store({
       state.submissionsDictionary[userName] = submissionsDict
     },
     updateSubmissionsData(state, payload) {
-      const problems = state.problemsDictionary;
-      const db = Vue.prototype.$db
       const userName = payload
+      const problems = state.problemsDictionary[userName];
+      const db = Vue.prototype.$db
+      
       let submissions = JSON.parse(JSON.stringify(state.submissionsDictionary[userName]));
 
       for (let dateStr in submissions) {
@@ -189,7 +196,7 @@ export default new Vuex.Store({
       const userName = payload
       const submissions = state.submissionsDictionary[userName];
       const db = Vue.prototype.$db
-      let problems = JSON.parse(JSON.stringify(state.problemsDictionary));
+      let problems = JSON.parse(JSON.stringify(state.problemsDictionary[userName]));
       let scores = JSON.parse(JSON.stringify(state.scoresDictionary[userName]));
 
       for (let dateStr in submissions) {
@@ -212,24 +219,25 @@ export default new Vuex.Store({
         }
       }
 
-      db.problems.put({id: "problemsDictionary", value: problems});
-      state.problemsDictionary = problems
+      db.problems.put({id: userName, value: problems});
+      state.problemsDictionary[userName] = problems
 
       db.scores.put({id: userName, value: scores});
       state.scoresDictionary[userName] = scores
     }
   },
   actions: {
-    async fetchProblemsData(context) {
+    async fetchProblemsData(context, payload) {
       console.log("Fetching from Atcoder Problems API(Problems Data)");
-      let result = [];
+      let result = {};
 
       await axios
         .get("https://kenkoooo.com/atcoder/resources/merged-problems.json")
         .then(res => {
           console.log("Successful to fetch Problems Data")
-          result = res.data
+          result.data = res.data
       })
+      result.userName = payload
       context.commit("setProblemsDataFromAPI", result)
     },
     async fetchSubmissionsData(context, payload) {
@@ -250,11 +258,10 @@ export default new Vuex.Store({
     async fetchAll(context, payload) {
       context.commit("setIsNowLoading", true)
       const userName = payload
-      await context.dispatch("fetchProblemsData").then(() => {})
-      
+      await context.dispatch("fetchProblemsData", userName).then(() => {})
       await context.dispatch("fetchSubmissionsData", userName).then(() => {})
+
       context.commit("updateSubmissionsData",userName)
-      
       context.commit("updateProblemsData",userName)
       context.commit("setIsNowLoading", false)
     },
@@ -276,28 +283,41 @@ export default new Vuex.Store({
         context.commit("setSubmissionsDictionary", result)
       }).catch( error => {
       });
+
+      let isEmpty = true
       await db.scores.toArray().then( (res) => {
         let result = {}
         for(let key in res) {
           let data = res[key]
           result[data.id] = data.value
         }
-        if (Object.keys(result).length == 0) {
-          context.dispatch("fetchProblemsData")
-        }
-        else {
+        if (Object.keys(result).length != 0) {
           context.commit("setScoresDictionary", result)
+          isEmpty = false
         }
       }).catch( error => {
       });
-      await db.problems.get("problemsDictionary").then( (data) => {
-        context.commit("setProblemsDictionary", data.value)
+      if (isEmpty) {
+        await context.dispatch("fetchProblemsData", "").then( (res) => {})
+      }
+
+      await db.problems.toArray().then( (res) => {
+        let result = {}
+        for(let key in res) {
+          let data = res[key]
+          result[data.id] = data.value
+        }
+        context.commit("setProblemsDictionary", result)
       }).catch( error => {
       });
       await db.inputs.get("selectedSearchTags").then( (data) => {
         context.commit("setSelectedSearchTags", data.value)
       }).catch( error => {
       });
+
+      await db.rivals.toArray().then( (res) => {
+        context.commit("setRivalsList", res)
+      })
 
       context.commit("setIsInitialLoad", false)
       context.commit("setIsNowLoading", false)

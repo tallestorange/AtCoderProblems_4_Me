@@ -6,9 +6,9 @@
     <v-divider></v-divider>
     <v-layout justify-center>
       <v-flex lg11 sm10 xs10>
+        <div v-if="!isLoading">
         <v-combobox
           label="Scores"
-          v-if="!isLoading"
           :items="getScoresList"
           v-model="scores"
           multiple
@@ -29,6 +29,7 @@
             </v-chip>
           </template>
         </v-combobox>
+        </div>
       </v-flex>
     </v-layout>
   </v-card>
@@ -53,7 +54,7 @@ export default {
     },
     getScoresList() {
       const userName = this.$store.getters.getUserName;
-      const scoresDict = this.$store.getters.getScoresDictionary[userName];
+      const scoresDict = this.$store.getters.getScores(userName);
       return Object.keys(scoresDict);
     }
   },

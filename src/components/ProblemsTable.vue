@@ -4,7 +4,7 @@
       <v-toolbar-title><h4>Problems</h4></v-toolbar-title>
     </v-toolbar>
     <v-divider></v-divider>
-    <v-card-text class="pa-0">
+    <v-card-text class="pa-0" v-if="!isLoading">
       <template>
         <v-data-table
           :headers="headers"
@@ -64,11 +64,15 @@ export default {
     };
   },
   computed: {
+    isLoading() {
+      return this.$store.getters.getIsNowLoading
+    },
     searchTags() {
       return this.$store.getters.getSelectedSearchTags;
     },
     getProblemsList() {
-      const problems = this.$store.getters.getProblemsDictionary
+      const userName = this.$store.getters.getUserName;
+      const problems = this.$store.getters.getProblems(userName);
       return Object.values(problems);
     }
   },
