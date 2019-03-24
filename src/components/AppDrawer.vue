@@ -208,7 +208,7 @@ export default {
     sendUserName() {
       this.$db.inputs.put({id: "userName", value: this.username});
       this.$store.commit("setUserName", this.username);
-      this.$store.dispatch("fetchAll");
+      this.$store.dispatch("fetchAll", this.username);
     }
   }
 };

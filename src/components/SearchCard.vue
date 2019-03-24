@@ -48,7 +48,8 @@ export default {
   },
   computed: {
     getScoresList() {
-      const scoresDict = this.$store.getters.getScoresDictionary;
+      const userName = this.$store.getters.getUserName;
+      const scoresDict = this.$store.getters.getScoresDictionary[userName];
       return Object.keys(scoresDict);
     }
   },

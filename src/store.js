@@ -247,9 +247,9 @@ export default new Vuex.Store({
 
       context.commit("setSubmissionDataFromAPI", result)
     },
-    async fetchAll(context) {
+    async fetchAll(context, payload) {
       context.commit("setIsNowLoading", true)
-      const userName = context.getters.getUserName
+      const userName = payload
       await context.dispatch("fetchProblemsData").then(() => {})
       
       await context.dispatch("fetchSubmissionsData", userName).then(() => {})

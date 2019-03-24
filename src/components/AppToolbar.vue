@@ -37,7 +37,8 @@ export default {
       window.getApp.$emit("APP_DRAWER_TOGGLED");
     },
     pushedRefreshButton() {
-      this.$store.dispatch("fetchAll");
+      const userName = this.$store.getters.getUserName
+      this.$store.dispatch("fetchAll", userName);
     }
   }
 };
