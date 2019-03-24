@@ -282,9 +282,13 @@ export default new Vuex.Store({
           let data = res[key]
           result[data.id] = data.value
         }
-        context.commit("setScoresDictionary", result)
+        if (Object.keys(result).length == 0) {
+          context.dispatch("fetchProblemsData")
+        }
+        else {
+          context.commit("setScoresDictionary", result)
+        }
       }).catch( error => {
-        context.dispatch("fetchProblemsData")
       });
       await db.problems.get("problemsDictionary").then( (data) => {
         context.commit("setProblemsDictionary", data.value)
