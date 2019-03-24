@@ -7,6 +7,7 @@
     <v-card-text class="pa-0">
       <template>
         <v-data-table
+          v-if="!isLoading"
           :headers="headers"
           :items="submissionsData"
           :pagination.sync="pagination"
@@ -65,8 +66,9 @@ export default {
   },
   computed: {
     submissionsData() {
-      let problemsDict = this.$store.getters.getSubmissionsDictionary;
-      let selectedDate = this.$store.getters.getSelectedDate;
+      const userName = this.$store.getters.getUserName;
+      const problemsDict = this.$store.getters.getSubmissions(userName)
+      const selectedDate = this.$store.getters.getSelectedDate;
 
       if (problemsDict[selectedDate]) {
         return problemsDict[selectedDate].submissions
@@ -74,6 +76,9 @@ export default {
       else {
         return []
       }
+    },
+    isLoading() {
+      return this.$store.getters.getIsNowLoading
     }
   },
   methods: {

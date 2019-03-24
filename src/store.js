@@ -56,6 +56,9 @@ export default new Vuex.Store({
     },
     getUserName: (state, getters) => {
       return state.userName
+    },
+    getSubmissions: state => userName => {
+      return state.submissionsDictionary[userName]
     }
   },
   mutations: {
@@ -247,19 +250,6 @@ export default new Vuex.Store({
       context.commit("setIsNowLoading", true)
       const db = Vue.prototype.$db
 
-      await db.inputs.get("selectedSearchTags").then( (data) => {
-        context.commit("setSelectedSearchTags", data.value)
-      }).catch( error => {
-      });
-      await db.problems.get("scoresDictionary").then( (data) => {
-        context.commit("setScoresDictionary", data.value)
-      }).catch( error => {
-        context.dispatch("fetchProblemsData")
-      });
-      await db.problems.get("problemsDictionary").then( (data) => {
-        context.commit("setProblemsDictionary", data.value)
-      }).catch( error => {
-      });
       await db.inputs.get("userName").then( (data) => {
         context.commit("setUserName", data.value)
       }).catch( error => {
@@ -271,6 +261,19 @@ export default new Vuex.Store({
           userName: userName
         }
         context.commit("setSubmissionsDictionary", result)
+      }).catch( error => {
+      });
+      await db.problems.get("scoresDictionary").then( (data) => {
+        context.commit("setScoresDictionary", data.value)
+      }).catch( error => {
+        context.dispatch("fetchProblemsData")
+      });
+      await db.problems.get("problemsDictionary").then( (data) => {
+        context.commit("setProblemsDictionary", data.value)
+      }).catch( error => {
+      });
+      await db.inputs.get("selectedSearchTags").then( (data) => {
+        context.commit("setSelectedSearchTags", data.value)
       }).catch( error => {
       });
 

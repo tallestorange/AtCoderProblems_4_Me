@@ -5,6 +5,7 @@
     </v-toolbar>
     <v-divider></v-divider>
     <v-date-picker
+      v-if="!isLoading"
       full-width
       v-model="date"
       :events="arrayEvents"
@@ -22,8 +23,13 @@ export default {
   },
   computed: {
     arrayEvents() {
-      let submissionsData = this.$store.getters.getSubmissionsDictionary;
-      return Object.keys(submissionsData);
+      const userName = this.$store.getters.getUserName;
+      const submissionsData = this.$store.getters.getSubmissionsDictionary;
+      console.log(submissionsData[userName])
+      return Object.keys(submissionsData[userName]); 
+    },
+    isLoading() {
+      return this.$store.getters.getIsNowLoading
     }
   },
   watch: {

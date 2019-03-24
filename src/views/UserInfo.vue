@@ -3,7 +3,7 @@
     <v-container grid-list-xl fluid>
       <v-layout row wrap>
         <v-flex lg6 sm6 xs12>
-          <v-widget title="Unique AC" content-bg="white" v-if="!isScoresLoading">
+          <v-widget title="Unique AC" content-bg="white" v-if="!isLoading">
             <div slot="widget-content">
               <e-chart
                 :path-option="uniqueAC"
@@ -16,7 +16,7 @@
         </v-flex>
 
         <v-flex lg6 sm6 xs12>
-          <v-widget title="Rated Point Sum" content-bg="white" v-if="!isScoresLoading">
+          <v-widget title="Rated Point Sum" content-bg="white" v-if="!isLoading">
             <div slot="widget-content">
               <e-chart
                 :path-option="pointSum"
@@ -29,7 +29,7 @@
         </v-flex>
 
         <v-flex lg12 sm12 xs12 class="hidden-md-and-down">
-          <v-widget title="Earned Points" content-bg="white" v-if="!isSubmissionsLoading">
+          <v-widget title="Earned Points" content-bg="white" v-if="!isLoading">
             <div slot="widget-content">
               <heat-map height="260px"> </heat-map>
             </div>
@@ -82,17 +82,8 @@ export default {
     }
   },
   computed: {
-    isScoresLoading() {
-      if (Object.keys(this.$store.getters.getScoresDictionary).length == 0) {
-        return true;
-      }
-      return false
-    },
-    isSubmissionsLoading() {
-      if (Object.keys(this.$store.getters.getSubmissionsDictionary).length == 0) {
-        return true;
-      }
-      return false
+    isLoading() {
+      return this.$store.getters.getIsNowLoading
     },
     uniqueAC() {
       const scoresDict = this.$store.getters.getScoresDictionary;
