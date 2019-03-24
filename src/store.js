@@ -84,7 +84,7 @@ export default new Vuex.Store({
       state.scoresDictionary = payload;
     },
     setSubmissionsDictionary(state, payload) {
-      state.submissionsDictionary = payload;
+      state.submissionsDictionary[payload.userName] = payload.data;
     },
     setProblemsDataFromAPI(state, payload) {
       const problemsData = payload
@@ -117,9 +117,9 @@ export default new Vuex.Store({
       state.scoresDictionary = scoresDict
     },
     setSubmissionDataFromAPI(state, payload) {
-      const submissionsData = payload
+      const submissionsData = payload.data
+      const userName = payload.userName
       const db = Vue.prototype.$db
-      const userName = state.userName
       let submissionsDict = {}
 
       for (let key in submissionsData) {
@@ -146,13 +146,13 @@ export default new Vuex.Store({
       }
 
       db.submissions.put({id: userName, value: submissionsDict});
-      state.submissionsDictionary = submissionsDict
+      state.submissionsDictionary[userName] = submissionsDict
     },
     updateSubmissionsData(state, payload) {
-      let submissions = JSON.parse(JSON.stringify(state.submissionsDictionary));
       const problems = state.problemsDictionary;
       const db = Vue.prototype.$db
-      const userName = state.userName
+      const userName = payload
+      let submissions = JSON.parse(JSON.stringify(state.submissionsDictionary[userName]));
 
       for (let dateStr in submissions) {
         let data = submissions[dateStr].submissions        
@@ -168,10 +168,11 @@ export default new Vuex.Store({
       }
 
       db.submissions.put({id: userName, value: submissions});
-      state.submissionsDictionary = submissions
+      state.submissionsDictionary[userName] = submissions
     },
     updateProblemsData(state, payload) {
-      const submissions = state.submissionsDictionary;
+      const userName = payload
+      const submissions = state.submissionsDictionary[userName];
       const db = Vue.prototype.$db
       let problems = JSON.parse(JSON.stringify(state.problemsDictionary));
       let scores = JSON.parse(JSON.stringify(state.scoresDictionary));
@@ -218,15 +219,17 @@ export default new Vuex.Store({
     },
     async fetchSubmissionsData(context, payload) {
       console.log("Fetching from Atcoder Problems API(Submissions Data)");
-      let result = [];
+      let result = {};
       const userName = payload
+      result.userName = userName
 
       await axios
         .get("https://kenkoooo.com/atcoder/atcoder-api/results?user=" + userName)
         .then(res => {
           console.log("Successful to fetch Submissions Data")
-          result = res.data
+          result.data = res.data
       })
+
       context.commit("setSubmissionDataFromAPI", result)
     },
     async fetchAll(context) {
@@ -235,8 +238,8 @@ export default new Vuex.Store({
       await context.dispatch("fetchProblemsData").then(() => {})
       await context.dispatch("fetchSubmissionsData", userName).then(() => {})
 
-      context.commit("updateSubmissionsData")
-      context.commit("updateProblemsData")
+      context.commit("updateSubmissionsData",userName)
+      context.commit("updateProblemsData",userName)
       context.commit("setIsNowLoading", false)
     },
     async loadDataFromIDB(context) {
@@ -262,8 +265,12 @@ export default new Vuex.Store({
       }).catch( error => {
       });
       const userName = context.getters.getUserName
-      await db.submissions.get(userName).then( (data) => {
-        context.commit("setSubmissionsDictionary", data.value)
+      await db.submissions.get(userName).then( (res) => {
+        let result = {
+          data: res.value,
+          userName: userName
+        }
+        context.commit("setSubmissionsDictionary", result)
       }).catch( error => {
       });
 

@@ -17,12 +17,12 @@ const Menu = [
     icon: "",
     name: "UserInfo"
   },
-  // {
-  //   title: "Rivals",
-  //   group: "apps",
-  //   icon: "",
-  //   name: "Rivals"
-  // }
+  {
+    title: "Rivals",
+    group: "apps",
+    icon: "",
+    name: "Rivals"
+  }
 ];
 // reorder menu
 Menu.forEach(item => {

@@ -91,7 +91,6 @@ export default {
     },
     customFilter(items, search, filter) {
       let result = items.filter(item => filter(item.point, search));
-      // this.$store.commit("setStatusGraphData", result);
       return result
     }
   }
