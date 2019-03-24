@@ -27,6 +27,13 @@ db.version(5).stores({
   submissions: "id, value",
   rivals: "userid, accepted_count, rated_point_sum"
 });
+db.version(6).stores({
+  problems: "id, value",
+  scores: "id, value",
+  inputs: "id, value",
+  submissions: "id, value",
+  rivals: "userid, accepted_count, rated_point_sum"
+});
 
 
 export default db;

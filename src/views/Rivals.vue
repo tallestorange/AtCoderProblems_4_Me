@@ -8,12 +8,10 @@
           </v-toolbar>
           <v-divider></v-divider>
 
-            <v-layout justify-center>
-            
-            
+          <v-layout justify-center>
             <v-flex lg11 sm11 xs11>
               <div v-for="rival in rivalsList">
-              <v-layout row wrap>
+                <v-layout row wrap>
                   <v-flex lg12 sm12 xs12>
                     <v-card>
                       <v-card-title primary-title>
@@ -43,14 +41,10 @@
                       </v-card-actions> 
                     </v-card>
                   </v-flex>
-                  
-
-
-              </v-layout>
+                </v-layout>
               </div>
             </v-flex>
-            
-            </v-layout>
+          </v-layout>
 
         </v-card>
       </v-flex>
@@ -74,15 +68,8 @@ export default {
   }),
   methods: {},
   computed: {
-    arrayEvents() {
-      let submissionsData = this.$store.getters.getHeatMapData;
-      let result = [];
-      for (let key in submissionsData) {
-        result.push(key);
-      }
-      return result;
-    },
     rivalsList() {
+      console.log(this.$store.getters.getRivalsList)
       return this.$store.getters.getRivalsList
     },
     getStatus() {

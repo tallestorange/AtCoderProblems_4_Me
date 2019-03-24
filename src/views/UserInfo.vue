@@ -86,7 +86,8 @@ export default {
       return this.$store.getters.getIsNowLoading
     },
     uniqueAC() {
-      const scoresDict = this.$store.getters.getScoresDictionary;
+      const userName = this.$store.getters.getUserName;
+      const scoresDict = this.$store.getters.getScores(userName);
       let result = []
 
       let val = 0;
@@ -112,7 +113,8 @@ export default {
       ];
     },
     pointSum() {
-      const scoresDict = this.$store.getters.getScoresDictionary;
+      const userName = this.$store.getters.getUserName;
+      const scoresDict = this.$store.getters.getScores(userName);
       let result = []
 
       let val = 0;
@@ -122,7 +124,7 @@ export default {
         let score = (key != "undefined")? Number(key):0
         
         if(ac>0 && score != 0){
-          result.push({value:ac,name:key})
+          result.push({value:ac*score,name:key})
           colors.push(this.getColor(score))
         }
         val += ac * score

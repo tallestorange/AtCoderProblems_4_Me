@@ -66,7 +66,8 @@ export default {
   computed: {
     statusGraphData() {
       const searchTags = this.$store.getters.getSelectedSearchTags;
-      const scoresDict = this.$store.getters.getScoresDictionary;
+      const userName = this.$store.getters.getUserName;
+      const scoresDict = this.$store.getters.getScores(userName);
       let result = {}
 
       result["total"] = 0

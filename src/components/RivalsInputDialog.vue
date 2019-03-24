@@ -43,9 +43,23 @@ export default {
       if (this.userID == "") {
         return
       }
-      console.log(this.userID)
-      this.$store.commit("setRivalsList",this.userID)
+      const result = {
+        userid: this.userID,
+        accepted_count: 0,
+        rated_point_sum: 0
+      }
+      const payload = {
+        name: this.userID,
+        data: result
+      }
+      this.$store.commit("addRivalsList", payload)
+      console.log(this.$store.getters.getRivalsList)
       this.dialog = false
+    }
+  },
+  watch: {
+    dialog: function(val) {
+      this.userID = ""
     }
   }
 };
