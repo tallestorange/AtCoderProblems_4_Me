@@ -139,14 +139,17 @@ export default {
     },
 
     getVirtulData() {
-      let data = [];
+      let result = [];
       const userName = this.$store.getters.getUserName;
       const heatMapDict = this.$store.getters.getSubmissions(userName)
 
       for (let key in heatMapDict) {
-        data.push([key, heatMapDict[key].point_sum]);
+        let data = heatMapDict[key]
+        if (data.accepted_count > 0) {
+          result.push([key, data.point_sum]);
+        }
       }
-      return data;
+      return result;
     },
 
     resize() {

@@ -162,7 +162,7 @@ export default new Vuex.Store({
         submissionsDict[dateStr].submissions_count += 1
         if (isAccepted){
           submissionsDict[dateStr].accepted_count += 1
-          submissionsDict[dateStr].point_sum += submission.point
+          // submissionsDict[dateStr].point_sum += submission.point
         }
       }
 
@@ -177,15 +177,17 @@ export default new Vuex.Store({
       let submissions = JSON.parse(JSON.stringify(state.submissionsDictionary[userName]));
 
       for (let dateStr in submissions) {
-        let data = submissions[dateStr].submissions        
+        let data = submissions[dateStr].submissions
         for (let key in data) {
           let submission = data[key]
           let problem_info = problems[submission.problem_id]
-
           submission.score = problem_info.point
           submission.title = problem_info.title
           submission.problem_url = problem_info.url
           submission.submission_url = "https://atcoder.jp/contests/" + submission.contest_id + "/submissions/" + submission.id
+          if(typeof submission.score !== "undefined"){
+            submissions[dateStr].point_sum += submission.point
+          }
         }
       }
 
