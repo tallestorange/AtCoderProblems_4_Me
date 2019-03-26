@@ -7,7 +7,7 @@
         </v-toolbar>
         <v-divider></v-divider>
         <v-card-text>
-          <div class="justify-center row layout ma-0" v-if="statusGraphData != null">
+          <div class="justify-center row layout ma-0">
             <v-progress-circular
             :rotate="-90"
             :value="statusGraphData.ac / statusGraphData.total * 100"
@@ -21,7 +21,7 @@
           </div>
         </v-card-text>
         <v-divider></v-divider>
-        <v-card-actions v-if="statusGraphData != null">
+        <v-card-actions>
           <div class="headline">{{(statusGraphData.ac / statusGraphData.total * 100).toFixed(1) + "%"}}</div>
           <div class="caption">{{" (" + statusGraphData.ac + " / " + statusGraphData.total + ")"}}</div>
         </v-card-actions>
@@ -34,7 +34,7 @@
         </v-toolbar>
         <v-divider></v-divider>
         <v-card-text>
-          <div class="justify-center row layout ma-0" v-if="statusGraphData != null">
+          <div class="justify-center row layout ma-0">
             <v-progress-circular
             :rotate="-90"
             :value="statusGraphData.ac_point_sum / statusGraphData.point_sum * 100"
@@ -48,7 +48,7 @@
           </div>
         </v-card-text>
         <v-divider></v-divider>
-        <v-card-actions v-if="statusGraphData != null">
+        <v-card-actions>
           <div class="headline">{{(statusGraphData.ac_point_sum / statusGraphData.point_sum * 100).toFixed(1) + "%"}}</div>
           <div class="caption">{{" (" + statusGraphData.ac_point_sum + " / " + statusGraphData.point_sum + ")"}}</div>
         </v-card-actions>
@@ -66,10 +66,9 @@ export default {
   computed: {
     statusGraphData() {
       const searchTags = this.$store.getters.getSelectedSearchTags;
-      const userName = this.$store.getters.getUserName;
-      const scoresDict = this.$store.getters.getScores(userName);
-      let result = {}
+      const scoresDict = this.$store.getters.getScoresForView;
 
+      let result = {}
       result["total"] = 0
       result["point_sum"] = 0
       result["ac_point_sum"] = 0

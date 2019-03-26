@@ -29,6 +29,7 @@ export default new Vuex.Store({
     rivalsList: [],
     searchTagsForView: [],
     problemsForView: [],
+    scoresForView: {}
   },
   getters: {
     getIsInitialLoad: (state, getters) => {
@@ -39,6 +40,9 @@ export default new Vuex.Store({
     },
     getProblemsForView: (state, getters) => {
       return state.problemsForView
+    },
+    getScoresForView: (state, getters) => {
+      return state.scoresForView
     },
     getIsNowLoading: (state, getters) => {
       return state.isNowLoading;
@@ -95,6 +99,9 @@ export default new Vuex.Store({
     },
     setProblemsForView(state, payload) {
       state.problemsForView = payload
+    },
+    setScoresForView(state, payload) {
+      state.scoresForView = payload
     },
     setRivalsList(state, payload) {
       state.rivalsList = payload
@@ -342,6 +349,7 @@ export default new Vuex.Store({
         }
         if (Object.keys(result).length != 0) {
           context.commit("setScoresDictionary", result)
+          context.commit("setScoresForView", result[userName])
           isEmpty = false
         }
       }).catch( error => {

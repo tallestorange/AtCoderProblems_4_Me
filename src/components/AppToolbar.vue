@@ -36,9 +36,17 @@ export default {
     handleDrawerToggle() {
       window.getApp.$emit("APP_DRAWER_TOGGLED");
     },
-    pushedRefreshButton() {
+    pushedRefreshButton: async function() {
       const userName = this.$store.getters.getUserName
-      this.$store.dispatch("fetchAll", userName);
+      this.$db.inputs.put({id: "userName", value: userName});
+      this.$store.commit("setUserName", userName);
+      const self = this
+      this.$store.dispatch("fetchAll", userName).then(() => {
+        const problems = self.$store.getters.getProblems(userName)
+        self.$store.commit("setProblemsForView", Object.values(problems))
+        const scores = self.$store.getters.getScores(userName)
+        self.$store.commit("setScoresForView", scores)
+      });
     }
   }
 };
