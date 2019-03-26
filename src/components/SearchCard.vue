@@ -6,7 +6,7 @@
     <v-divider></v-divider>
     <v-layout justify-center>
       <v-flex lg11 sm10 xs10>
-        <div>
+
         <v-combobox
           label="Scores"
           :items="getScoresList"
@@ -29,7 +29,16 @@
             </v-chip>
           </template>
         </v-combobox>
-        </div>
+
+         <v-combobox
+          label="Contests"
+          :items="getContestsList"
+          v-model="contests"
+          clearable
+          full-width
+        >
+        </v-combobox>
+
       </v-flex>
     </v-layout>
   </v-card>
@@ -39,7 +48,8 @@
 export default {
   data() {
     return {
-      scores: []
+      scores: [],
+      contests: ""
     };
   },
   methods: {
@@ -54,21 +64,29 @@ export default {
     },
     getScoresList() {
       return this.$store.getters.getSearchTagsForView
+    },
+    getContestsList() {
+      return this.$store.getters.getContestsList
     }
   },
   watch: {
     scores: function() {
       this.$db.inputs.put({id: "selectedSearchTags", value: this.scores});
       this.$store.commit("setSelectedSearchTags", this.scores);
+    },
+    contests: function() {
+      this.$db.inputs.put({id: "selectedContestName", value: this.contests});
+      this.$store.commit("setSelectedContestName", this.contests);
     }
   },
-  created: async function() {
+  created() {
     let searchTags = [];
-    await this.$db.inputs.get("selectedSearchTags").then( (data) => {
+    this.$db.inputs.get("selectedSearchTags").then( (data) => {
       searchTags = data.value
+      this.scores = searchTags
     }).catch( error => {
     });
-    this.scores = searchTags
+    
   },
 };
 </script>

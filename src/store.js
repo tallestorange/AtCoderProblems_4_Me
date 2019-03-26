@@ -25,11 +25,13 @@ export default new Vuex.Store({
     submissionsDictionary: {},
     selectedSearchTags: [],
     selectedDate: "",
+    selectedContestName: "",
     userName: "",
     rivalsList: [],
     searchTagsForView: [],
     problemsForView: [],
-    scoresForView: {}
+    scoresForView: {},
+    contestsList: [],
   },
   getters: {
     getIsInitialLoad: (state, getters) => {
@@ -50,6 +52,9 @@ export default new Vuex.Store({
     getRivalsList: (state, getters) => {
       return state.rivalsList
     },
+    getContestsList: (state, getters) => {
+      return state.contestsList
+    },
     getSelectedDate: (state, getters) => {
       return state.selectedDate
     },
@@ -64,6 +69,9 @@ export default new Vuex.Store({
     },
     getSelectedSearchTags: (state, getters) => {
       return state.selectedSearchTags;
+    },
+    getSelectedContestName: (state, getters) => {
+      return state.selectedContestName
     },
     getProblemsDictionary: (state, getters) => {
       return state.problemsDictionary;
@@ -94,6 +102,9 @@ export default new Vuex.Store({
     addRivalsList(state, payload) {
       state.rivalsList.push(payload)
     },
+    setContestsList(state, payload) {
+      state.contestsList = payload
+    },
     setSearchTagsForView(state, payload) {
       state.searchTagsForView = payload
     },
@@ -120,6 +131,9 @@ export default new Vuex.Store({
     },
     setSelectedSearchTags(state, payload) {
       state.selectedSearchTags = payload
+    },
+    setSelectedContestName(state, payload) {
+      state.selectedContestName = payload
     },
     setProblemsDictionary(state, payload) {
       state.problemsDictionary = payload;
@@ -170,10 +184,23 @@ export default new Vuex.Store({
     },
     setContestsDataFromAPI(state, payload) {
       let result = {}
+      let contests = []
+      const db = Vue.prototype.$db
+
       for (let key in payload) {
         let data = payload[key]
+        contests.push(data.title)
         result[data.id] = data
       }
+
+      contests.sort(function(a,b){
+        if( a < b ) return -1;
+        if( a > b ) return 1;
+        return 0;
+      });
+
+      db.inputs.put({id: "contests", value: contests});
+      state.contestsList = contests
       state.contestsDictionary = result
     },
     setSubmissionsDataFromAPI(state, payload) {
@@ -322,6 +349,10 @@ export default new Vuex.Store({
 
       await db.inputs.get("searchTags").then( (data) => {
         context.commit("setSearchTagsForView", data.value)
+      }).catch( error => {
+      });
+      await db.inputs.get("contests").then( (data) => {
+        context.commit("setContestsList", data.value)
       }).catch( error => {
       });
 

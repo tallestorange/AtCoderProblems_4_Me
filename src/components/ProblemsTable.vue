@@ -75,29 +75,45 @@ export default {
     getProblemsList() {
       const userName = this.$store.getters.getUserName;
       const problems = this.$store.getters.getProblems(userName);
-      // return Object.values(problems);
       return this.$store.getters.getProblemsForView
     }
   },
   methods: {
     filter(val, search) {
       const searchTags = this.$store.getters.getSelectedSearchTags;
+      const contestName = this.$store.getters.getSelectedContestName;
+
       if (searchTags.length == 0) {
-        return true;
+        if (contestName === null || contestName === undefined || contestName == "") {
+          return true
+        }
+        else if (val.contest_title == contestName) {
+          return true
+        }
       }
       for (let key in search) {
         let tag = searchTags[key];
-        if (val === undefined && tag == "undefined") {
-          return true;
+        if (val.point === undefined && tag == "undefined") {
+          if (contestName === null || contestName === undefined || contestName == "") {
+            return true
+          }
+          else if (val.contest_title == contestName) {
+            return true
+          }
         }
-        else if (tag == val) {
-          return true;
+        else if (tag == val.point) {
+          if (contestName === null || contestName === undefined || contestName == "") {
+            return true
+          }
+          else if (val.contest_title == contestName) {
+            return true
+          }
         }
       }
       return false;
     },
     customFilter(items, search, filter) {
-      let result = items.filter(item => filter(item.point, search));
+      let result = items.filter(item => filter(item, search));
       return result
     }
   }

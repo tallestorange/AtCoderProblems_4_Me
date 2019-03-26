@@ -74,8 +74,6 @@ export default {
       const searchTags = this.$store.getters.getSelectedSearchTags;
       const scoresDict = this.$store.getters.getScoresForView;
 
-      console.log(Object.keys(scoresDict).length)
-
       let result = {}
       result["total"] = 0
       result["point_sum"] = 0
