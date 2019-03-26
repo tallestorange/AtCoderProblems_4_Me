@@ -6,7 +6,7 @@
     <v-divider></v-divider>
     <v-layout justify-center>
       <v-flex lg11 sm10 xs10>
-        <div v-if="!isLoading">
+        <div>
         <v-combobox
           label="Scores"
           :items="getScoresList"
@@ -53,9 +53,7 @@ export default {
       return this.$store.getters.getIsNowLoading
     },
     getScoresList() {
-      const userName = this.$store.getters.getUserName;
-      const scoresDict = this.$store.getters.getScores(userName);
-      return Object.keys(scoresDict);
+      return this.$store.getters.getSearchTagsForView
     }
   },
   watch: {

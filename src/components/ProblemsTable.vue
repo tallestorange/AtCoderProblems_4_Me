@@ -4,7 +4,7 @@
       <v-toolbar-title><h4>Problems</h4></v-toolbar-title>
     </v-toolbar>
     <v-divider></v-divider>
-    <v-card-text class="pa-0" v-if="!isLoading">
+    <v-card-text class="pa-0">
       <template>
         <v-data-table
           :headers="headers"
@@ -75,7 +75,8 @@ export default {
     getProblemsList() {
       const userName = this.$store.getters.getUserName;
       const problems = this.$store.getters.getProblems(userName);
-      return Object.values(problems);
+      // return Object.values(problems);
+      return this.$store.getters.getProblemsForView
     }
   },
   methods: {

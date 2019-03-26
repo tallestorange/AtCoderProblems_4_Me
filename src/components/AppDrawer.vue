@@ -205,10 +205,17 @@ export default {
     setCanMessageSubmit() {
       this.canMessageSubmit = true;
     },
-    sendUserName() {
-      this.$db.inputs.put({id: "userName", value: this.username});
-      this.$store.commit("setUserName", this.username);
-      this.$store.dispatch("fetchAll", this.username);
+    sendUserName: async function() {
+      const userName = this.username
+      this.$db.inputs.put({id: "userName", value: userName});
+      this.$store.commit("setUserName", userName);
+      const self = this
+      this.$store.dispatch("fetchAll", userName).then(() => {
+        const result = self.$store.getters.getProblems(userName)
+        self.$store.commit("setProblemsForView", Object.values(result))
+      });
+
+      
     }
   }
 };

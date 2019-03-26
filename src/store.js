@@ -26,11 +26,19 @@ export default new Vuex.Store({
     selectedSearchTags: [],
     selectedDate: "",
     userName: "",
-    rivalsList: []
+    rivalsList: [],
+    searchTagsForView: [],
+    problemsForView: [],
   },
   getters: {
     getIsInitialLoad: (state, getters) => {
       return state.isInitialLoad;
+    },
+    getSearchTagsForView: (state, getters) => {
+      return state.searchTagsForView
+    },
+    getProblemsForView: (state, getters) => {
+      return state.problemsForView
     },
     getIsNowLoading: (state, getters) => {
       return state.isNowLoading;
@@ -81,6 +89,12 @@ export default new Vuex.Store({
     },
     addRivalsList(state, payload) {
       state.rivalsList.push(payload)
+    },
+    setSearchTagsForView(state, payload) {
+      state.searchTagsForView = payload
+    },
+    setProblemsForView(state, payload) {
+      state.problemsForView = payload
     },
     setRivalsList(state, payload) {
       state.rivalsList = payload
@@ -142,6 +156,10 @@ export default new Vuex.Store({
 
       state.problemsDictionary[userName] = problemsDict
       state.scoresDictionary[userName] = scoresDict
+
+      let searchTags = Object.keys(scoresDict)
+      state.searchTagsForView = searchTags
+      db.inputs.put({id: "searchTags", value: searchTags});
     },
     setContestsDataFromAPI(state, payload) {
       let result = {}
@@ -149,7 +167,6 @@ export default new Vuex.Store({
         let data = payload[key]
         result[data.id] = data
       }
-      console.log(result)
       state.contestsDictionary = result
     },
     setSubmissionsDataFromAPI(state, payload) {
@@ -296,11 +313,17 @@ export default new Vuex.Store({
       context.commit("setIsNowLoading", true)
       const db = Vue.prototype.$db
 
+      await db.inputs.get("searchTags").then( (data) => {
+        context.commit("setSearchTagsForView", data.value)
+      }).catch( error => {
+      });
+
       await db.inputs.get("userName").then( (data) => {
         context.commit("setUserName", data.value)
       }).catch( error => {
       });
       const userName = context.getters.getUserName
+
       await db.submissions.get(userName).then( (res) => {
         let result = {
           data: res.value,
@@ -325,7 +348,7 @@ export default new Vuex.Store({
       });
       if (isEmpty) {
         await context.dispatch("fetchContestsData").then(() => {})
-        await context.dispatch("fetchProblemsData", "").then( (res) => {})
+        await context.dispatch("fetchProblemsData", userName).then( (res) => {})
       }
 
       await db.problems.toArray().then( (res) => {
@@ -334,9 +357,12 @@ export default new Vuex.Store({
           let data = res[key]
           result[data.id] = data.value
         }
+        const problems = Object.values(result[userName])
+        context.commit("setProblemsForView", problems)
         context.commit("setProblemsDictionary", result)
       }).catch( error => {
       });
+
       await db.inputs.get("selectedSearchTags").then( (data) => {
         context.commit("setSelectedSearchTags", data.value)
       }).catch( error => {
