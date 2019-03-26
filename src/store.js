@@ -162,7 +162,6 @@ export default new Vuex.Store({
         submissionsDict[dateStr].submissions_count += 1
         if (isAccepted){
           submissionsDict[dateStr].accepted_count += 1
-          // submissionsDict[dateStr].point_sum += submission.point
         }
       }
 
