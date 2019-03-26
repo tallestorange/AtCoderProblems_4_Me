@@ -35,7 +35,7 @@
 
             <td class="text-xs-left">{{ props.item.point }}</td>
             <td class="text-xs-left">{{ props.item.solver_count }}</td>
-            <td class="text-xs-left hidden-xs-and-down">{{ props.item.contest_id }}</td>
+            <td class="text-xs-left hidden-xs-and-down">{{ props.item.contest_title }}</td>
             <td class="text-xs-left hidden-md-and-down">{{ props.item.your_ac_count }}</td>
             <td class="text-xs-left hidden-md-and-down">{{ props.item.your_wa_count }}</td>
           </template>
@@ -54,7 +54,7 @@ export default {
         { text: "Title", value: "title", sortable: false },
         { text: "Score", value: "point" },
         { text: "Solvers", value: "solver_count" },
-        { text: "Contest ID", value: "contest_id", class: "hidden-xs-and-down" },
+        { text: "Contest Title", value: "contest_title", class: "hidden-xs-and-down" },
         { text: "Your AC Count", value: "your_ac_count", class: "hidden-md-and-down" },
         { text: "Your WA Count", value: "your_wa_count", class: "hidden-md-and-down" }
       ],

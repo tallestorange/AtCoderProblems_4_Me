@@ -21,6 +21,7 @@ export default new Vuex.Store({
     isDarkMode: false,
     problemsDictionary: {},
     scoresDictionary: {},
+    contestsDictionary: {},
     submissionsDictionary: {},
     selectedSearchTags: [],
     selectedDate: "",
@@ -69,6 +70,9 @@ export default new Vuex.Store({
     },
     getSubmissions: state => userName => {
       return state.submissionsDictionary[userName]
+    },
+    getContestsDictionary: (state, getters) => {
+      return state.contestsDictionary
     }
   },
   mutations: {
@@ -109,6 +113,7 @@ export default new Vuex.Store({
       const problemsData = payload.data
       const db = Vue.prototype.$db
       const userName = payload.userName
+      const contestsData = state.contestsDictionary
 
       let scoresDict = {}
       let problemsDict = {}
@@ -116,6 +121,7 @@ export default new Vuex.Store({
       for (let key in problemsData) {
         let problem = problemsData[key]
         problemsDict[problem.id] = problem
+        problemsDict[problem.id].contest_title = contestsData[problem.contest_id].title
         problemsDict[problem.id].your_ac_count = 0
         problemsDict[problem.id].your_wa_count = 0
         problemsDict[problem.id].url = "https://atcoder.jp/contests/" + problem.contest_id + "/tasks/" + problem.id
@@ -137,7 +143,16 @@ export default new Vuex.Store({
       state.problemsDictionary[userName] = problemsDict
       state.scoresDictionary[userName] = scoresDict
     },
-    setSubmissionDataFromAPI(state, payload) {
+    setContestsDataFromAPI(state, payload) {
+      let result = {}
+      for (let key in payload) {
+        let data = payload[key]
+        result[data.id] = data
+      }
+      console.log(result)
+      state.contestsDictionary = result
+    },
+    setSubmissionsDataFromAPI(state, payload) {
       const submissionsData = payload.data
       const userName = payload.userName
       const db = Vue.prototype.$db
@@ -253,12 +268,22 @@ export default new Vuex.Store({
           console.log("Successful to fetch Submissions Data")
           result.data = res.data
       })
-
-      context.commit("setSubmissionDataFromAPI", result)
+      context.commit("setSubmissionsDataFromAPI", result)
+    },
+    async fetchContestsData(context, payload) {
+      let result = []
+      await axios
+        .get("https://kenkoooo.com/atcoder/resources/contests.json")
+        .then(res => {
+          result = res.data
+      })
+      context.commit("setContestsDataFromAPI", result)
     },
     async fetchAll(context, payload) {
       context.commit("setIsNowLoading", true)
       const userName = payload
+
+      await context.dispatch("fetchContestsData").then(() => {})
       await context.dispatch("fetchProblemsData", userName).then(() => {})
       await context.dispatch("fetchSubmissionsData", userName).then(() => {})
 
@@ -299,6 +324,7 @@ export default new Vuex.Store({
       }).catch( error => {
       });
       if (isEmpty) {
+        await context.dispatch("fetchContestsData").then(() => {})
         await context.dispatch("fetchProblemsData", "").then( (res) => {})
       }
 
