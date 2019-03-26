@@ -9,6 +9,7 @@
         <v-card-text>
           <div class="justify-center row layout ma-0">
             <v-progress-circular
+            v-if="!isLoading"
             :rotate="-90"
             :value="statusGraphData.ac / statusGraphData.total * 100"
             :size="140"
@@ -21,7 +22,7 @@
           </div>
         </v-card-text>
         <v-divider></v-divider>
-        <v-card-actions>
+        <v-card-actions v-if="!isLoading">
           <div class="headline">{{(statusGraphData.ac / statusGraphData.total * 100).toFixed(1) + "%"}}</div>
           <div class="caption">{{" (" + statusGraphData.ac + " / " + statusGraphData.total + ")"}}</div>
         </v-card-actions>
@@ -36,6 +37,7 @@
         <v-card-text>
           <div class="justify-center row layout ma-0">
             <v-progress-circular
+            v-if="!isLoading"
             :rotate="-90"
             :value="statusGraphData.ac_point_sum / statusGraphData.point_sum * 100"
             :size="140"
@@ -48,7 +50,7 @@
           </div>
         </v-card-text>
         <v-divider></v-divider>
-        <v-card-actions>
+        <v-card-actions v-if="!isLoading">
           <div class="headline">{{(statusGraphData.ac_point_sum / statusGraphData.point_sum * 100).toFixed(1) + "%"}}</div>
           <div class="caption">{{" (" + statusGraphData.ac_point_sum + " / " + statusGraphData.point_sum + ")"}}</div>
         </v-card-actions>
@@ -64,9 +66,15 @@ export default {
     };
   },
   computed: {
+    isLoading() {
+      const scoresDict = this.$store.getters.getScoresForView;
+      return Object.keys(scoresDict).length == 0
+    },
     statusGraphData() {
       const searchTags = this.$store.getters.getSelectedSearchTags;
       const scoresDict = this.$store.getters.getScoresForView;
+
+      console.log(Object.keys(scoresDict).length)
 
       let result = {}
       result["total"] = 0
