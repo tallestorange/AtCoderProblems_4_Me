@@ -14,6 +14,9 @@
                   <div class="display-3 mr-2">{{ rank + 1 }}</div>
                   <v-divider vertical></v-divider>
                   <div class="headline ml-2">{{ rival.userid }}</div>
+                  <v-btn icon style="right: 5vw; bottom: 4vh; z-index: 999; position: fixed;">
+                    <v-icon>more_vert</v-icon>
+                  </v-btn>
                 </v-card-title>
                 <v-divider></v-divider>
                 <v-card-actions>
