@@ -60,8 +60,7 @@ export default new Vuex.Store({
       return state.contestsList
     },
     getSelectedDate: (state, getters) => {
-      console.log(state.getSelectedDate)
-      return state.selectedDate
+      return {date: state.selectedDate}
     },
     getIsDarkMode: (state, getters) => {
       return state.isDarkMode
@@ -150,7 +149,7 @@ export default new Vuex.Store({
       state.scoresDictionary = payload;
     },
     setSubmissionsDictionary(state, payload) {
-      state.submissionsDictionary[payload.userName] = payload.data;
+      state.submissionsDictionary = payload;
     },
     setProblemsDataFromAPI(state, payload) {
       const problemsData = payload.data
@@ -374,12 +373,14 @@ export default new Vuex.Store({
       });
       const userName = context.getters.getUserName
 
-      await db.submissions.get(userName).then( (res) => {
-        let result = {
-          data: res.value,
-          userName: userName
+      await db.submissions.toArray().then( (res) => {
+        let result = {}
+        for (let key in res) {
+          let data = res[key]
+          result[data.id] = data.value
         }
-        const eventsList = Object.keys(res.value)
+
+        const eventsList = Object.keys(result[userName])
         context.commit("setEventsList", eventsList)
         context.commit("setSubmissionsDictionary", result)
       }).catch( error => {
