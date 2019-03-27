@@ -60,6 +60,7 @@ export default new Vuex.Store({
       return state.contestsList
     },
     getSelectedDate: (state, getters) => {
+      console.log(state.getSelectedDate)
       return state.selectedDate
     },
     getIsDarkMode: (state, getters) => {
@@ -360,6 +361,10 @@ export default new Vuex.Store({
       });
       await db.inputs.get("contests").then( (data) => {
         context.commit("setContestsList", data.value)
+      }).catch( error => {
+      });
+      await db.inputs.get("selectedDate").then( (data) => {
+        context.commit("setSelectedDate", data.value)
       }).catch( error => {
       });
 
