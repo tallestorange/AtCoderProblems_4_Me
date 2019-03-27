@@ -16,8 +16,8 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   const result = store.getters.getIsInitialLoad;
   if (result) {
-    store.dispatch("loadDataFromIDB")
-  }  
+    store.dispatch("loadDataFromIDB");
+  }
   next();
 });
 

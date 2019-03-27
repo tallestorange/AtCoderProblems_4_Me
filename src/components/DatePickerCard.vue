@@ -22,23 +22,25 @@ export default {
   },
   computed: {
     eventsList() {
-      return this.$store.getters.getEventsList
-    },
+      return this.$store.getters.getEventsList;
+    }
   },
   watch: {
     date: function() {
-      this.$db.inputs.put({id: "selectedDate", value: this.date});
+      this.$db.inputs.put({ id: "selectedDate", value: this.date });
       this.$store.commit("setSelectedDate", this.date);
     }
   },
   created: async function() {
-    let result = ""
-    await this.$db.inputs.get("selectedDate").then( (data) => {
-      result = data.value
-    }).catch( error => {
-    });
+    let result = "";
+    await this.$db.inputs
+      .get("selectedDate")
+      .then(data => {
+        result = data.value;
+      })
+      .catch(error => {});
     if (result != "") {
-      this.date = result
+      this.date = result;
     }
   }
 };

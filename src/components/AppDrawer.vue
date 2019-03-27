@@ -120,11 +120,9 @@
             <v-list-tile-title>NightMode</v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-action>
-            <v-switch v-model="darkMode">
-            </v-switch>
+            <v-switch v-model="darkMode"> </v-switch>
           </v-list-tile-action>
         </v-list-tile>
-
       </v-list>
     </vue-perfect-scrollbar>
   </v-navigation-drawer>
@@ -163,7 +161,7 @@ export default {
       return this.$vuetify.options.extra.sideNav;
     },
     userName() {
-      return this.$store.getters.getUserName
+      return this.$store.getters.getUserName;
     }
   },
   created: async function() {
@@ -172,23 +170,27 @@ export default {
     });
 
     let isDarkMode = false;
-    await this.$db.inputs.get("isDarkMode").then( (data) => {
-      isDarkMode = data.value
-    }).catch( error => {
-    });
-    this.darkMode = isDarkMode
+    await this.$db.inputs
+      .get("isDarkMode")
+      .then(data => {
+        isDarkMode = data.value;
+      })
+      .catch(error => {});
+    this.darkMode = isDarkMode;
 
-    let result = ""
-    await this.$db.inputs.get("userName").then( (data) => {
-      result = data.value
-    }).catch( error => {
-    });  
-    this.$store.commit("setUserName", result)
-    this.username = result
+    let result = "";
+    await this.$db.inputs
+      .get("userName")
+      .then(data => {
+        result = data.value;
+      })
+      .catch(error => {});
+    this.$store.commit("setUserName", result);
+    this.username = result;
   },
   watch: {
     darkMode: function() {
-      this.$db.inputs.put({id: "isDarkMode", value: this.darkMode});
+      this.$db.inputs.put({ id: "isDarkMode", value: this.darkMode });
       this.$store.commit("setIsDarkMode", this.darkMode);
     }
   },
@@ -206,20 +208,20 @@ export default {
       this.canMessageSubmit = true;
     },
     sendUserName: async function() {
-      const userName = this.username
-      this.$db.inputs.put({id: "userName", value: userName});
+      const userName = this.username;
+      this.$db.inputs.put({ id: "userName", value: userName });
       this.$store.commit("setUserName", userName);
-      const self = this
+      const self = this;
       this.$store.dispatch("fetchAll", userName).then(() => {
-        const problems = self.$store.getters.getProblems(userName)
-        const scores = self.$store.getters.getScores(userName)
-        const submissions = self.$store.getters.getSubmissions(userName)
-        const eventsList = Object.keys(submissions)
-        const problemsList = Object.values(problems)
+        const problems = self.$store.getters.getProblems(userName);
+        const scores = self.$store.getters.getScores(userName);
+        const submissions = self.$store.getters.getSubmissions(userName);
+        const eventsList = Object.keys(submissions);
+        const problemsList = Object.values(problems);
 
-        self.$store.commit("setProblemsForView", problemsList)
-        self.$store.commit("setScoresForView", scores)
-        self.$store.commit("setEventsList", eventsList)
+        self.$store.commit("setProblemsForView", problemsList);
+        self.$store.commit("setScoresForView", scores);
+        self.$store.commit("setEventsList", eventsList);
       });
     }
   }

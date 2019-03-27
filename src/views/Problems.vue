@@ -28,8 +28,7 @@ export default {
     StatusCard
   },
   data() {
-    return {
-    };
-  },
+    return {};
+  }
 };
 </script>

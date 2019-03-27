@@ -141,10 +141,10 @@ export default {
     getVirtulData() {
       let result = [];
       const userName = this.$store.getters.getUserName;
-      const heatMapDict = this.$store.getters.getSubmissions(userName)
+      const heatMapDict = this.$store.getters.getSubmissions(userName);
 
       for (let key in heatMapDict) {
-        let data = heatMapDict[key]
+        let data = heatMapDict[key];
         if (data.accepted_count > 0) {
           result.push([key, data.point_sum]);
         }

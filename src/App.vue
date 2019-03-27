@@ -33,7 +33,7 @@ export default {
   },
   computed: {
     darkMode() {
-      return this.$store.getters.getIsDarkMode
+      return this.$store.getters.getIsDarkMode;
     }
   }
 };

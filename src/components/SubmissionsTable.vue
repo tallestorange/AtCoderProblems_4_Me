@@ -67,22 +67,22 @@ export default {
   computed: {
     submissionsData() {
       const userName = this.$store.getters.getUserName;
-      const submissionsDictionary = this.$store.getters.getSubmissionsDictionary;
+      const submissionsDictionary = this.$store.getters
+        .getSubmissionsDictionary;
       if (Object.keys(submissionsDictionary) == 0) {
-        return []
+        return [];
       }
       const selectedDate = this.$store.getters.getSelectedDate;
-      const submissions = submissionsDictionary[userName]
+      const submissions = submissionsDictionary[userName];
 
       if (submissions[selectedDate]) {
-        return submissions[selectedDate].submissions
-      }
-      else {
-        return []
+        return submissions[selectedDate].submissions;
+      } else {
+        return [];
       }
     },
     isLoading() {
-      return this.$store.getters.getIsNowLoading
+      return this.$store.getters.getIsNowLoading;
     }
   },
   methods: {

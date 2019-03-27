@@ -6,9 +6,9 @@ import store from "./store";
 import "./registerServiceWorker";
 import "roboto-fontface/css/roboto/roboto-fontface.css";
 import "font-awesome/css/font-awesome.css";
-import db from './idb';
+import db from "./idb";
 
-Vue.prototype.$db = db
+Vue.prototype.$db = db;
 Vue.config.productionTip = false;
 
 new Vue({

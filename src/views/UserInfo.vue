@@ -5,24 +5,20 @@
         <v-flex lg6 sm6 xs12>
           <v-widget title="Unique AC" content-bg="white" v-if="!isLoading">
             <div slot="widget-content">
-              <e-chart
-                :path-option="uniqueAC"
-                height="400px"
-                width="100%"
-              >
+              <e-chart :path-option="uniqueAC" height="400px" width="100%">
               </e-chart>
             </div>
           </v-widget>
         </v-flex>
 
         <v-flex lg6 sm6 xs12>
-          <v-widget title="Rated Point Sum" content-bg="white" v-if="!isLoading">
+          <v-widget
+            title="Rated Point Sum"
+            content-bg="white"
+            v-if="!isLoading"
+          >
             <div slot="widget-content">
-              <e-chart
-                :path-option="pointSum"
-                height="400px"
-                width="100%"
-              >
+              <e-chart :path-option="pointSum" height="400px" width="100%">
               </e-chart>
             </div>
           </v-widget>
@@ -35,7 +31,6 @@
             </div>
           </v-widget>
         </v-flex>
-
       </v-layout>
     </v-container>
   </div>
@@ -52,8 +47,7 @@ export default {
     EChart,
     HeatMap
   },
-  data: () => ({
-  }),
+  data: () => ({}),
   methods: {
     getColor(rate) {
       if (rate == 100) {
@@ -83,22 +77,22 @@ export default {
   },
   computed: {
     isLoading() {
-      return this.$store.getters.getIsNowLoading
+      return this.$store.getters.getIsNowLoading;
     },
     uniqueAC() {
       const userName = this.$store.getters.getUserName;
       const scoresDict = this.$store.getters.getScores(userName);
-      let result = []
+      let result = [];
 
       let val = 0;
       let colors = [];
       for (var key in scoresDict) {
-        let ac = scoresDict[key].accepted_count
-        if(ac>0){
-          result.push({value:ac,name:key})
-          colors.push(this.getColor(Number(key)))
+        let ac = scoresDict[key].accepted_count;
+        if (ac > 0) {
+          result.push({ value: ac, name: key });
+          colors.push(this.getColor(Number(key)));
         }
-        val += ac
+        val += ac;
       }
 
       return [
@@ -115,19 +109,19 @@ export default {
     pointSum() {
       const userName = this.$store.getters.getUserName;
       const scoresDict = this.$store.getters.getScores(userName);
-      let result = []
+      let result = [];
 
       let val = 0;
       let colors = [];
       for (var key in scoresDict) {
-        let ac = scoresDict[key].accepted_count
-        let score = (key != "undefined")? Number(key):0
-        
-        if(ac>0 && score != 0){
-          result.push({value:ac*score,name:key})
-          colors.push(this.getColor(score))
+        let ac = scoresDict[key].accepted_count;
+        let score = key != "undefined" ? Number(key) : 0;
+
+        if (ac > 0 && score != 0) {
+          result.push({ value: ac * score, name: key });
+          colors.push(this.getColor(score));
         }
-        val += ac * score
+        val += ac * score;
       }
 
       return [

@@ -36,24 +36,29 @@ export default {
   },
   computed: {
     getStatus() {
-      const empty_result = { submissions_count: 0, point_sum: 0, accepted_count: 0 }
-      const userName = this.$store.getters.getUserName
-      const submissionsDictionary = this.$store.getters.getSubmissionsDictionary;
+      const empty_result = {
+        submissions_count: 0,
+        point_sum: 0,
+        accepted_count: 0
+      };
+      const userName = this.$store.getters.getUserName;
+      const submissionsDictionary = this.$store.getters
+        .getSubmissionsDictionary;
       if (Object.keys(submissionsDictionary) == 0) {
-        return empty_result
+        return empty_result;
       }
 
-      const submissions = submissionsDictionary[userName]
+      const submissions = submissionsDictionary[userName];
       const selectedDate = this.$store.getters.getSelectedDate;
 
       if (submissions[selectedDate]) {
         return submissions[selectedDate];
       } else {
-        return empty_result
+        return empty_result;
       }
     },
     isLoading() {
-      return this.$store.getters.getIsNowLoading
+      return this.$store.getters.getIsNowLoading;
     }
   }
 };

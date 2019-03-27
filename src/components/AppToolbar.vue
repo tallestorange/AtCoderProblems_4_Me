@@ -37,20 +37,20 @@ export default {
       window.getApp.$emit("APP_DRAWER_TOGGLED");
     },
     pushedRefreshButton: async function() {
-      const userName = this.$store.getters.getUserName
-      this.$db.inputs.put({id: "userName", value: userName});
+      const userName = this.$store.getters.getUserName;
+      this.$db.inputs.put({ id: "userName", value: userName });
       this.$store.commit("setUserName", userName);
-      const self = this
+      const self = this;
       this.$store.dispatch("fetchAll", userName).then(() => {
-        const problems = self.$store.getters.getProblems(userName)
-        const scores = self.$store.getters.getScores(userName)
-        const submissions = self.$store.getters.getSubmissions(userName)
-        const eventsList = Object.keys(submissions)
-        const problemsList = Object.values(problems)
+        const problems = self.$store.getters.getProblems(userName);
+        const scores = self.$store.getters.getScores(userName);
+        const submissions = self.$store.getters.getSubmissions(userName);
+        const eventsList = Object.keys(submissions);
+        const problemsList = Object.values(problems);
 
-        self.$store.commit("setProblemsForView", problemsList)
-        self.$store.commit("setScoresForView", scores)
-        self.$store.commit("setEventsList", eventsList)
+        self.$store.commit("setProblemsForView", problemsList);
+        self.$store.commit("setScoresForView", scores);
+        self.$store.commit("setEventsList", eventsList);
       });
     }
   }
