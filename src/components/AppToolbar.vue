@@ -12,7 +12,7 @@
       color="primary"
       v-if="isLoading"
     ></v-progress-circular>
-    <v-btn flat icon v-else @click="pushedRefreshButton">
+    <v-btn flat icon v-if="!isLoading" @click="pushedRefreshButton">
       <v-icon>autorenew</v-icon>
     </v-btn>
   </v-toolbar>

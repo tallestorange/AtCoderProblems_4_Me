@@ -10,6 +10,12 @@
         <v-card>
           <v-toolbar card dense color="transparent">
             <v-toolbar-title><h4>Today's Submissions</h4></v-toolbar-title>
+            <v-spacer></v-spacer>
+
+            <v-btn flat icon @click="pushedRefreshButton" v-if="!isLoading">
+              <v-icon>autorenew</v-icon>
+            </v-btn>
+
           </v-toolbar>
           <v-divider></v-divider>
           <v-data-table
@@ -79,7 +85,8 @@ export default {
       sortBy: "id",
       descending: true,
       rowsPerPage: 10
-    }
+    },
+    isLoading: false
   }),
   methods: {
     getColorByStatus(status) {
@@ -88,6 +95,17 @@ export default {
       } else {
         return "orange";
       }
+    },
+    pushedRefreshButton: async function() {
+      this.isLoading = true
+      const rivals = this.$store.getters.getRivalsList
+      for(let key in rivals){
+        let rival = rivals[key]
+        await this.$store.dispatch("fetchAll", rival.userid).then(() => {
+          console.log("Successfully loaded " + rival.userid)
+        })
+      }
+      this.isLoading = false
     }
   },
   computed: {
@@ -109,7 +127,6 @@ export default {
           }
         }
       }
-      console.log(result)
       return result
     }
   }
