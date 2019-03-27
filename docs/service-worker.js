@@ -14,13 +14,10 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/AtCoderProblems_4_Me/precache-manifest.896978012377f60db1d39884ad116871.js"
+  "/precache-manifest.14fcd360923c81acf1522d763d8f5b7a.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "vma"});
-
-workbox.skipWaiting();
-workbox.clientsClaim();
 
 /**
  * The workboxSW.precacheAndRoute() method efficiently caches and responds to
