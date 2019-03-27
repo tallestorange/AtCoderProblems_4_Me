@@ -1,4 +1,4 @@
 module.exports = {
-  publicPath: "/",
+  publicPath: "/AtCoderProblems_4_Me/",
   outputDir: 'docs',
 };
