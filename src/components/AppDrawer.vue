@@ -212,9 +212,14 @@ export default {
       const self = this
       this.$store.dispatch("fetchAll", userName).then(() => {
         const problems = self.$store.getters.getProblems(userName)
-        self.$store.commit("setProblemsForView", Object.values(problems))
         const scores = self.$store.getters.getScores(userName)
+        const submissions = self.$store.getters.getSubmissions(userName)
+        const eventsList = Object.keys(submissions)
+        const problemsList = Object.values(problems)
+
+        self.$store.commit("setProblemsForView", problemsList)
         self.$store.commit("setScoresForView", scores)
+        self.$store.commit("setEventsList", eventsList)
       });
     }
   }

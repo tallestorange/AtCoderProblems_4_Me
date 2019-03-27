@@ -32,6 +32,7 @@ export default new Vuex.Store({
     problemsForView: [],
     scoresForView: {},
     contestsList: [],
+    eventsList: [],
   },
   getters: {
     getIsInitialLoad: (state, getters) => {
@@ -39,6 +40,9 @@ export default new Vuex.Store({
     },
     getSearchTagsForView: (state, getters) => {
       return state.searchTagsForView
+    },
+    getEventsList: (state, getters) => {
+      return state.eventsList
     },
     getProblemsForView: (state, getters) => {
       return state.problemsForView
@@ -104,6 +108,9 @@ export default new Vuex.Store({
     },
     setContestsList(state, payload) {
       state.contestsList = payload
+    },
+    setEventsList(state, payload) {
+      state.eventsList = payload
     },
     setSearchTagsForView(state, payload) {
       state.searchTagsForView = payload
@@ -367,6 +374,8 @@ export default new Vuex.Store({
           data: res.value,
           userName: userName
         }
+        const eventsList = Object.keys(res.value)
+        context.commit("setEventsList", eventsList)
         context.commit("setSubmissionsDictionary", result)
       }).catch( error => {
       });

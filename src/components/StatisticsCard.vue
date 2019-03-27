@@ -36,14 +36,19 @@ export default {
   },
   computed: {
     getStatus() {
+      const empty_result = { submissions_count: 0, point_sum: 0, accepted_count: 0 }
       const userName = this.$store.getters.getUserName
-      const submissionsData = this.$store.getters.getSubmissions(userName)
+      const submissionsDictionary = this.$store.getters.getSubmissionsDictionary;
+      if (Object.keys(submissionsDictionary) == 0) {
+        return empty_result
+      }
+
       const selectedDate = this.$store.getters.getSelectedDate;
 
-      if (submissionsData[selectedDate]) {
-        return submissionsData[selectedDate];
+      if (submissionsDictionary[selectedDate]) {
+        return submissionsDictionary[selectedDate];
       } else {
-        return { submissions_count: 0, point_sum: 0, accepted_count: 0 };
+        return empty_result
       }
     },
     isLoading() {

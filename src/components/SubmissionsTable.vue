@@ -67,11 +67,15 @@ export default {
   computed: {
     submissionsData() {
       const userName = this.$store.getters.getUserName;
-      const problemsDict = this.$store.getters.getSubmissions(userName)
+      const submissionsDictionary = this.$store.getters.getSubmissionsDictionary;
+      if (Object.keys(submissionsDictionary) == 0) {
+        return []
+      }
       const selectedDate = this.$store.getters.getSelectedDate;
+      const submissions = submissionsDictionary[userName]
 
-      if (problemsDict[selectedDate]) {
-        return problemsDict[selectedDate].submissions
+      if (submissions[selectedDate]) {
+        return submissions[selectedDate].submissions
       }
       else {
         return []

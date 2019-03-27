@@ -5,10 +5,9 @@
     </v-toolbar>
     <v-divider></v-divider>
     <v-date-picker
-      v-if="!isLoading"
       full-width
       v-model="date"
-      :events="arrayEvents"
+      :events="eventsList"
       event-color="green lighten-1"
     ></v-date-picker>
   </v-card>
@@ -22,14 +21,9 @@ export default {
     };
   },
   computed: {
-    arrayEvents() {
-      const userName = this.$store.getters.getUserName;
-      const submissionsData = this.$store.getters.getSubmissions(userName)
-      return Object.keys(submissionsData); 
+    eventsList() {
+      return this.$store.getters.getEventsList
     },
-    isLoading() {
-      return this.$store.getters.getIsNowLoading
-    }
   },
   watch: {
     date: function() {
