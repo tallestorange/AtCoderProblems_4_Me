@@ -18,12 +18,12 @@
       <template v-slot:items="props">
         <td class="text-xs-left">{{ props.item.user_id }}</td>
         <td>
-          <a :href="props.item.submission_url" target="_blank">{{
+          <a :href="props.item.submission_url" target="_blank" rel="noopener noreferrer">{{
             props.item.id
           }}</a>
         </td>
         <td class="text-xs-left">
-          <a :href="props.item.problem_url" target="_blank">{{
+          <a :href="props.item.problem_url" target="_blank" rel="noopener noreferrer">{{
             props.item.title
           }}</a>
         </td>

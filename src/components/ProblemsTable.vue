@@ -20,7 +20,7 @@
               class="text-xs-left green lighten-3"
               v-if="props.item.your_ac_count > 0"
             >
-              <a :href="props.item.url" target="_blank">{{
+              <a :href="props.item.url" target="_blank" rel="noopener noreferrer">{{
                 props.item.title
               }}</a>
             </td>
@@ -28,12 +28,9 @@
               class="text-xs-left orange lighten-3"
               v-else-if="props.item.your_wa_count > 0"
             >
-              <a :href="props.item.url" target="_blank">{{
-                props.item.title
-              }}</a>
             </td>
             <td v-else>
-              <a :href="props.item.url" target="_blank">{{
+              <a :href="props.item.url" target="_blank" rel="noopener noreferrer">{{
                 props.item.title
               }}</a>
             </td>
