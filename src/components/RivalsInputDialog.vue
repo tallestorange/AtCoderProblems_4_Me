@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" max-width="600px">
     <template v-slot:activator="{ on }">
       <div style="right: 5vw; bottom: 4vh; z-index: 999; position: fixed;">
-        <v-btn v-on="on" fab color="primary">
+        <v-btn v-on="on" fab color="primary" v-if="!dialog">
           <v-icon>add</v-icon>
         </v-btn>
       </div>
