@@ -43,10 +43,11 @@ export default {
         return empty_result
       }
 
+      const submissions = submissionsDictionary[userName]
       const selectedDate = this.$store.getters.getSelectedDate;
 
-      if (submissionsDictionary[selectedDate]) {
-        return submissionsDictionary[selectedDate];
+      if (submissions[selectedDate]) {
+        return submissions[selectedDate];
       } else {
         return empty_result
       }
