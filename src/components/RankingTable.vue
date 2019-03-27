@@ -4,7 +4,6 @@
       <v-toolbar-title><h4>Rivals</h4></v-toolbar-title>
     </v-toolbar>
     <v-divider></v-divider>
-
     <v-layout justify-center>
       <v-flex lg11 sm11 xs11>
         <div v-for="(rival, rank) in rivalsList">

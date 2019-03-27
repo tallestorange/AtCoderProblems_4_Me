@@ -9,6 +9,7 @@
         <v-card-text>
           <div class="justify-center row layout ma-0">
             <v-progress-circular
+              v-if="!isLoading"
               :rotate="-90"
               :value="(statusGraphData.ac / statusGraphData.total) * 100"
               :size="140"
@@ -21,7 +22,7 @@
           </div>
         </v-card-text>
         <v-divider></v-divider>
-        <v-card-actions>
+        <v-card-actions v-if="!isLoading">
           <div class="headline">
             {{
               ((statusGraphData.ac / statusGraphData.total) * 100).toFixed(1) +
@@ -45,6 +46,7 @@
         <v-card-text>
           <div class="justify-center row layout ma-0">
             <v-progress-circular
+              v-if="!isLoading"
               :rotate="-90"
               :value="
                 (statusGraphData.ac_point_sum / statusGraphData.point_sum) * 100
@@ -59,7 +61,7 @@
           </div>
         </v-card-text>
         <v-divider></v-divider>
-        <v-card-actions>
+        <v-card-actions v-if="!isLoading">
           <div class="headline">
             {{
               (
