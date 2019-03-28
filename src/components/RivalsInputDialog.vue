@@ -18,6 +18,8 @@
               <v-text-field
                 v-model="userID"
                 label="userID*"
+                @keyup.enter="submit"
+                @keypress="setCanMessageSubmit"
                 required
               ></v-text-field>
             </v-flex>
@@ -41,6 +43,7 @@ export default {
     return {
       dialog: false,
       isLoading: false,
+      canMessageSubmit: false,
       userID: ""
     };
   },
@@ -83,6 +86,9 @@ export default {
 
       this.dialog = false;
       this.isLoading = false;
+    },
+    setCanMessageSubmit() {
+      this.canMessageSubmit = true;
     }
   },
   watch: {
