@@ -2,7 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import paths from "./paths";
 import NProgress from "nprogress";
-import store from "../store";
+import store from "../store/store";
 import "nprogress/nprogress.css";
 
 Vue.use(Router);
