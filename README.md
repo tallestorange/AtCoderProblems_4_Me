@@ -3,7 +3,7 @@
 
 ## Preview
 
-[Sample Page](https://tallestorange.github.io/AtCoderProblems_4_Me)
+[Sample Page](https://compro.192.works)
 
 ## Project setup
 ```
