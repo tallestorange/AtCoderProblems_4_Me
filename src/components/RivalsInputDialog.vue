@@ -40,13 +40,12 @@ export default {
   data() {
     return {
       dialog: false,
-      userID: "",
-      isLoading: false
+      isLoading: false,
+      userID: ""
     };
   },
   methods: {
     submit: async function() {
-      this.isLoading = true;
       if (this.userID == "") {
         return;
       }
@@ -60,6 +59,8 @@ export default {
       if (isExist) {
         return;
       }
+
+      this.isLoading = true;
 
       let result = {
         userid: this.userID,
