@@ -27,8 +27,9 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" flat @click="dialog = false">Cancel</v-btn>
-        <v-btn color="blue darken-1" flat @click="submit()">Add</v-btn>
+        <v-btn color="blue darken-1" flat @click="dialog = false" v-if="!isLoading">Cancel</v-btn>
+        <v-btn color="blue darken-1" flat @click="submit()" v-if="!isLoading">Add</v-btn>
+        <v-btn color="blue darken-1" flat disabled v-else>Loading...</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -39,14 +40,27 @@ export default {
   data() {
     return {
       dialog: false,
-      userID: ""
+      userID: "",
+      isLoading: false
     };
   },
   methods: {
     submit: async function() {
+      this.isLoading = true;
       if (this.userID == "") {
         return;
       }
+
+      let isExist = false
+      await this.$db.rivals.get(this.userID).then((res) => {
+        if (res !== undefined) {
+          isExist = true
+        }
+      }).catch(error => {});
+      if (isExist) {
+        return;
+      }
+
       let result = {
         userid: this.userID,
         accepted_count: 0,
@@ -67,6 +81,7 @@ export default {
       this.$db.rivals.add(result);
 
       this.dialog = false;
+      this.isLoading = false;
     }
   },
   watch: {
